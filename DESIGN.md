@@ -116,8 +116,8 @@ Rules: base size is 14px (dense admin UI). Every figure that can line up with an
 ┌──────────────┬──────────────────────────────────────────────┐
 │ SideNav      │ PageHeader  (title · meta line · actions)    │
 │ 248px        ├──────────────────────────────────────────────┤
-│ --chrome     │ Filter bar  (state Select · period Tabs ·    │
-│              │              spacer · Export CSV)            │
+│ --chrome     │ Filter bar  (state Select · agency Select ·  │
+│              │              period Tabs)                    │
 │              │ KPI row     (4 cards, flex 1 1 220px)        │
 │              │ Trend card  (line chart, full width)         │
 │              │ ┌ By-state card ─┐ ┌ Top agencies table ───┐ │
@@ -140,7 +140,7 @@ Build on shadcn/ui primitives in `src/components/ui`, themed through the tokens 
 | Variant | Fill / text / border | Use |
 | --- | --- | --- |
 | Primary | `--primary` / `--on-primary` | One per view, the main action |
-| Secondary | `--surface-raised` / `--ink` / `--line-strong` | Supporting actions (Export CSV) |
+| Secondary | `--surface-raised` / `--ink` / `--line-strong` | Supporting actions |
 | Ghost | transparent / `--ink` | Toolbar and icon buttons |
 | Danger | `--danger` / `--on-danger` | Destructive confirmation |
 
@@ -171,7 +171,7 @@ Framed like a card (`--line` border, `--radius-lg`, overflow hidden). Header row
 
 ### Side navigation (`ci-sidenav`)
 
-On `--chrome`. Head: product name (`--on-chrome`) and context line ("Group office · All states", `--on-chrome-muted`). Section label in `text-overline`. Items 36px tall, `--radius-md`, icon in `--on-chrome-muted`; hover and current use `--chrome-raised`, current is weight 600 with a `--sky` icon and `aria-current="page"`. Footer shows the signed-in role. Focus uses `--focus-ring-chrome`.
+On `--chrome`. Head: product name (`--on-chrome`) and context line ("Group office · All states", `--on-chrome-muted`). Section label in `text-overline`. Items 36px tall, `--radius-md`, icon in `--on-chrome-muted`; hover and current use `--chrome-raised`, current is weight 600 with a `--sky` icon and `aria-current="page"`. Footer shows the viewing context ("Group manager view"); there is no sign-in, so it never names a user. Focus uses `--focus-ring-chrome`.
 
 ### Page header (`ci-pagehead`)
 

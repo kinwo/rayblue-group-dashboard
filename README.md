@@ -17,10 +17,15 @@ The group manager oversees many agencies across Australia but has no single plac
 ### Scope of the prototype
 
 - **App shell**: a left drawer sidebar with one navigation item, **Rental Analytics**.
-- **Rental Analytics page**: basic analytics shown as charts:
-  - Number of rental listings per **day**, **week** and **month** (one chart with a granularity switch).
-  - Filters by **state** (NSW, VIC, QLD, WA, SA, TAS, ACT, NT) and by **agency**.
+- **Rental Analytics page**:
+  - Filters by **state** (NSW, VIC, QLD, WA, SA, TAS, ACT, NT), by **agency**, and by listing period (**daily**, **weekly**, **monthly**).
+  - KPI tiles: new listings today, this week and this month, and the number of agencies.
+  - Trend chart of new listings per day, week or month.
+  - New listings by state, and a table of the top agencies.
 - **Data**: synthetic, seeded into a local SQLite file. No real customer data.
+- **Public**: no sign-in; the app shows aggregate counts only.
+
+Full requirements and acceptance criteria: **[intent.md](intent.md)**. It is the source of truth for v1 scope.
 
 ### Out of scope (for now)
 
@@ -28,6 +33,7 @@ The group manager oversees many agencies across Australia but has no single plac
 - Editing listings or agencies
 - Live integrations with listing portals
 - Analytics beyond listing counts (vacancy, rent prices, days on market)
+- Listing-level detail (addresses, rents, people)
 
 ### Domain glossary
 
@@ -92,7 +98,8 @@ Then open http://localhost:3000.
 Read in this order; each step goes one level deeper.
 
 1. **README.md** (this file): what the product is and how to run it.
-2. **[AGENTS.md](AGENTS.md)**: the short rule set for anyone (human or AI agent) changing the code.
-3. **[ENGINEERING.md](ENGINEERING.md)**: architecture, engineering decisions, practices and the testing strategy.
-4. **[DESIGN.md](DESIGN.md)**: the UI design system (tokens, typography, layout, components, charts).
-5. **`docs/`**: detailed, topic-specific notes and decision records, added as features grow.
+2. **[intent.md](intent.md)**: v1 requirements and acceptance criteria.
+3. **[AGENTS.md](AGENTS.md)**: the short rule set for anyone (human or AI agent) changing the code.
+4. **[ENGINEERING.md](ENGINEERING.md)**: architecture, engineering decisions, practices and the testing strategy.
+5. **[DESIGN.md](DESIGN.md)**: the UI design system (tokens, typography, layout, components, charts).
+6. **`docs/`**: detailed, topic-specific notes and decision records, added as features grow.
