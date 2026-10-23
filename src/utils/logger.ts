@@ -67,7 +67,8 @@ export type LoggerOptions = {
 
 export function createLogger({
   level = "info",
-  write = (line) => process.stdout.write(line + "\n"),
+  // console.log writes one line to stdout on Node and works in the Edge runtime too.
+  write = (line) => console.log(line),
   now = () => Date.now(),
 }: LoggerOptions = {}): Logger {
   const log = (entryLevel: LogLevel) => (msg: string, fields: LogFields = {}) => {

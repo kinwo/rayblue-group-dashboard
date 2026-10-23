@@ -9,15 +9,8 @@ export async function register(): Promise<void> {
   if (process.env.NEXT_RUNTIME !== "nodejs") return;
   // Build workers start servers too; the database is checked when the release runs.
   if (process.env.NEXT_PHASE === "phase-production-build") return;
-  const { runStartupChecks } = await import("@/data/startup-check");
-  try {
-    const env = runStartupChecks();
-    logger.info("startup_check_passed", { version: env.APP_VERSION });
-  } catch (error) {
-    const reason = (error as { reason?: unknown }).reason;
-    logger.error("startup_check_failed", { reason: typeof reason === "string" ? reason : "unknown", error });
-    process.exit(1);
-  }
+  const { checkStartupOrExit } = await import("@/instrumentation-node");
+  checkStartupOrExit();
 }
 
 /** Logs every server-side request failure as one structured line, without the stack (AC-REL-7). */

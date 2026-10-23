@@ -2,7 +2,7 @@ import { checkHealth } from "@/services/health";
 import { createTestDatabase } from "@/test/db";
 
 describe("checkHealth (AC-REL-4)", () => {
-  beforeEach(() => jest.spyOn(process.stdout, "write").mockImplementation(() => true));
+  beforeEach(() => jest.spyOn(console, "log").mockImplementation(() => {}));
   afterEach(() => jest.restoreAllMocks());
 
   it("reports ok when the database answers", async () => {

@@ -10,9 +10,8 @@ describe("instrumentation", () => {
 
   beforeEach(() => {
     lines = [];
-    jest.spyOn(process.stdout, "write").mockImplementation((chunk) => {
-      lines.push(String(chunk));
-      return true;
+    jest.spyOn(console, "log").mockImplementation((line: unknown) => {
+      lines.push(String(line));
     });
     exit = jest.spyOn(process, "exit").mockImplementation((() => undefined) as never);
     dir = fs.mkdtempSync(path.join(os.tmpdir(), "rayblue-instr-"));

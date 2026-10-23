@@ -20,9 +20,8 @@ describe("API route handlers", () => {
     process.env.DATABASE_URL = file;
     process.env.APP_VERSION = "v9.9.9";
     lines = [];
-    jest.spyOn(process.stdout, "write").mockImplementation((chunk) => {
-      lines.push(String(chunk));
-      return true;
+    jest.spyOn(console, "log").mockImplementation((line: unknown) => {
+      lines.push(String(line));
     });
     jest.resetModules();
   });
