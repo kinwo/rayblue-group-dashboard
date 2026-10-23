@@ -1,13 +1,10 @@
 import type { ListingRepository } from "@/data/repository.types";
 import type { Granularity } from "@/utils/granularity";
+import type { AnalyticsFilters } from "@/utils/search-params";
 import type { StateCode } from "@/utils/states";
 
-/** Validated filters, as parsed from the URL at the page boundary. */
-export type AnalyticsFilters = {
-  state: StateCode | null;
-  agencyId: number | null;
-  granularity: Granularity;
-};
+/** Validated filters, as parsed from the URL at the page boundary. Defined in utils so the parser owns it. */
+export type { AnalyticsFilters };
 
 export type AgencyOption = { id: number; name: string; state: StateCode };
 
