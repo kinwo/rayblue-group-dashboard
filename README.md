@@ -94,4 +94,5 @@ Read in this order; each step goes one level deeper.
 1. **README.md** (this file): what the product is and how to run it.
 2. **[AGENTS.md](AGENTS.md)**: the short rule set for anyone (human or AI agent) changing the code.
 3. **[ENGINEERING.md](ENGINEERING.md)**: architecture, engineering decisions, practices and the testing strategy.
-4. **`docs/`**: detailed, topic-specific notes and decision records, added as features grow.
+4. **[DESIGN.md](DESIGN.md)**: the UI design system (tokens, typography, layout, components, charts).
+5. **`docs/`**: detailed, topic-specific notes and decision records, added as features grow.

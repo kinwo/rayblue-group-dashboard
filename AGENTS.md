@@ -55,5 +55,6 @@ Never import upward. Use the `@/` alias.
 | Unsure about product scope or terms | [README.md › Product brief](README.md#product-brief) |
 | Adding a feature or a new layer file | [ENGINEERING.md › Architecture](ENGINEERING.md#3-architecture) |
 | Choosing a library or pattern | [ENGINEERING.md › Tech stack decisions](ENGINEERING.md#2-tech-stack-decisions) |
+| Building or styling UI (tokens, components, charts) | [DESIGN.md](DESIGN.md) |
 | Writing tests or property tests | [ENGINEERING.md › Testing strategy](ENGINEERING.md#5-testing-strategy) |
 | Working on a specific topic | `docs/` (topic notes and ADRs) |
