@@ -2,7 +2,7 @@
 
 Requirements and acceptance criteria for the first release of the Rayblue Agency Group dashboard. This file is the single home for **what v1 must do** and **how we know it does it**. Terms are defined in the [README glossary](README.md#domain-glossary); how it is built is in [ENGINEERING.md](ENGINEERING.md); how it looks is in [DESIGN.md](DESIGN.md).
 
-Status: draft · Last updated 24 Oct 2026
+Status: draft · Last updated 24 Oct 2026 (seed scope and property-manager names amended for the prototype)
 
 ## 1. Intent
 
@@ -151,13 +151,14 @@ Columns: Agency · State · New listings · Share of group (or "Share of NSW" wh
 
 ## 6. Data and counting rules
 
-- A listing counts **once**, in the bucket that contains its `listedAt`, converted to `Australia/Sydney`.
+- A listing counts **once**, in the bucket that contains its `listedDate`, converted to `Australia/Sydney`.
 - Filters narrow by the agency's state and by agency; they never change how a listing is bucketed.
-- The seed covers at least **24 months** before the as-of time across every state and territory, so every range and its previous range have data.
+- **Prototype seed scope:** the seed covers the **last 30 days** before the as-of time, for agencies in **NSW, VIC and QLD only**. Other states and territories have no agencies and no listings and still appear with 0 (AC-STA-1). Buckets and comparison periods older than 30 days are 0, so Weekly and Monthly trends and "vs previous" are mostly 0 or "—" by design.
+- Listings carry a `status` (`active`, `leased`, `withdrawn`); every listing counts once on its `listedDate`, whatever its status.
 
 - **AC-DAT-1** — The listing-count invariants in [ENGINEERING.md › Property-based tests](ENGINEERING.md#property-based-tests) hold for generated data: conservation, exclusivity, continuity (including DST changes and month and year ends), filter monotonicity, and daily-to-weekly consistency. `property`
 - **AC-DAT-2** — *Given* a fixed seed value, *then* `npm run db:seed` produces the same dataset every time. `integration`
-- **AC-DAT-3** — *Given* the seeded dataset, *then* every state and territory has at least one agency and every agency has listings in the last 24 months. `integration`
+- **AC-DAT-3** — *Given* the seeded dataset, *then* NSW, VIC and QLD each have at least one agency, no other state has agencies, every agency has listings in the last 30 days, and no listing is after the as-of time. `integration`
 
 ## 7. Non-functional requirements
 
@@ -176,8 +177,8 @@ Columns: Agency · State · New listings · Share of group (or "Share of NSW" wh
 The app is designed so that it handles no personal information. This is a design goal, not a compliance claim; loading real data needs the review in §9.
 
 - **AC-PRV-1** — Services return aggregates only: counts plus agency and state names and ids. Listing addresses and rents never leave `src/data`. `CI` (typecheck of service return types)
-- **AC-PRV-2** — *Given* the seeded dataset, *when* any page or endpoint is requested, *then* the response contains no seeded listing address or weekly rent. `integration`
-- **AC-PRV-3** — The seed generates no names of people, and agency names are fictitious ("Rayblue Parramatta"). `unit`
+- **AC-PRV-2** — *Given* the seeded dataset, *when* any page or endpoint is requested, *then* the response contains no seeded listing address, weekly rent or property-manager name. `integration`
+- **AC-PRV-3** — The seed generates no real names of people: property-manager names are fictitious and never leave `src/data`; agency names are fictitious ("Rayblue Parramatta"). `unit` + `integration` (AC-PRV-2)
 - **AC-PRV-4** — "Sample data" is visible on every page (AC-HDR-1), so figures cannot be mistaken for real agency performance. `component`
 - **AC-PRV-5** — The app sets no cookies, loads no third-party scripts, trackers or analytics, and makes no runtime requests to other hosts; fonts are self-hosted. `integration` + `manual` (browser network panel)
 

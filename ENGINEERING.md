@@ -64,10 +64,11 @@ app ──► components ──► utils
 
 | Table | Columns (key ones) |
 | --- | --- |
-| `agencies` | `id`, `name`, `state` (enum: NSW, VIC, QLD, WA, SA, TAS, ACT, NT), `suburb` |
-| `listings` | `id`, `agencyId` → `agencies.id`, `address`, `weeklyRent`, `listedAt` (UTC timestamp) |
+| `agencies` | `id`, `name`, `state` (enum: NSW, VIC, QLD, WA, SA, TAS, ACT, NT), `suburb`, `createdAt`, `updatedAt` |
+| `listings` | `id`, `agencyId` → `agencies.id`, `subNumber`, `streetNumber`, `street`, `suburb`, `postcode`, `state`, `propertyType`, `beds`, `baths`, `rentPerWeek`, `propertyManager`, `status` (`ListingStatus`: active, leased, withdrawn), `listedDate` (UTC epoch ms), `createdAt`, `updatedAt` |
+| `dataset_meta` | single row: `asOf` (the dataset's as-of time), `seed`, `generatedAt` |
 
-Index `listings(agencyId, listedAt)` for the time-series queries.
+Indexes `listings(agencyId, listedDate)` and `listings(listedDate)` for the time-series queries. Filters use the agency's state; `listings.state` mirrors it and the seed test checks that. Address, rent and property-manager columns never leave `src/data` (AC-PRV-1): repositories return only ids, names, states and timestamps.
 
 ### Request flow: Rental Analytics
 
