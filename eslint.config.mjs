@@ -54,7 +54,7 @@ const eslintConfig = defineConfig([
     files: ["src/components/ui/**", "src/components/hooks/**"],
     rules: { "react-hooks/purity": "off", "react-hooks/set-state-in-effect": "off" },
   },
-  globalIgnores([".next/**", "out/**", "build/**", "coverage/**", "next-env.d.ts", "src/data/migrations/**"]),
+  globalIgnores([".claude/**", ".next/**", "out/**", "build/**", "coverage/**", "next-env.d.ts", "src/data/migrations/**"]),
 ]);
 
 export default eslintConfig;

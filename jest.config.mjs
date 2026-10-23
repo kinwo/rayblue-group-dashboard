@@ -18,6 +18,9 @@ const dom = await createJestConfig({
 })();
 
 const config = {
+  // Teammate worktrees live under .claude/; never collect their tests or modules.
+  modulePathIgnorePatterns: ["<rootDir>/.claude/"],
+  testPathIgnorePatterns: ["/node_modules/", "<rootDir>/.claude/"],
   projects: [node, dom],
   coverageProvider: "v8",
   collectCoverageFrom: ["src/utils/**/*.ts", "src/services/**/*.ts", "!src/**/*.test.ts"],
