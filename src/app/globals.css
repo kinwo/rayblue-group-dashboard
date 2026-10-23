@@ -1,36 +1,377 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/* Dark mode follows the operating system (AC-THM-1, DESIGN.md §9). */
+@custom-variant dark (@media (prefers-color-scheme: dark));
 
+/* Cirrus tokens: the source of truth (DESIGN.md §2–4). Light theme. */
 :root {
-    --sidebar: hsl(0 0% 98%);
-    --sidebar-foreground: hsl(240 5.3% 26.1%);
-    --sidebar-primary: hsl(240 5.9% 10%);
-    --sidebar-primary-foreground: hsl(0 0% 98%);
-    --sidebar-accent: hsl(240 4.8% 95.9%);
-    --sidebar-accent-foreground: hsl(240 5.9% 10%);
-    --sidebar-border: hsl(220 13% 91%);
-    --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  color-scheme: light;
+
+  /* Surfaces and ink */
+  --surface: #f4f7fa;
+  --surface-raised: #ffffff;
+  --surface-sunken: #e9eff5;
+  --surface-hover: #eef5fa;
+  --selected: #e2f3fc;
+  --line: #d6e0e9;
+  --line-strong: #71889b;
+  --ink: #0e2232;
+  --ink-muted: #475d6e;
+  --ink-disabled: #93a3b1;
+  --overlay: #0614207a;
+
+  /* Accent and status */
+  --primary: #0a6aa1;
+  --primary-hover: #085a89;
+  --primary-pressed: #064970;
+  --on-primary: #ffffff;
+  --sky: #2bb0ed;
+  --sky-soft: #e2f3fc;
+  --on-sky: #04263b;
+  --link: #0a6aa1;
+  --info: #0a6aa1;
+  --info-soft: #e2f3fc;
+  --success: #167445;
+  --success-soft: #e3f4ea;
+  --warning: #8a5000;
+  --warning-soft: #fdf0d5;
+  --danger: #bd2a1c;
+  --danger-soft: #fde9e6;
+  --danger-hover: #9e2013;
+  --on-danger: #ffffff;
+
+  /* Chrome (side navigation): dark in both themes */
+  --chrome: #0c2638;
+  --chrome-raised: #173a52;
+  --chrome-line: #24485f;
+  --on-chrome: #e8f2f9;
+  --on-chrome-muted: #a3bccd;
+
+  /* Chart palette */
+  --chart-1: #1a8ad0;
+  --chart-2: #e2622b;
+  --chart-3: #cf4f93;
+  --chart-4: #7f8f14;
+  --chart-5: #6a55d8;
+  --chart-6: #0e9a8f;
+  --chart-other: #71889b;
+  --chart-seq-1: #d6edfb;
+  --chart-seq-2: #a3d4f5;
+  --chart-seq-3: #5aaee6;
+  --chart-seq-4: #1f80c2;
+  --chart-seq-5: #0d568a;
+  --chart-div-1: #d2551f;
+  --chart-div-2: #eba27f;
+  --chart-div-3: #e9eff5;
+  --chart-div-4: #84bde3;
+  --chart-div-5: #1a7cbf;
+
+  /* Spacing, size, shape */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --control-sm: 28px;
+  --control-md: 36px;
+  --control-lg: 44px;
+  --row-compact: 32px;
+  --row-default: 40px;
+  --row-comfortable: 48px;
+  --sidenav-width: 248px;
+
+  /* Depth */
+  --shadow-sm: 0 1px 2px #0e22321a;
+  --shadow-md: 0 4px 12px #0e22321f, 0 1px 3px #0e223214;
+  --shadow-lg: 0 16px 40px #0e223229, 0 2px 6px #0e22321a;
+  --z-sticky: 100;
+  --z-dropdown: 1000;
+  --z-dialog: 1300;
+  --z-toast: 1400;
+
+  /* Focus: 2px surface gap + 2px ring (drawn as an offset outline) */
+  --focus-ring-color: var(--primary);
+  --focus-ring-chrome-color: var(--sky);
+
+  /* Motion */
+  --motion-fast: 120ms;
+
+  /* shadcn/ui aliases (DESIGN.md §10). --primary is shared by name. */
+  --background: var(--surface);
+  --foreground: var(--ink);
+  --card: var(--surface-raised);
+  --card-foreground: var(--ink);
+  --popover: var(--surface-raised);
+  --popover-foreground: var(--ink);
+  --primary-foreground: var(--on-primary);
+  --secondary: var(--surface-sunken);
+  --secondary-foreground: var(--ink);
+  --muted: var(--surface-sunken);
+  --muted-foreground: var(--ink-muted);
+  --accent: var(--surface-hover);
+  --accent-foreground: var(--ink);
+  --destructive: var(--danger);
+  --border: var(--line);
+  --input: var(--line-strong);
+  --ring: var(--primary);
+  --radius: 6px;
+  --sidebar: var(--chrome);
+  --sidebar-foreground: var(--on-chrome);
+  --sidebar-primary: var(--sky);
+  --sidebar-primary-foreground: var(--on-sky);
+  --sidebar-accent: var(--chrome-raised);
+  --sidebar-accent-foreground: var(--on-chrome);
+  --sidebar-border: var(--chrome-line);
+  --sidebar-ring: var(--sky);
 }
 
-.dark {
-    --sidebar: hsl(240 5.9% 10%);
-    --sidebar-foreground: hsl(240 4.8% 95.9%);
-    --sidebar-primary: hsl(224.3 76.3% 48%);
-    --sidebar-primary-foreground: hsl(0 0% 100%);
-    --sidebar-accent: hsl(240 3.7% 15.9%);
-    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-    --sidebar-border: hsl(240 3.7% 15.9%);
-    --sidebar-ring: hsl(217.2 91.2% 59.8%);
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --surface: #0a141c;
+    --surface-raised: #111f2b;
+    --surface-sunken: #0c1822;
+    --surface-hover: #172838;
+    --selected: #0f2f45;
+    --line: #223647;
+    --line-strong: #5f7d95;
+    --ink: #e6eef5;
+    --ink-muted: #9cb1c2;
+    --ink-disabled: #556b7d;
+    --overlay: #000000a8;
+
+    --primary: #56c4f5;
+    --primary-hover: #86d5f8;
+    --primary-pressed: #b0e4fb;
+    --on-primary: #04202f;
+    --sky: #38bdf8;
+    --sky-soft: #0f2f45;
+    --on-sky: #04202f;
+    --link: #56c4f5;
+    --info: #56c4f5;
+    --info-soft: #0f2f45;
+    --success: #5bd394;
+    --success-soft: #0e2d1f;
+    --warning: #f4b740;
+    --warning-soft: #33250b;
+    --danger: #ff8f80;
+    --danger-soft: #3b1613;
+    --danger-hover: #ffb0a6;
+    --on-danger: #2b0904;
+
+    --chrome: #060f16;
+    --chrome-raised: #132535;
+    --chrome-line: #1b2e3e;
+    --on-chrome: #e6eef5;
+    --on-chrome-muted: #93a9ba;
+
+    --chart-1: #2f9ee0;
+    --chart-2: #d95926;
+    --chart-3: #db5fa9;
+    --chart-4: #8d9c1e;
+    --chart-5: #8f82ea;
+    --chart-6: #13a093;
+    --chart-other: #5f7d95;
+    --chart-seq-1: #143650;
+    --chart-seq-2: #1d5a86;
+    --chart-seq-3: #2f86c0;
+    --chart-seq-4: #66b5e8;
+    --chart-seq-5: #a3d8f7;
+    --chart-div-1: #f08a5d;
+    --chart-div-2: #a8603f;
+    --chart-div-3: #223647;
+    --chart-div-4: #3b88b8;
+    --chart-div-5: #5cbcf2;
+
+    --shadow-sm: 0 1px 2px #00000066;
+    --shadow-md: 0 4px 12px #0000008c, 0 1px 3px #00000066;
+    --shadow-lg: 0 16px 40px #000000a6, 0 2px 6px #00000080;
+  }
 }
 
+/* Expose tokens to Tailwind (bg-surface-sunken, text-ink-muted, border-line, …). */
 @theme inline {
-    --color-sidebar: var(--sidebar);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-ring: var(--sidebar-ring);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-hover: var(--surface-hover);
+  --color-selected: var(--selected);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-disabled: var(--ink-disabled);
+  --color-overlay: var(--overlay);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-pressed: var(--primary-pressed);
+  --color-on-primary: var(--on-primary);
+  --color-sky: var(--sky);
+  --color-sky-soft: var(--sky-soft);
+  --color-on-sky: var(--on-sky);
+  --color-link: var(--link);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-hover: var(--danger-hover);
+  --color-on-danger: var(--on-danger);
+  --color-chrome: var(--chrome);
+  --color-chrome-raised: var(--chrome-raised);
+  --color-chrome-line: var(--chrome-line);
+  --color-on-chrome: var(--on-chrome);
+  --color-on-chrome-muted: var(--on-chrome-muted);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-other: var(--chart-other);
+
+  /* shadcn/ui names */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 10px;
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
+  --font-sans: var(--font-public-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* The shell's single breakpoint: below ~808px the nav becomes a sheet (DESIGN.md §5). */
+  --breakpoint-md: 50.5rem;
+}
+
+/* Type scale (DESIGN.md §3): text-display, text-caption-strong, … */
+@theme {
+  --text-display: 28px;
+  --text-display--line-height: 36px;
+  --text-display--font-weight: 600;
+  --text-display--letter-spacing: -0.01em;
+  --text-title: 22px;
+  --text-title--line-height: 28px;
+  --text-title--font-weight: 600;
+  --text-title--letter-spacing: -0.005em;
+  --text-heading: 17px;
+  --text-heading--line-height: 24px;
+  --text-heading--font-weight: 600;
+  --text-subheading: 14px;
+  --text-subheading--line-height: 20px;
+  --text-subheading--font-weight: 600;
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 24px;
+  --text-body-lg--font-weight: 400;
+  --text-body: 14px;
+  --text-body--line-height: 20px;
+  --text-body--font-weight: 400;
+  --text-label: 14px;
+  --text-label--line-height: 20px;
+  --text-label--font-weight: 500;
+  --text-caption: 12px;
+  --text-caption--line-height: 16px;
+  --text-caption--font-weight: 400;
+  --text-caption-strong: 12px;
+  --text-caption-strong--line-height: 16px;
+  --text-caption-strong--font-weight: 600;
+  --text-overline: 11px;
+  --text-overline--line-height: 16px;
+  --text-overline--font-weight: 600;
+  --text-overline--letter-spacing: 0.06em;
+  --text-code: 13px;
+  --text-code--line-height: 20px;
+  --text-code--font-weight: 400;
+}
+
+@utility text-overline {
+  text-transform: uppercase;
+}
+
+@utility text-code {
+  font-family: var(--font-mono);
+}
+
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/*
+ * Focus ring on every interactive element (DESIGN.md §8). Unlayered so it
+ * wins over component utilities such as `outline-none`.
+ */
+:focus-visible {
+  outline: 2px solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+[data-sidebar] :focus-visible,
+[data-chrome] :focus-visible {
+  outline-color: var(--focus-ring-chrome-color);
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
