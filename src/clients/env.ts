@@ -1,7 +1,6 @@
 import { z } from "zod";
+import { LOG_LEVELS } from "@/utils/logger";
 import { version as packageVersion } from "../../package.json";
-
-export const LOG_LEVELS = ["debug", "info", "warn", "error"] as const;
 
 const envSchema = z.object({
   DATABASE_URL: z.string().trim().min(1).default("./data/rayblue.db"),
