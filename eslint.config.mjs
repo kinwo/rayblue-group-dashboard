@@ -14,7 +14,9 @@ const restrict = (files, layers, extra = {}) => ({
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  restrict(["src/utils/**"], ["app", "components", "services", "data", "clients", "test"]),
+  { ...restrict(["src/utils/**"], ["app", "components", "services", "data", "clients", "test"]), ignores: ["src/**/*.test.ts"] },
+  // Utils tests may use the shared generators in src/test, nothing else above utils.
+  restrict(["src/utils/**/*.test.ts"], ["app", "components", "services", "data", "clients"]),
   restrict(["src/clients/**"], ["app", "components", "services", "data", "test"]),
   restrict(["src/data/**"], ["app", "components", "services"]),
   {
