@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
   // per-request CSP nonce, so every route renders dynamically (Next CSP guide, ADR 0003).
   cacheComponents: false,
   poweredByHeader: false,
+  // forbidden() / unauthorized() and their 403/401 views, ready for auth (ADR 0006).
+  experimental: { authInterrupts: true },
   // Pages also get a per-request CSP from src/proxy.ts (AC-SEC-4).
   async headers() {
     return [
