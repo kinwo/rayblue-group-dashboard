@@ -106,6 +106,8 @@ describe("proxy", () => {
       const page = await handle(request("/", method));
       expect(page.status).toBe(405);
       expect(page.headers.get("allow")).toBe("GET, HEAD");
+      expect(page.headers.get("content-type")).toBe("text/html; charset=utf-8");
+      expect(await page.text()).toContain("<h1>This action isn't supported</h1>");
     },
   );
 
@@ -143,13 +145,16 @@ describe("proxy rate limiting (ADR 0004)", () => {
     expect(await limited.json()).toEqual({ error: "Too many requests" });
   });
 
-  it("answers a page client over its limit with plain-text 429 and the security headers", async () => {
+  it("answers a page client over its limit with an HTML 429 page and the security headers", async () => {
     const send = limitedTo(1, 10);
     await send(request("/rental-analytics", "GET", client));
     const limited = await send(request("/rental-analytics?state=NSW", "GET", client));
     expect(limited.status).toBe(429);
-    expect(limited.headers.get("content-type")).toBe("text/plain");
-    expect(await limited.text()).toBe("Too many requests");
+    expect(limited.headers.get("content-type")).toBe("text/html; charset=utf-8");
+    const body = await limited.text();
+    expect(body).toContain("<h1>Too many requests</h1>");
+    expect(body).toContain(`Please wait ${limited.headers.get("retry-after")} second`);
+    expect(body).not.toContain("NSW");
     expect(limited.headers.get("content-security-policy")).toBe(NON_PAGE_CONTENT_SECURITY_POLICY);
     for (const [name, value] of Object.entries(SECURITY_HEADERS)) expect(limited.headers.get(name)).toBe(value);
   });
