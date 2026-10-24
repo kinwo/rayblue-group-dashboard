@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { CardRow } from "@/components/analytics/analytics-layout";
 import { Filters } from "@/components/analytics/filters";
 import { KpiTiles } from "@/components/analytics/kpi-tiles";
 import { StateBars } from "@/components/analytics/state-bars";
@@ -32,10 +33,10 @@ export default async function RentalAnalyticsPage({ searchParams }: { searchPara
         <Filters filters={view.filters} agencyOptions={view.agencyOptions}>
           <KpiTiles kpis={view.kpis} scope={view.scope} asOf={view.asOf} />
           <TrendChart trend={view.trend} scope={view.scope} />
-          <div className="flex flex-wrap gap-6">
+          <CardRow>
             <StateBars byState={view.byState} scope={view.scope} trend={view.trend} />
             <TopAgenciesTable topAgencies={view.topAgencies} scope={view.scope} trend={view.trend} />
-          </div>
+          </CardRow>
         </Filters>
       </PageContent>
     </>

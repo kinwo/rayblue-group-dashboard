@@ -3,6 +3,8 @@ import { useId, type ReactNode } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/utils/cn";
 
+import styles from "@/components/analytics/analytics-card.module.css";
+
 type AnalyticsCardProps = {
   title: string;
   description?: ReactNode;
@@ -19,20 +21,20 @@ export function AnalyticsCard({ title, description, aside, className, children }
     <Card
       role="region"
       aria-labelledby={headingId}
-      className={cn("min-w-0 gap-0 rounded-lg border-line bg-surface-raised py-0 text-ink shadow-none", className)}
+      className={cn(styles.card, className)}
     >
-      <CardHeader className="flex flex-wrap items-start justify-between gap-2 px-4 pt-4">
-        <div className="flex flex-col gap-1">
+      <CardHeader className={styles.header}>
+        <div className={styles.heading}>
           <CardTitle>
-            <h2 id={headingId} className="text-heading text-ink">
+            <h2 id={headingId} className={styles.title}>
               {title}
             </h2>
           </CardTitle>
-          {description ? <CardDescription className="text-caption text-ink-muted">{description}</CardDescription> : null}
+          {description ? <CardDescription className={styles.description}>{description}</CardDescription> : null}
         </div>
         {aside}
       </CardHeader>
-      <CardContent className="p-4">{children}</CardContent>
+      <CardContent className={styles.content}>{children}</CardContent>
     </Card>
   );
 }

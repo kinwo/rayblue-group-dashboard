@@ -1,0 +1,6 @@
+@reference "../../app/globals.css";
+
+/* Primary button (DESIGN.md §6 › Buttons). */
+.retry {
+  @apply h-9 bg-primary px-4 text-label text-on-primary hover:bg-primary-hover;
+}

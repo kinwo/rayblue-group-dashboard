@@ -1,0 +1,66 @@
+@reference "../../app/globals.css";
+
+/* Data table (DESIGN.md §6 › Data table): sunken header, 40px rows, numeric columns right-aligned. */
+.frame {
+  @apply overflow-hidden rounded-lg border border-line;
+}
+
+.table {
+  @apply text-body;
+}
+
+.head {
+  @apply bg-surface-sunken;
+}
+
+.headRow {
+  @apply border-line hover:bg-transparent;
+}
+
+.emptyRow {
+  @apply hover:bg-transparent;
+}
+
+.empty {
+  @apply py-12 text-center text-ink-muted;
+}
+
+.row {
+  @apply h-10 border-line hover:bg-surface-hover data-[state=selected]:bg-selected;
+}
+
+.cell {
+  @apply px-3;
+}
+
+.name {
+  @apply font-medium text-ink;
+}
+
+.state {
+  @apply text-ink-muted;
+}
+
+.numeric {
+  @apply text-right tabular-nums;
+}
+
+.columnHead {
+  @apply h-10 px-3 text-caption-strong text-ink-muted;
+}
+
+.columnHeadNumeric {
+  @apply text-right;
+}
+
+.sortButton {
+  @apply inline-flex items-center gap-1 rounded-sm hover:text-ink;
+}
+
+.sortIcon {
+  @apply size-3.5 text-ink-muted;
+}
+
+.sortIcon[data-active] {
+  @apply text-primary;
+}

@@ -1,0 +1,54 @@
+@reference "../../app/globals.css";
+
+/* Placeholder blocks sized like the final page (AC-STE-1). */
+.block {
+  @apply bg-surface-sunken;
+}
+
+.frame {
+  @apply flex min-w-0 flex-col gap-4 rounded-lg border border-line bg-surface-raised p-4;
+}
+
+.frameHeading {
+  @apply flex flex-col gap-1;
+}
+
+.cardTitle {
+  @apply h-6 w-48;
+}
+
+.cardDescription {
+  @apply h-4 w-64 max-w-full;
+}
+
+.header {
+  @apply flex flex-col gap-1 border-b border-line bg-surface-raised px-6 pt-5 pb-4;
+}
+
+.pageTitle {
+  @apply h-7 w-52;
+}
+
+.pageMeta {
+  @apply h-4 w-96 max-w-full;
+}
+
+.filters {
+  @apply h-[78px] rounded-lg;
+}
+
+.kpi {
+  @apply h-[108px] rounded-lg border border-line bg-surface-raised;
+}
+
+.trend {
+  @apply h-60;
+}
+
+.stateRow {
+  @apply h-8;
+}
+
+.tableRow {
+  @apply h-10;
+}

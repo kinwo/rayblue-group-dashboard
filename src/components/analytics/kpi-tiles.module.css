@@ -1,0 +1,19 @@
+@reference "../../app/globals.css";
+
+/* KPI tile (DESIGN.md §6 › KPI tile). */
+.tile {
+  @apply flex min-w-0 flex-col gap-1 rounded-lg border border-line bg-surface-raised p-4;
+}
+
+.label {
+  @apply text-caption-strong text-ink-muted;
+}
+
+/* Tabular and never coloured (AC-KPI-4). */
+.value {
+  @apply text-display text-ink tabular-nums;
+}
+
+.note {
+  @apply text-caption text-ink-muted;
+}

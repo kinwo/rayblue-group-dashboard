@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import { StatusView } from "@/components/layout/status-view";
 
+import styles from "@/app/not-found.module.css";
+
 export const metadata: Metadata = { title: "Page not found" };
 
 /** Unknown routes (AC-STE-4); Next.js sends HTTP 404. */
@@ -12,7 +14,7 @@ export default function NotFound() {
       title="Page not found"
       message="There's no page at this address. It may have moved, or the link may be wrong."
       action={
-        <Link href="/rental-analytics" className="text-label text-link underline underline-offset-4 hover:no-underline">
+        <Link href="/rental-analytics" className={styles.link}>
           Go to Rental analytics
         </Link>
       }
