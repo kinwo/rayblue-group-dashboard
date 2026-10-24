@@ -1,0 +1,13 @@
+@reference "../../app/globals.css";
+
+.banner {
+  @apply rounded-none border-x-0 border-t-0 border-warning/40 bg-warning-soft px-6 text-warning;
+}
+
+.title {
+  @apply text-subheading;
+}
+
+.text {
+  @apply text-body text-ink;
+}

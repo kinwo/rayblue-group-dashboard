@@ -2,8 +2,9 @@
 
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useId, useState, type ReactNode } from "react";
+import { useId, useState, useTransition, type ReactNode } from "react";
 
+import { useOnlineStatus } from "@/components/hooks/use-online-status";
 import { useNonce } from "@/components/security/nonce";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
@@ -13,13 +14,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { AgencyOption } from "@/services/rental-analytics.types";
 import { cn } from "@/utils/cn";
 import { GRANULARITIES, type Granularity } from "@/utils/granularity";
-import { toQueryString, type AnalyticsFilters } from "@/utils/search-params";
+import { toQueryString, type AnalyticsFilters, type FilterKey } from "@/utils/search-params";
 import { ALL_STATES_LABEL, isStateCode, STATES, stateName, type StateCode } from "@/utils/states";
 
 import styles from "@/components/analytics/filters.module.css";
 
 const ALL = "all";
 export const ALL_AGENCIES_LABEL = "All agencies";
+
+/** Field labels, shared with the filter-reset notice so both name a filter the same way. */
+export const FILTER_LABELS: Record<FilterKey, string> = {
+  state: "State or territory",
+  agencyId: "Agency",
+  granularity: "Listing period",
+};
 
 export const GRANULARITY_LABELS: Record<Granularity, string> = {
   daily: "Daily",
@@ -48,11 +56,18 @@ type FiltersProps = {
 /**
  * Filter bar and Listing period tabs. The URL is the only state (AC-FLT-5):
  * every change pushes new search params and the server renders the new view.
+ * While the new view loads the panel is marked busy; offline, changes are held
+ * back and the connection banner says why (AC-STE-6).
  */
 export function Filters({ filters, agencyOptions, children }: FiltersProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const navigate = (next: AnalyticsFilters) => router.push(`${pathname}${toQueryString(next)}`, { scroll: false });
+  const online = useOnlineStatus();
+  const [isPending, startTransition] = useTransition();
+  const navigate = (next: AnalyticsFilters) => {
+    if (!online) return;
+    startTransition(() => router.push(`${pathname}${toQueryString(next)}`, { scroll: false }));
+  };
 
   return (
     <Tabs
@@ -68,11 +83,12 @@ export function Filters({ filters, agencyOptions, children }: FiltersProps) {
         <AgencyCombobox
           value={filters.agencyId}
           options={agencyOptions}
+          emptyHint={`No agencies in ${filters.state ? stateName(filters.state) : "the group"}`}
           onChange={(agencyId) => navigate({ ...filters, agencyId })}
         />
         <div className={styles.field}>
           <span id="listing-period-label" className={styles.label}>
-            Listing period
+            {FILTER_LABELS.granularity}
           </span>
           <TabsList
             variant="line"
@@ -87,7 +103,7 @@ export function Filters({ filters, agencyOptions, children }: FiltersProps) {
           </TabsList>
         </div>
       </section>
-      <TabsContent value={filters.granularity} className={styles.panel}>
+      <TabsContent value={filters.granularity} aria-busy={isPending} className={styles.panel}>
         {children}
       </TabsContent>
     </Tabs>
@@ -100,7 +116,7 @@ function StateSelect({ value, onChange }: { value: StateCode | null; onChange: (
   return (
     <div className={styles.field}>
       <label htmlFor={id} className={styles.label}>
-        State or territory
+        {FILTER_LABELS.state}
       </label>
       <Select value={value ?? ALL} onValueChange={(v) => onChange(isStateCode(v) ? v : null)}>
         <SelectTrigger id={id} className={styles.trigger}>
@@ -123,15 +139,20 @@ function StateSelect({ value, onChange }: { value: StateCode | null; onChange: (
 function AgencyCombobox({
   value,
   options,
+  emptyHint,
   onChange,
 }: {
   value: number | null;
   options: readonly AgencyOption[];
+  /** Shown, and the combobox disabled, when the state has no agencies. */
+  emptyHint: string;
   onChange: (agencyId: number | null) => void;
 }) {
   const [open, setOpen] = useState(false);
   const labelId = useId();
   const listId = useId();
+  const hintId = useId();
+  const isEmpty = options.length === 0;
   const sorted = [...options].sort((a, b) => a.name.localeCompare(b.name, "en-AU"));
   const selected = sorted.find((a) => a.id === value);
 
@@ -143,7 +164,7 @@ function AgencyCombobox({
   return (
     <div className={styles.field}>
       <span id={labelId} className={styles.label}>
-        Agency
+        {FILTER_LABELS.agencyId}
       </span>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
@@ -153,6 +174,8 @@ function AgencyCombobox({
             aria-labelledby={labelId}
             aria-expanded={open}
             aria-controls={listId}
+            aria-describedby={isEmpty ? hintId : undefined}
+            disabled={isEmpty}
             className={styles.trigger}
           >
             <span className={styles.triggerText}>{selected ? selected.name : ALL_AGENCIES_LABEL}</span>
@@ -185,6 +208,11 @@ function AgencyCombobox({
           </Command>
         </PopoverContent>
       </Popover>
+      {isEmpty ? (
+        <span id={hintId} className={styles.hint}>
+          {emptyHint}
+        </span>
+      ) : null}
     </div>
   );
 }

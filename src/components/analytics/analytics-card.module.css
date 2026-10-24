@@ -24,3 +24,7 @@
 .content {
   @apply p-4;
 }
+
+.note {
+  @apply mb-3 text-caption text-ink-muted;
+}

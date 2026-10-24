@@ -29,6 +29,7 @@ export function dailyPoints(counts: readonly number[] = DAILY_COUNTS): TrendPoin
 export function makeView(overrides: Partial<RentalAnalyticsView> = {}): RentalAnalyticsView {
   return {
     filters: { state: null, agencyId: null, granularity: "daily" },
+    droppedFilters: [],
     scope: { label: "All states and territories", seriesName: "All Rayblue agencies", state: null, agency: null },
     asOf: AS_OF,
     isStale: false,
@@ -41,6 +42,7 @@ export function makeView(overrides: Partial<RentalAnalyticsView> = {}): RentalAn
       stateCount: 8,
     },
     trend: { granularity: "daily", points: dailyPoints() },
+    isEmpty: false,
     byState: STATE_CODES.map((state, i) => ({
       state,
       agencyCount: [2, 1, 1, 0, 0, 0, 0, 0][i],

@@ -139,15 +139,33 @@ describe("getRentalAnalytics: known counts across a DST change and a month end (
 });
 
 describe("getRentalAnalytics: empty and failing data", () => {
-  it("returns zeros, not errors, for an empty dataset (AC-STE-2)", async () => {
-    const v = await view(db());
+  it("returns zeros, not errors, when there are agencies but no listings (AC-STE-2)", async () => {
+    const v = await view(db({ agencies: [{ state: "NSW" }] }));
     expect(v.kpis.today.current).toBe(0);
-    expect(v.kpis.agencyCount).toBe(0);
+    expect(v.kpis.agencyCount).toBe(1);
     expect(v.trend.points).toHaveLength(14);
     expect(v.trend.points.every((p) => p.count === 0)).toBe(true);
+    expect(v.isEmpty).toBe(true);
     expect(v.byState.map((r) => r.count)).toEqual([0, 0, 0, 0, 0, 0, 0, 0]);
-    expect(v.topAgencies).toEqual({ rows: [], scopeTotal: 0 });
-    expect(v.agencyOptions).toEqual([]);
+    expect(v.topAgencies.scopeTotal).toBe(0);
+  });
+
+  it("withholds a dataset with no agencies at all as DataIntegrityError (AC-STE-7)", async () => {
+    await expect(view(db())).rejects.toBeInstanceOf(DataIntegrityError);
+  });
+
+  it("withholds a dataset whose as-of time is in the future (AC-STE-7)", async () => {
+    const d = db({ agencies: [{ state: "NSW" }] });
+    const { asOf } = await d.repo.getDatasetMeta();
+    await expect(view(d, {}, asOf - 2 * 60 * 60 * 1000)).rejects.toBeInstanceOf(DataIntegrityError);
+    await expect(view(d, {}, asOf - 30 * 60 * 1000)).resolves.toBeDefined();
+  });
+
+  it("reports a dropped agency so the page can say so (AC-FLT-11)", async () => {
+    const d = db({ agencies: [{ id: 1, state: "NSW" }] });
+    expect((await view(d, { state: "VIC", agencyId: 1 })).droppedFilters).toEqual(["agencyId"]);
+    expect((await view(d, { agencyId: 1 })).droppedFilters).toEqual([]);
+    expect((await view(d, { agencyId: 99 })).droppedFilters).toEqual(["agencyId"]);
   });
 
   it("propagates DataUnavailableError when the database cannot be read", async () => {
@@ -162,7 +180,7 @@ describe("getRentalAnalytics: empty and failing data", () => {
   });
 
   it("reads one bounded window, never unbounded (AC-SEC-2)", async () => {
-    const d = db();
+    const d = db({ agencies: [{ state: "NSW" }] });
     const spy = jest.spyOn(d.repo, "listListingTimes");
     const { asOf } = await d.repo.getDatasetMeta();
     for (const granularity of ["daily", "weekly", "monthly"] as const) {
@@ -243,14 +261,13 @@ describe("getRentalAnalytics: properties over generated data", () => {
 });
 
 describe("loadRentalAnalytics", () => {
-  it("rejects with DataUnavailableError when the database file is missing", async () => {
+  it("returns an unavailable result when the database file is missing (AC-STE-5)", async () => {
     const previous = process.env.DATABASE_URL;
     process.env.DATABASE_URL = "./does-not-exist/rayblue.db";
     try {
       await jest.isolateModulesAsync(async () => {
         const { loadRentalAnalytics } = await import("@/services/rental-analytics");
-        const errors = await import("@/utils/errors");
-        await expect(loadRentalAnalytics(DEFAULT_FILTERS, 0)).rejects.toBeInstanceOf(errors.DataUnavailableError);
+        await expect(loadRentalAnalytics(DEFAULT_FILTERS, 0)).resolves.toEqual({ kind: "unavailable" });
       });
     } finally {
       if (previous === undefined) delete process.env.DATABASE_URL;

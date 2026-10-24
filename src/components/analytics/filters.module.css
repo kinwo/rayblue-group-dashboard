@@ -28,7 +28,16 @@
 }
 
 .panel {
-  @apply flex flex-col gap-6;
+  @apply flex flex-col gap-6 transition-opacity;
+}
+
+/* A new view is loading: dim the old one so it doesn't read as current. */
+.panel[aria-busy="true"] {
+  @apply opacity-60;
+}
+
+.hint {
+  @apply text-caption text-ink-muted;
 }
 
 /* State select and agency combobox triggers share one look (DESIGN.md §6 › Form controls). */

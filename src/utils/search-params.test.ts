@@ -4,7 +4,9 @@ import { GRANULARITIES } from "@/utils/granularity";
 import {
   type AnalyticsFilters,
   DEFAULT_FILTERS,
+  type FilterKey,
   parseAnalyticsSearchParams,
+  parseAnalyticsSearchParamsDetailed,
   type RawSearchParams,
   toQueryString,
   toSearchParams,
@@ -99,6 +101,44 @@ describe("toSearchParams / toQueryString", () => {
     fc.assert(
       fc.property(arbFilters, (f) => {
         expect(parseAnalyticsSearchParams(fromQuery(toSearchParams(f).toString()))).toEqual(f);
+      }),
+    );
+  });
+});
+
+describe("parseAnalyticsSearchParamsDetailed (AC-FLT-11)", () => {
+  const KEYS: FilterKey[] = ["state", "agencyId", "granularity"];
+  const arbRawValue = fc.oneof(fc.string({ maxLength: 40 }), fc.array(fc.string({ maxLength: 4 }), { maxLength: 3 }), fc.constant(undefined));
+  const arbRaw = fc.dictionary(fc.constantFrom(...KEYS, "utm_source", "page"), arbRawValue);
+
+  it("lists only the filter params that were present and rejected", () => {
+    expect(parseAnalyticsSearchParamsDetailed({ state: "XYZ", granularity: "weekly", utm_source: "x" }).reset).toEqual(["state"]);
+    expect(parseAnalyticsSearchParamsDetailed({ agencyId: ["1", "2"], granularity: "x".repeat(20) }).reset).toEqual([
+      "agencyId",
+      "granularity",
+    ]);
+    expect(parseAnalyticsSearchParamsDetailed({}).reset).toEqual([]);
+  });
+
+  it("never throws, agrees with parseAnalyticsSearchParams, and reports only present filter keys", () => {
+    fc.assert(
+      fc.property(arbRaw, (raw) => {
+        const { filters, reset } = parseAnalyticsSearchParamsDetailed(raw);
+        expect(filters).toEqual(parseAnalyticsSearchParams(raw));
+        for (const key of reset) {
+          expect(KEYS).toContain(key);
+          expect(raw[key]).toBeDefined();
+          expect(filters[key]).toEqual(DEFAULT_FILTERS[key]);
+        }
+      }),
+    );
+  });
+
+  it("never reports a valid value", () => {
+    fc.assert(
+      fc.property(fc.option(arbStateCode, { nil: null }), fc.option(fc.integer({ min: 1, max: 999_999_999 }), { nil: null }), arbGranularity, (state, agencyId, granularity) => {
+        const raw = fromQuery(toQueryString({ state, agencyId, granularity }).slice(1));
+        expect(parseAnalyticsSearchParamsDetailed(raw).reset).toEqual([]);
       }),
     );
   });

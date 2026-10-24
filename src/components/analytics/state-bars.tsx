@@ -1,6 +1,6 @@
 import { AnalyticsCard } from "@/components/analytics/analytics-card";
 import layout from "@/components/analytics/analytics-layout.module.css";
-import { highlightedState, trendRangeLabel } from "@/components/analytics/scope";
+import { highlightedState, noListingsNote, trendRangeLabel } from "@/components/analytics/scope";
 import type { RentalAnalyticsView } from "@/services/rental-analytics.types";
 import { SINGLE_SERIES_COLOR } from "@/utils/chart-colors";
 import { formatAgencyCount, formatCount } from "@/utils/format";
@@ -26,7 +26,12 @@ export function StateBars({ byState, scope, trend }: StateBarsProps) {
     : `${range} · ${ALL_STATES_LABEL}`;
 
   return (
-    <AnalyticsCard title="New listings by state" description={description} className={layout.stateColumn}>
+    <AnalyticsCard
+      title="New listings by state"
+      description={description}
+      note={max === 0 ? noListingsNote(ALL_STATES_LABEL) : null}
+      className={layout.stateColumn}
+    >
       <ul className={styles.rows}>
         {rows.map((row) => (
           <li

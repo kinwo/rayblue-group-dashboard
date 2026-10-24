@@ -3,7 +3,7 @@
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import { AnalyticsCard } from "@/components/analytics/analytics-card";
-import { PERIOD_NOUN, trendRangeLabel } from "@/components/analytics/scope";
+import { noListingsNote, PERIOD_NOUN, trendRangeLabel } from "@/components/analytics/scope";
 import { ChartContainer, ChartTooltip, type ChartConfig } from "@/components/ui/chart";
 import type { RentalAnalyticsView, TrendPoint } from "@/services/rental-analytics.types";
 import { SINGLE_SERIES_COLOR } from "@/utils/chart-colors";
@@ -12,7 +12,7 @@ import type { Granularity } from "@/utils/granularity";
 
 import styles from "@/components/analytics/trend-chart.module.css";
 
-type TrendChartProps = Pick<RentalAnalyticsView, "trend" | "scope">;
+type TrendChartProps = Pick<RentalAnalyticsView, "trend" | "scope"> & Partial<Pick<RentalAnalyticsView, "isEmpty">>;
 
 /** Bucket starts to label: every second one counting back from the latest, so the latest is always labelled. */
 export function tickStarts(points: readonly TrendPoint[]): number[] {
@@ -51,7 +51,7 @@ export function trendSummary({ trend, scope }: TrendChartProps): string {
 const SERIES_KEY = "count";
 
 /** Trend line card (F4, DESIGN.md §7). */
-export function TrendChart({ trend, scope }: TrendChartProps) {
+export function TrendChart({ trend, scope, isEmpty = false }: TrendChartProps) {
   const { points, granularity } = trend;
   const config: ChartConfig = { [SERIES_KEY]: { label: scope.seriesName } };
   const title = trendTitle(granularity);
@@ -62,6 +62,7 @@ export function TrendChart({ trend, scope }: TrendChartProps) {
       title={title}
       description={`${trendRangeLabel(points, granularity)} · ${scope.label}`}
       aside={<Legend name={scope.seriesName} />}
+      note={isEmpty ? noListingsNote(scope.label) : null}
     >
       <figure className={styles.figure}>
         <div role="img" aria-label={trendSummary({ trend, scope })}>

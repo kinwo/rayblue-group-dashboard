@@ -115,6 +115,24 @@ describe("Filters", () => {
     expect(screen.getByRole("tab", { name: "Monthly" })).toHaveAttribute("aria-selected", "true");
   });
 
+  it("AC-STE-6: offline, filter changes are held back", async () => {
+    const onLine = jest.spyOn(navigator, "onLine", "get").mockReturnValue(false);
+    try {
+      renderFilters();
+      await userEvent.click(screen.getByRole("tab", { name: "Weekly" }));
+      expect(push).not.toHaveBeenCalled();
+    } finally {
+      onLine.mockRestore();
+    }
+  });
+
+  it("AC-AGY-6: a state with no agencies disables the agency combobox and says why", () => {
+    renderFilters({ state: "TAS" }, []);
+    const agency = screen.getByRole("combobox", { name: "Agency" });
+    expect(agency).toBeDisabled();
+    expect(agency).toHaveAccessibleDescription("No agencies in Tasmania");
+  });
+
   it("AC-FLT-10: changing to a state without the selected agency resets the agency", async () => {
     renderFilters({ agencyId: 3, granularity: "weekly" });
     await userEvent.click(screen.getByRole("combobox", { name: "State or territory" }));

@@ -4,3 +4,11 @@
 .retry {
   @apply h-9 bg-primary px-4 text-label text-on-primary hover:bg-primary-hover;
 }
+
+.actions {
+  @apply flex items-center gap-3;
+}
+
+.status {
+  @apply text-caption text-ink-muted;
+}

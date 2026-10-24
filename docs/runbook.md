@@ -45,10 +45,14 @@ Point `current` back at the previous release directory and restart. Releases shi
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | Process exits at start with `startup_check_failed` | Env invalid, DB file missing, or migration mismatch | Read the one log line, fix config or redeploy the release with its DB |
-| Page shows "We can't load the figures right now", health 503 | DB file removed, unreadable, locked or corrupt | Restore the release's `data/rayblue.db` (or roll back); users press Retry |
+| Page shows "We can't reach the listing data right now", health 503, `analytics_degraded` / `data_unavailable` warnings | DB file removed, unreadable, locked or corrupt | Restore the release's `data/rayblue.db` (or roll back); users press Retry |
+| Page shows "These figures failed a safety check", `analytics_degraded` / `data_invalid` errors | The shipped dataset breaks an invariant (AC-STE-7), e.g. no as-of time or an as-of in the future | Roll back, then rebuild the release with a valid seed. Retrying does not help |
+| Page shows "We can't load the figures right now", `request_failed` errors | An unexpected server error | Correlate by `digest`; roll back if it started with a deploy |
 | Page shows "figures may be out of date" | Dataset as-of time is over 24 hours old | Build and deploy a release with a fresh seed |
 | 404 JSON under `/api/*` | Unknown endpoint; only `/api/health` exists | Expected |
 | 429 and `rate_limited` warnings in the log | A client is over its per-minute limit | Expected for scrapers. If real users hit it (for example many people behind one office IP), raise `RATE_LIMIT_PAGES_PER_MINUTE` and restart. If every client is limited at once, check the proxy sets `X-Forwarded-For`: without it, all requests share one bucket |
+
+See [error-handling.md](error-handling.md) for every failure path and what the visitor sees.
 
 Logs are one JSON object per line on stdout (time, level, route, status, duration). They contain no request bodies, cookies or personal data. Retention is decided once a host is chosen (intent §9).
 

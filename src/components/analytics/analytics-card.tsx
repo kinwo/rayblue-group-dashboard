@@ -10,12 +10,14 @@ type AnalyticsCardProps = {
   description?: ReactNode;
   /** Right of the title, e.g. a legend. */
   aside?: ReactNode;
+  /** A short informational line above the content, e.g. that the range has no listings. */
+  note?: string | null;
   className?: string;
   children: ReactNode;
 };
 
 /** Cirrus card (DESIGN.md §6 › Card) as a labelled section. */
-export function AnalyticsCard({ title, description, aside, className, children }: AnalyticsCardProps) {
+export function AnalyticsCard({ title, description, aside, note, className, children }: AnalyticsCardProps) {
   const headingId = useId();
   return (
     <Card
@@ -34,7 +36,10 @@ export function AnalyticsCard({ title, description, aside, className, children }
         </div>
         {aside}
       </CardHeader>
-      <CardContent className={styles.content}>{children}</CardContent>
+      <CardContent className={styles.content}>
+        {note ? <p className={styles.note}>{note}</p> : null}
+        {children}
+      </CardContent>
     </Card>
   );
 }

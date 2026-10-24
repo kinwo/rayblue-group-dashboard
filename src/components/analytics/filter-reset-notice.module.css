@@ -1,0 +1,22 @@
+@reference "../../app/globals.css";
+
+/* Informational, not an error (DESIGN.md §6 › Alerts). */
+.notice {
+  @apply border-info/40 bg-info-soft pr-12 text-info;
+}
+
+.title {
+  @apply text-subheading;
+}
+
+.text {
+  @apply text-body text-ink;
+}
+
+.list {
+  @apply flex flex-col gap-1;
+}
+
+.dismiss {
+  @apply absolute top-2 right-2 text-ink-muted hover:text-ink;
+}
