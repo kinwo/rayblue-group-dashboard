@@ -3,22 +3,13 @@ import userEvent from "@testing-library/user-event";
 import fc from "fast-check";
 
 import { niceYTicks, tickStarts, TrendChart, TrendTooltip, trendSummary } from "@/components/analytics/trend-chart";
-import { installDomPolyfills } from "@/components/testing/dom";
+import { installChartLayout, installDomPolyfills } from "@/components/testing/dom";
 import { dailyPoints, makeView } from "@/components/testing/fixtures";
 import type { TrendPoint } from "@/services/rental-analytics.types";
 
 beforeAll(() => {
   installDomPolyfills();
-  // Give Recharts' ResponsiveContainer a size; jsdom lays nothing out.
-  jest.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
-    width: 640, height: 240, top: 0, left: 0, right: 640, bottom: 240, x: 0, y: 0, toJSON: () => ({}),
-  });
-  for (const prop of ["clientWidth", "offsetWidth"] as const) {
-    Object.defineProperty(HTMLElement.prototype, prop, { configurable: true, get: () => 640 });
-  }
-  for (const prop of ["clientHeight", "offsetHeight"] as const) {
-    Object.defineProperty(HTMLElement.prototype, prop, { configurable: true, get: () => 240 });
-  }
+  installChartLayout();
 });
 
 const view = makeView();
