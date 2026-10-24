@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { clientKey, getRateLimiter, type RateLimiter } from "@/clients/rate-limiter";
 import { logger } from "@/utils/logger";
+import { methodNotAllowedPage, tooManyRequestsPage } from "@/utils/plain-status-page";
 import {
   ALLOWED_METHODS,
   buildContentSecurityPolicy,
@@ -9,6 +10,7 @@ import {
 } from "@/utils/security-headers";
 
 const ALLOW = ALLOWED_METHODS.join(", ");
+const HTML = "text/html; charset=utf-8";
 
 /** Adds the shared headers, and the non-page CSP unless a page CSP is already set. */
 function withSecurityHeaders(response: NextResponse): NextResponse {
@@ -23,14 +25,14 @@ function methodNotAllowed(isApi: boolean): NextResponse {
   const headers = { Allow: ALLOW, "Cache-Control": "no-store" };
   return isApi
     ? NextResponse.json({ error: "Method not allowed" }, { status: 405, headers })
-    : new NextResponse("Method not allowed", { status: 405, headers: { ...headers, "Content-Type": "text/plain" } });
+    : new NextResponse(methodNotAllowedPage(), { status: 405, headers: { ...headers, "Content-Type": HTML } });
 }
 
 function tooManyRequests(isApi: boolean, retryAfterSeconds: number): NextResponse {
   const headers = { "Retry-After": String(retryAfterSeconds), "Cache-Control": "no-store" };
   return isApi
     ? NextResponse.json({ error: "Too many requests" }, { status: 429, headers })
-    : new NextResponse("Too many requests", { status: 429, headers: { ...headers, "Content-Type": "text/plain" } });
+    : new NextResponse(tooManyRequestsPage(retryAfterSeconds), { status: 429, headers: { ...headers, "Content-Type": HTML } });
 }
 
 function newNonce(): string {

@@ -122,3 +122,34 @@ Each step ran in its own session, so every session started from documents rather
 - **Ground agents in installed docs.** Next 16.4's `cacheComponents` default, `proxy.ts`, `retry()` and the CSP and PPR incompatibility all differ from training data. Pointing agents at `node_modules/next/dist/docs/` caught them.
 - **Exclusive file ownership plus "ask the owner"** turned what would have been merge conflicts into short negotiations: the CSP `style-src`, `cn`, the sidebar cookie and chart colours.
 - **Production builds find what unit tests can't.** The CSP and hydration blocker was invisible in Jest and in `next dev`.
+
+## Apendix:
+
+## Product Intent Prompt
+
+```
+Create an interactive prototype for Australia “Rayblue Agency Group" dashboard
+
+- Overseeing all the individual agencies in each states
+- It has a left drawer side bar with 1 item: Rental Analytics
+- Group manager can see basic analytics in diagrams:
+  - Number of listings on daily, weekly and monthly
+- Real estate is a regulated industry.
+- Deployment reliability, security and enterprise quality are high priority.
+```
+
+## Implementation Plan Prompt
+
+```
+# Implementation
+- implement with intent.md
+- generate sample synthetic data dataset for the last 30 days across NSW, VIC and QLD states
+- implement with agent team with 3 teammates: Sam, Tim and Albert, agent teammates should commit to git when it finishes a subtask
+- include safety and failure paths e.g database outage, API endpoint not available
+
+# Data Model Schema
+
+- Tables: Listing, Agency
+- Listing: id, subNumber, streetNumber, street, suburb, postcode, state, propertyType, beds, baths, rentPerWeek, propertyManager, status, listedDate, createdAt, updatedAt
+- Enum: ListingStatus
+```

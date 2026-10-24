@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 
 import { AppSidebar, PRODUCT_NAME } from "@/components/layout/app-sidebar";
+import { ConnectionBanner } from "@/components/layout/connection-banner";
 import { MobileNavButton } from "@/components/layout/mobile-nav-button";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
@@ -18,6 +19,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <MobileNavButton />
           <span className={styles.productName}>{PRODUCT_NAME}</span>
         </header>
+        <ConnectionBanner />
         {children}
       </SidebarInset>
     </SidebarProvider>

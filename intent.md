@@ -77,9 +77,10 @@ Search params: `state`, `agencyId`, `granularity` (names from [ENGINEERING.md �
 - **AC-FLT-5** — *Given* any filter or tab change, *then* the URL search params update, the page shows the new view, and no other client-side state holds the selection. `component`
 - **AC-FLT-6** — *Given* a visitor changes filters several times, *when* they press Back or Forward, *then* each earlier view is restored exactly. `manual`
 - **AC-FLT-7** — *Given* a URL copied from any view, *when* someone else opens it, *then* they see the same filters and the same figures (for the same as-of time). `integration`
-- **AC-FLT-8** — *Given* an unknown or malformed value for any param (for example `state=XYZ`, `granularity=hourly`, `agencyId=abc`, or a 10,000-character string), *when* the page loads, *then* that param falls back to its default, the response is HTTP 200, and no error text or input echo appears. `unit` + `integration`
+- **AC-FLT-8** — *Given* an unknown or malformed value for any param (for example `state=XYZ`, `granularity=hourly`, `agencyId=abc`, or a 10,000-character string), *when* the page loads, *then* that param falls back to its default, the response is HTTP 200, a neutral notice names the reset filter (AC-FLT-11), and the raw value is never echoed. `unit` + `integration`
 - **AC-FLT-9** — *Given* a URL whose `agencyId` is not in the selected `state`, *when* the page loads, *then* the agency filter is dropped and the state filter kept. `unit`
 - **AC-FLT-10** — *Given* an agency is selected, *when* the user changes the state to one that does not contain that agency, *then* the agency resets to "All agencies". `component`
+- **AC-FLT-11** — *Given* a URL param was reset (AC-FLT-8) or an agency was dropped (AC-FLT-9), *then* a dismissible information notice (`role="status"`, not an alert) names each affected filter by its label and what is shown instead, never the rejected value; it is gone once any filter changes. `unit` + `component`
 
 ### F3. KPI tiles
 
@@ -141,9 +142,12 @@ Columns: Agency · State · New listings · Share of group (or "Share of NSW" wh
 ### F8. Loading, empty and error states
 
 - **AC-STE-1** — *Given* data is loading, *then* each card shows a skeleton of its final size so the layout does not jump. `component`
-- **AC-STE-2** — *Given* a scope with no listings in range, *then* tiles show 0, the chart shows a flat zero series, and nothing is shown as an error. `component`
+- **AC-STE-2** — *Given* a scope with no listings in range, *then* tiles show 0, the chart shows a flat zero series with a "No listings for <scope> in this period" note, and nothing is shown as an error. A state with no agencies disables the Agency filter with "No agencies in <state>". `component`
 - **AC-STE-3** — *Given* a server error while building the page, *then* an error view shows a plain message and a Retry button, and contains no stack trace, file path, SQL or environment value. `component` + `integration`
 - **AC-STE-4** — *Given* an unknown route, *then* a not-found page shows with a link back to Rental analytics and HTTP 404. `integration`
+- **AC-STE-5** — *Given* the database cannot be read, *then* the page shows "We can't reach the listing data right now" with Retry instead of figures. Every Retry button allows one attempt at a time, waits 0 s, 5 s, then 15 s between attempts, and after 3 failed attempts asks the visitor to come back later. `component` + `integration`
+- **AC-STE-6** — *Given* the browser goes offline, *then* a banner says the figures may be out of date and filter changes are held back until it reconnects; while a new view loads, the old one is marked busy and dimmed. `component`
+- **AC-STE-7** — *Given* the dataset breaks an invariant (no as-of time, no agencies, as-of more than an hour ahead of the server clock, negative or fractional counts, missing buckets or states), *then* the figures are withheld and a "failed a safety check" view shows instead (safe abstain), logged as `analytics_degraded` / `data_invalid`. `unit` + `integration`
 
 ### F9. Themes
 

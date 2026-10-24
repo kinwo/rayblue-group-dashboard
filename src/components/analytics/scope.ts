@@ -13,4 +13,9 @@ export function trendRangeLabel(points: readonly TrendPoint[], granularity: Gran
   return formatBucketRange(points[0].start, points[points.length - 1].start, granularity);
 }
 
+/** Shown when a card's range has no listings: information, never an error (AC-STE-2). */
+export function noListingsNote(label: string): string {
+  return `No listings for ${label} in this period.`;
+}
+
 export const PERIOD_NOUN: Record<Granularity, string> = { daily: "day", weekly: "week", monthly: "month" };

@@ -11,6 +11,12 @@ export type AnalyticsFilters = {
   granularity: Granularity;
 };
 
+/** A filter's URL param name. */
+export type FilterKey = keyof AnalyticsFilters;
+
+/** Filters plus the params that were present but rejected, so the page can say so without echoing them. */
+export type ParsedAnalyticsSearchParams = { filters: AnalyticsFilters; reset: FilterKey[] };
+
 export const DEFAULT_FILTERS: AnalyticsFilters = Object.freeze({
   state: null,
   agencyId: null,
@@ -30,24 +36,31 @@ const agencyIdSchema = z
   .regex(/^[1-9]\d{0,8}$/)
   .transform(Number);
 
-function single(value: string | string[] | undefined): string | undefined {
-  return typeof value === "string" && value.length <= MAX_PARAM_LENGTH ? value : undefined;
-}
-
-function parseOr<T>(schema: z.ZodType<T>, value: string | undefined, fallback: T): T {
-  if (value === undefined) return fallback;
-  const result = schema.safeParse(value);
-  return result.success ? result.data : fallback;
+/**
+ * Parses raw search params into filters, listing each filter param that was present but
+ * rejected (array, oversized or failing its schema). Never throws; rejected values become defaults.
+ */
+export function parseAnalyticsSearchParamsDetailed(raw: RawSearchParams | null | undefined): ParsedAnalyticsSearchParams {
+  const reset: FilterKey[] = [];
+  function parse<K extends FilterKey>(key: K, schema: z.ZodType<AnalyticsFilters[K]>): AnalyticsFilters[K] {
+    const value = raw && Object.hasOwn(raw, key) ? raw[key] : undefined;
+    if (value === undefined) return DEFAULT_FILTERS[key];
+    const result = typeof value === "string" && value.length <= MAX_PARAM_LENGTH ? schema.safeParse(value) : undefined;
+    if (result?.success) return result.data;
+    reset.push(key);
+    return DEFAULT_FILTERS[key];
+  }
+  const filters = {
+    state: parse("state", stateSchema),
+    agencyId: parse("agencyId", agencyIdSchema),
+    granularity: parse("granularity", granularitySchema),
+  };
+  return { filters, reset };
 }
 
 /** Parses raw search params into filters. Never throws; arrays, unknown and oversized values become defaults. */
 export function parseAnalyticsSearchParams(raw: RawSearchParams | null | undefined): AnalyticsFilters {
-  const get = (key: string) => (raw && Object.hasOwn(raw, key) ? single(raw[key]) : undefined);
-  return {
-    state: parseOr<StateCode | null>(stateSchema, get("state"), DEFAULT_FILTERS.state),
-    agencyId: parseOr<number | null>(agencyIdSchema, get("agencyId"), DEFAULT_FILTERS.agencyId),
-    granularity: parseOr<Granularity>(granularitySchema, get("granularity"), DEFAULT_FILTERS.granularity),
-  };
+  return parseAnalyticsSearchParamsDetailed(raw).filters;
 }
 
 /** Search params for a view, omitting defaults, in the order state, agencyId, granularity. */

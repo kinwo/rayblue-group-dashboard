@@ -1,6 +1,6 @@
 import type { ListingRepository } from "@/data/repository.types";
 import type { Granularity } from "@/utils/granularity";
-import type { AnalyticsFilters } from "@/utils/search-params";
+import type { AnalyticsFilters, FilterKey } from "@/utils/search-params";
 import type { StateCode } from "@/utils/states";
 
 /** Validated filters, as parsed from the URL at the page boundary. Defined in utils so the parser owns it. */
@@ -52,6 +52,8 @@ export type AgencyRow = {
 export type RentalAnalyticsView = {
   /** Filters after cross-validation (an agency outside the state is dropped, AC-FLT-9). */
   filters: AnalyticsFilters;
+  /** Requested filters the service dropped (`agencyId` when unknown or outside the state, AC-FLT-11). */
+  droppedFilters: FilterKey[];
   scope: Scope;
   /** Dataset as-of time, UTC ms. */
   asOf: number;
@@ -68,6 +70,8 @@ export type RentalAnalyticsView = {
     stateCount: number;
   };
   trend: { granularity: Granularity; points: TrendPoint[] };
+  /** True when the scope has no listings in the trend range: shown as information, never as an error (AC-STE-2). */
+  isEmpty: boolean;
   /** All eight states and territories, highest count first, over the trend range. */
   byState: StateRow[];
   topAgencies: {
@@ -87,3 +91,13 @@ export type GetRentalAnalytics = (
   deps: RentalAnalyticsDeps,
   filters: AnalyticsFilters,
 ) => Promise<RentalAnalyticsView>;
+
+/**
+ * What the page renders. Known data failures are values, not throws, so the page can pick
+ * a tailored view: `unavailable` is transient (retry helps), `invalid` means the figures
+ * failed a plausibility check and are withheld (safe abstain). Anything else still throws.
+ */
+export type RentalAnalyticsResult =
+  | { kind: "ok"; view: RentalAnalyticsView }
+  | { kind: "unavailable" }
+  | { kind: "invalid" };
