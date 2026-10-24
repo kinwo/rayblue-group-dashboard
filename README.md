@@ -10,8 +10,8 @@ The group manager oversees many agencies across Australia but has no single plac
 
 ### Users
 
-| User | Needs |
-| --- | --- |
+| User                        | Needs                                                                                                              |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | **Group manager** (primary) | A group-wide view of rental activity across every agency, with the option to narrow it down by state or by agency. |
 
 ### Scope of the prototype
@@ -37,13 +37,13 @@ Full requirements and acceptance criteria: **[intent.md](intent.md)**. It is the
 
 ### Domain glossary
 
-| Term | Meaning |
-| --- | --- |
-| **Group** | Rayblue Agency Group, the parent organisation. |
-| **State** | An Australian state or territory. Each agency belongs to exactly one. |
-| **Agency** | An individual Rayblue office that manages rental properties. |
-| **Listing** | A rental property advertised by an agency, counted on the date it was listed. |
-| **Granularity** | The time bucket for a chart: daily, weekly (weeks start Monday) or monthly. |
+| Term            | Meaning                                                                       |
+| --------------- | ----------------------------------------------------------------------------- |
+| **Group**       | Rayblue Agency Group, the parent organisation.                                |
+| **State**       | An Australian state or territory. Each agency belongs to exactly one.         |
+| **Agency**      | An individual Rayblue office that manages rental properties.                  |
+| **Listing**     | A rental property advertised by an agency, counted on the date it was listed. |
+| **Granularity** | The time bucket for a chart: daily, weekly (weeks start Monday) or monthly.   |
 
 All dates are bucketed in the `Australia/Sydney` timezone.
 
@@ -59,13 +59,13 @@ Filters live in the URL (`?state=QLD&agencyId=29&granularity=weekly`), so every 
 
 ## Tech stack
 
-| Concern | Choice |
-| --- | --- |
-| Runtime | Node.js 24, TypeScript (strict) |
-| Framework | Next.js 16 with the App Router |
-| Database | SQLite (file-based) through Drizzle ORM |
-| UI | Tailwind CSS, shadcn/ui, shadcn charts (Recharts) |
-| Tests | Jest, React Testing Library, fast-check (property-based) |
+| Concern   | Choice                                                   |
+| --------- | -------------------------------------------------------- |
+| Runtime   | Node.js 24, TypeScript (strict)                          |
+| Framework | Next.js 16 with the App Router                           |
+| Database  | SQLite (file-based) through Drizzle ORM                  |
+| UI        | Tailwind CSS, shadcn/ui, shadcn charts (Recharts)        |
+| Tests     | Jest, React Testing Library, fast-check (property-based) |
 
 ## Prerequisites
 
@@ -153,33 +153,33 @@ The seed is deterministic, so these numbers are the same on every machine. Scree
 
 Everything is in **[evidence/](evidence/)**:
 
-| Item | What it shows |
-| --- | --- |
-| [evidence/agentic-workflow.md](evidence/agentic-workflow.md) | How the prototype was built with AI agents, step by step |
-| [evidence/design.md](evidence/design.md) | Architecture, data flow and design decisions |
-| [evidence/decisions.md](evidence/decisions.md) | Key decisions and trade-offs |
-| [evidence/verify.md](evidence/verify.md) | Verification results |
-| [evidence/operate.md](evidence/operate.md) | How to operate the app |
-| [evidence/e2e/shots/](evidence/e2e/shots/) | 22 screenshots of the E2E run: defaults, filters, keyboard focus, tooltips, sorting, mobile and breakpoints |
-| [evidence/e2e/http-checks.txt](evidence/e2e/http-checks.txt) | HTTP checks: redirects, 404s, 405s, health and security headers |
-| [evidence/e2e/oracle.py](evidence/e2e/oracle.py), [expected.json](evidence/e2e/expected.json) | Independent SQL oracle for the expected figures, and its output |
-| [evidence/e2e/inspect.js](evidence/e2e/inspect.js), `inspect-*.json` | In-page script and the figures it read from the rendered page, to compare with the oracle |
+| Item                                                                                          | What it shows                                                                                               |
+| --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| [evidence/agentic-workflow.md](evidence/agentic-workflow.md)                                  | How the prototype was built with AI agents, step by step                                                    |
+| [evidence/design.md](evidence/design.md)                                                      | Architecture, data flow and design decisions                                                                |
+| [evidence/decisions.md](evidence/decisions.md)                                                | Key decisions and trade-offs                                                                                |
+| [evidence/verify.md](evidence/verify.md)                                                      | Verification results                                                                                        |
+| [evidence/operate.md](evidence/operate.md)                                                    | How to operate the app                                                                                      |
+| [evidence/e2e/shots/](evidence/e2e/shots/)                                                    | 22 screenshots of the E2E run: defaults, filters, keyboard focus, tooltips, sorting, mobile and breakpoints |
+| [evidence/e2e/http-checks.txt](evidence/e2e/http-checks.txt)                                  | HTTP checks: redirects, 404s, 405s, health and security headers                                             |
+| [evidence/e2e/oracle.py](evidence/e2e/oracle.py), [expected.json](evidence/e2e/expected.json) | Independent SQL oracle for the expected figures, and its output                                             |
+| [evidence/e2e/inspect.js](evidence/e2e/inspect.js), `inspect-*.json`                          | In-page script and the figures it read from the rendered page, to compare with the oracle                   |
 
 Related: requirements and acceptance criteria in [intent.md](intent.md), the E2E plan in [e2e-test-plan.md](e2e-test-plan.md), and decision records in [docs/adr/](docs/adr/).
 
 ## Scripts
 
-| Script | Purpose |
-| --- | --- |
-| `npm run dev` | Start the Next.js dev server |
-| `npm run build` / `npm start` | Production build and serve |
-| `npm run lint` | ESLint |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm test` | Run all Jest tests |
-| `npm run test:watch` | Jest in watch mode |
-| `npm run db:generate` | Generate a Drizzle migration from schema changes |
-| `npm run db:migrate` | Apply migrations to the SQLite file |
-| `npm run db:seed` | Fill the database with synthetic agencies and listings |
+| Script                        | Purpose                                                |
+| ----------------------------- | ------------------------------------------------------ |
+| `npm run dev`                 | Start the Next.js dev server                           |
+| `npm run build` / `npm start` | Production build and serve                             |
+| `npm run lint`                | ESLint                                                 |
+| `npm run typecheck`           | `tsc --noEmit`                                         |
+| `npm test`                    | Run all Jest tests                                     |
+| `npm run test:watch`          | Jest in watch mode                                     |
+| `npm run db:generate`         | Generate a Drizzle migration from schema changes       |
+| `npm run db:migrate`          | Apply migrations to the SQLite file                    |
+| `npm run db:seed`             | Fill the database with synthetic agencies and listings |
 
 ## Documentation map
 
@@ -191,3 +191,12 @@ Read in this order; each step goes one level deeper.
 4. **[ENGINEERING.md](ENGINEERING.md)**: architecture, engineering decisions, practices and the testing strategy.
 5. **[DESIGN.md](DESIGN.md)**: the UI design system (tokens, typography, layout, components, charts).
 6. **`docs/`**: detailed, topic-specific notes and decision records, added as features grow.
+
+## Future improvements
+
+- [ ] Add user auth, JWT sessions token
+- [ ] API will verify Auth JWT session
+- [ ] Add DB field level or row level security
+- [ ] Deterministic E2E Playwright tests
+- [ ] Improve the data model e.g PropertyAddress model
+- [ ] Consider Bot and Spam protection

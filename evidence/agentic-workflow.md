@@ -97,12 +97,7 @@ Each step ran in its own session, so every session started from documents rather
 
 **Reading the code:** the lead read the critical paths rather than trusting the reports. For example, it read `rental-analytics.ts` to confirm there is one bounded read, that errors propagate, and that the AC-FLT-9 agency drop is in place. It also read Albert's `error.tsx`, `retry-error-view.tsx` and `not-found.tsx` to confirm the error object is never rendered.
 
-**Reports treated as claims, not proof:** the teammates' final reports listed their judgement calls, and each was accepted or questioned explicitly. Accepted examples:
-
-- Listings after the as-of time never count.
-- Top 8 may include agencies with 0 listings.
-- `retry()` instead of `reset()`.
-- `style-src-attr 'unsafe-inline'`.
+**Reports treated as claims, not proof:** the teammates' final reports listed their judgement calls, and each was accepted or questioned explicitly.
 
 **Mechanical checks:**
 
