@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import fc from "fast-check";
 
-import { tickStarts, TrendChart, TrendTooltip, trendSummary } from "@/components/analytics/trend-chart";
+import { niceYTicks, tickStarts, TrendChart, TrendTooltip, trendSummary } from "@/components/analytics/trend-chart";
 import { installDomPolyfills } from "@/components/testing/dom";
 import { dailyPoints, makeView } from "@/components/testing/fixtures";
 import type { TrendPoint } from "@/services/rental-analytics.types";
@@ -116,6 +116,30 @@ describe("tickStarts", () => {
         });
       }),
     );
+  });
+});
+
+describe("niceYTicks", () => {
+  it("gives five evenly spaced whole-number ticks from 0 that cover the max", () => {
+    fc.assert(
+      fc.property(fc.nat(1_000_000), (max) => {
+        const ticks = niceYTicks(max);
+        expect(ticks).toHaveLength(5);
+        expect(ticks[0]).toBe(0);
+        expect(ticks.every(Number.isInteger)).toBe(true);
+        expect(ticks[4]).toBeGreaterThanOrEqual(max);
+        const step = ticks[1];
+        ticks.forEach((t, i) => expect(t).toBe(i * step));
+        // Never more than double the needed headroom.
+        expect(ticks[4]).toBeLessThanOrEqual(Math.max(4, 2 * max));
+      }),
+    );
+  });
+
+  it("rounds to readable steps", () => {
+    expect(niceYTicks(621)).toEqual([0, 200, 400, 600, 800]);
+    expect(niceYTicks(260)).toEqual([0, 75, 150, 225, 300]);
+    expect(niceYTicks(0)).toEqual([0, 1, 2, 3, 4]);
   });
 });
 

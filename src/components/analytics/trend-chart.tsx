@@ -18,6 +18,17 @@ export function tickStarts(points: readonly TrendPoint[]): number[] {
   return points.filter((_, i) => (last - i) % 2 === 0).map((p) => p.start);
 }
 
+const Y_INTERVALS = 4;
+
+/** Five whole-number y ticks from 0 with a rounded step (e.g. 75, 200, 2,500) whose top covers `max`. */
+export function niceYTicks(max: number): number[] {
+  const raw = Math.max(max, 1) / Y_INTERVALS;
+  const magnitude = 10 ** Math.floor(Math.log10(raw));
+  const multiples = magnitude >= 10 ? [1, 1.5, 2, 2.5, 3, 4, 5, 6, 7.5, 8, 10] : [1, 2, 3, 4, 5, 6, 8, 10];
+  const step = Math.max(1, multiples.map((m) => m * magnitude).find((s) => s >= raw)!);
+  return Array.from({ length: Y_INTERVALS + 1 }, (_, i) => i * step);
+}
+
 export function trendTitle(granularity: Granularity): string {
   return `New listings per ${PERIOD_NOUN[granularity]}`;
 }
@@ -39,6 +50,7 @@ export function TrendChart({ trend, scope }: TrendChartProps) {
   const { points, granularity } = trend;
   const config: ChartConfig = { [SERIES_KEY]: { label: scope.seriesName } };
   const title = trendTitle(granularity);
+  const yTicks = niceYTicks(Math.max(0, ...points.map((p) => p.count)));
 
   return (
     <AnalyticsCard
@@ -65,13 +77,13 @@ export function TrendChart({ trend, scope }: TrendChartProps) {
                 interval={0}
               />
               <YAxis
-                tickCount={5}
-                allowDecimals={false}
+                ticks={yTicks}
+                interval={0}
                 tickFormatter={(n: number) => formatCount(n)}
                 tickLine={false}
                 axisLine={false}
                 width={48}
-                domain={[0, "auto"]}
+                domain={[0, yTicks[yTicks.length - 1]]}
               />
               <ChartTooltip
                 cursor={{ stroke: "var(--line-strong)", strokeDasharray: "4 4" }}
