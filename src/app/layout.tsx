@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Public_Sans } from "next/font/google";
+import { headers } from "next/headers";
+import { connection } from "next/server";
 
 import { AppShell } from "@/components/layout/app-shell";
+import { NonceProvider } from "@/components/security/nonce";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 import "./globals.css";
@@ -27,13 +30,22 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+/**
+ * Every route renders at request time so Next.js can put the proxy's CSP nonce
+ * on every script and style; a static or partially prerendered page has none.
+ */
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  await connection();
+  // Set by src/proxy.ts; client code that injects <style> elements needs it too.
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html lang="en-AU" className={`${publicSans.variable} ${jetBrainsMono.variable}`}>
       <body>
-        <TooltipProvider>
-          <AppShell>{children}</AppShell>
-        </TooltipProvider>
+        <NonceProvider nonce={nonce}>
+          <TooltipProvider>
+            <AppShell>{children}</AppShell>
+          </TooltipProvider>
+        </NonceProvider>
       </body>
     </html>
   );

@@ -54,8 +54,12 @@ function SelectContent({
   children,
   position = "item-aligned",
   align = "center",
+  nonce,
   ...props
-}: React.ComponentProps<typeof SelectPrimitive.Content>) {
+}: React.ComponentProps<typeof SelectPrimitive.Content> & {
+  /** CSP nonce for the viewport's scrollbar <style> element (AC-SEC-4). */
+  nonce?: string
+}) {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
@@ -72,6 +76,7 @@ function SelectContent({
       >
         <SelectScrollUpButton />
         <SelectPrimitive.Viewport
+          nonce={nonce}
           className={cn(
             "p-1",
             position === "popper" &&

@@ -14,7 +14,6 @@ jest.mock("../../data/listing-repository", () => ({
   ...jest.requireActual("../../data/listing-repository"),
   getListingRepository: () => mockRepo,
 }));
-jest.mock("next/server", () => ({ connection: async () => {} }));
 jest.mock("next/navigation", () => ({
   useRouter: () => ({ push: jest.fn() }),
   usePathname: () => "/rental-analytics",

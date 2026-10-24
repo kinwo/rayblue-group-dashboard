@@ -4,6 +4,7 @@ import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useId, useState, type ReactNode } from "react";
 
+import { useNonce } from "@/components/security/nonce";
 import { Button } from "@/components/ui/button";
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -13,7 +14,7 @@ import type { AgencyOption } from "@/services/rental-analytics.types";
 import { cn } from "@/utils/cn";
 import { GRANULARITIES, type Granularity } from "@/utils/granularity";
 import { toQueryString, type AnalyticsFilters } from "@/utils/search-params";
-import { ALL_STATES_LABEL, isStateCode, STATES, type StateCode } from "@/utils/states";
+import { ALL_STATES_LABEL, isStateCode, STATES, stateName, type StateCode } from "@/utils/states";
 
 const ALL = "all";
 export const ALL_AGENCIES_LABEL = "All agencies";
@@ -103,6 +104,7 @@ const fieldTriggerClass =
 
 function StateSelect({ value, onChange }: { value: StateCode | null; onChange: (state: StateCode | null) => void }) {
   const id = useId();
+  const nonce = useNonce();
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor={id} className="text-label text-ink">
@@ -110,9 +112,10 @@ function StateSelect({ value, onChange }: { value: StateCode | null; onChange: (
       </label>
       <Select value={value ?? ALL} onValueChange={(v) => onChange(isStateCode(v) ? v : null)}>
         <SelectTrigger id={id} className={fieldTriggerClass}>
-          <SelectValue />
+          {/* Explicit text so the server-rendered trigger shows the selection before hydration. */}
+          <SelectValue>{value ? stateName(value) : ALL_STATES_LABEL}</SelectValue>
         </SelectTrigger>
-        <SelectContent position="popper" className="rounded-md bg-surface-raised shadow-md">
+        <SelectContent nonce={nonce} position="popper" className="rounded-md bg-surface-raised shadow-md">
           <SelectItem value={ALL}>{ALL_STATES_LABEL}</SelectItem>
           {STATES.map((s) => (
             <SelectItem key={s.code} value={s.code}>

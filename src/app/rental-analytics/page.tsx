@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { connection } from "next/server";
 
 import { Filters } from "@/components/analytics/filters";
 import { KpiTiles } from "@/components/analytics/kpi-tiles";
@@ -17,14 +16,12 @@ export const metadata: Metadata = { title: { absolute: "Rental analytics · Rayb
 const requestTime = () => Date.now();
 
 /**
- * Rental analytics (F2–F7). Request-time data: it reads searchParams and the
- * server clock, so it is never cached and streams behind loading.tsx.
- * Failures propagate to error.tsx.
+ * Rental analytics (F2–F7). Rendered per request (the root layout awaits
+ * connection()); the data streams in behind loading.tsx and failures
+ * propagate to error.tsx.
  */
 export default async function RentalAnalyticsPage({ searchParams }: { searchParams: Promise<RawSearchParams> }) {
   const filters = parseAnalyticsSearchParams(await searchParams);
-  // Per-request work on a synchronous SQLite driver must follow connection() (Cache Components).
-  await connection();
   const view = await loadRentalAnalytics(filters, requestTime());
 
   return (
