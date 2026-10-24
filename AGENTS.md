@@ -17,11 +17,12 @@ npm run dev          # dev server on :3000
 npm run lint         # ESLint
 npm run typecheck    # tsc --noEmit
 npm test             # all tests
+npm run verify       # lint + typecheck + test
 npm run db:migrate   # apply migrations
 npm run db:seed      # synthetic data
 ```
 
-Done means `npm run lint && npm run typecheck && npm test` passes.
+Done means `npm run verify` (lint, typecheck, test) passes.
 
 ## Where code goes
 

@@ -94,7 +94,7 @@ Indexes `listings(agencyId, listedDate)` and `listings(listedDate)` for the time
 ### Workflow
 
 - Branch from `main`; small, focused commits using Conventional Commits (`feat:`, `fix:`, `test:`, `docs:`, `refactor:`, `chore:`).
-- Before pushing: `npm run lint && npm run typecheck && npm test` must pass.
+- Before pushing: `npm run verify` (lint, typecheck, test) must pass.
 - Schema change → edit `src/data/schema.ts` → `npm run db:generate` → commit the generated migration alongside the schema change.
 - Update this file or add an ADR when you change an architectural decision; update README when you change product scope.
 

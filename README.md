@@ -114,8 +114,11 @@ curl -s http://localhost:3000/api/health
 The full verification gate, the same steps CI runs ([.github/workflows/ci.yml](.github/workflows/ci.yml)):
 
 ```bash
-npm run lint && npm run typecheck && npm test
+npm run verify
 ```
+
+It runs these in order and stops at the first failure:
+
 
 - `npm run lint`: ESLint, including the layer import rules (a wrong import fails).
 - `npm run typecheck`: `tsc --noEmit` in strict mode.
@@ -187,6 +190,7 @@ Related: requirements and acceptance criteria in [intent.md](intent.md), the E2E
 | `npm run typecheck`           | `tsc --noEmit`                                         |
 | `npm test`                    | Run all Jest tests                                     |
 | `npm run test:watch`          | Jest in watch mode                                     |
+| `npm run verify`              | Lint, typecheck and test in one go (the done gate)     |
 | `npm run db:generate`         | Generate a Drizzle migration from schema changes       |
 | `npm run db:migrate`          | Apply migrations to the SQLite file                    |
 | `npm run db:seed`             | Fill the database with synthetic agencies and listings |
