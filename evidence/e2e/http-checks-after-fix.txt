@@ -1,0 +1,10 @@
+== SEC-01 re-test after fix
+/rental-analytics -> content-security-policy: default-src 'self'; script-src 'self' 'nonce-MTRkYTdlOWEtZDY2NC00Yjg5LTkyNzctNzhiNDgyNWIyMzM5' 
+/nope -> content-security-policy: default-src 'self'; script-src 'self' 'nonce-MjhmNjA1OTgtMWU3YS00NWVjLTg4NzQtNDdlOTVkNTc5OWU5' 
+/api/health -> content-security-policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; objec
+/api/nope -> content-security-policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; objec
+/_next/static/chunks/0nurhv_fjp0nf.js -> Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; objec
+/favicon.ico -> Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; objec
+POST /api/health -> content-security-policy: default-src 'none'; script-src 'self'; style-src 'self'
+X-Powered-By count: 0
+CSP headers on page: 1

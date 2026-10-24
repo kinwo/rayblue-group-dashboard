@@ -1,10 +1,19 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { ALLOWED_METHODS, buildContentSecurityPolicy, SECURITY_HEADERS } from "@/utils/security-headers";
+import {
+  ALLOWED_METHODS,
+  buildContentSecurityPolicy,
+  NON_PAGE_CONTENT_SECURITY_POLICY,
+  SECURITY_HEADERS,
+} from "@/utils/security-headers";
 
 const ALLOW = ALLOWED_METHODS.join(", ");
 
+/** Adds the shared headers, and the non-page CSP unless a page CSP is already set. */
 function withSecurityHeaders(response: NextResponse): NextResponse {
   for (const [name, value] of Object.entries(SECURITY_HEADERS)) response.headers.set(name, value);
+  if (!response.headers.has("Content-Security-Policy")) {
+    response.headers.set("Content-Security-Policy", NON_PAGE_CONTENT_SECURITY_POLICY);
+  }
   return response;
 }
 

@@ -1,0 +1,6 @@
+== REL-02 / STE-02 DB becomes unavailable after start
+before: {"status":"ok","version":"0.1.0","database":"ok"} 200
+after:  {"status":"error","version":"0.1.0","database":"unavailable"} 503 cache-control=cache-control: no-store
+page status 200
+visible text: Rental analytics · Rayblue Agency Group Rayblue Agency Group Group office · All states and territories Analytics Rental analytics Group manager view Rayblue Agency Group Loading rental analytics
+leaks in full HTML (incl. scripts): []

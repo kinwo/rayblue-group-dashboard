@@ -1,0 +1,88 @@
+== NAV-01
+307 -> http://localhost:3000/rental-analytics
+== STE-03
+/nope 404
+href="/rental-analytics">
+href="/rental-analytics">Go to Rental analytics
+/rental-analytics/x 404
+href="/rental-analytics">
+href="/rental-analytics">Go to Rental analytics
+== REL-01
+HTTP/1.1 200 OK
+cache-control: no-store
+{"status":"ok","version":"0.1.0","database":"ok"}
+
+== SEC-03
+POST /rental-analytics 405
+POST /api/health 405
+PUT /rental-analytics 405
+PUT /api/health 405
+PATCH /rental-analytics 405
+PATCH /api/health 405
+DELETE /rental-analytics 405
+DELETE /api/health 405
+POST Next-Action 405
+== SEC-01 headers
+--- /rental-analytics
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+referrer-policy: strict-origin-when-cross-origin
+permissions-policy: camera=(), microphone=(), geolocation=()
+content-security-policy: default-src 'self'; script-src 'self' 'nonce-OWM4ZmVkZDUtMmI3Yi00MTY3LWI0NmItZjJkNTAyNTJjOWYy' 'strict-dynamic'; style-src 'self' 'nonce-OWM4ZmVkZDUtMmI3Yi00MTY3LWI0NmItZjJkNTAyNTJjOWYy'; style-src-attr 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+--- /nope
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+referrer-policy: strict-origin-when-cross-origin
+permissions-policy: camera=(), microphone=(), geolocation=()
+content-security-policy: default-src 'self'; script-src 'self' 'nonce-MDU0OWM0MmMtMzRiNS00NjhjLWI3MWQtZTc4MTRjMjIwYTY1' 'strict-dynamic'; style-src 'self' 'nonce-MDU0OWM0MmMtMzRiNS00NjhjLWI3MWQtZTc4MTRjMjIwYTY1'; style-src-attr 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+--- /api/health
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+referrer-policy: strict-origin-when-cross-origin
+permissions-policy: camera=(), microphone=(), geolocation=()
+--- /_next/static/chunks/0nurhv_fjp0nf.js
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+== FLT-11 invalid params
+state=XYZ -> 200 scope= All states and territories bad= [] len= 79108
+granularity=hourly -> 200 scope= All states and territories bad= [] len= 79140
+agencyId=abc -> 200 scope= All states and territories bad= [] len= 79128
+agencyId=-1 -> 200 scope= All states and territories bad= [] len= 79126
+state=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -> 200 scope= All states and territories bad= [] len= 99246
+state=%3Cscript%3Ealert(1)%3C%2Fscript%3 -> 200 scope= All states and territories bad= [] len= 79190
+state=NSW&state=VIC -> 200 scope= All states and territories bad= [] len= 79141
+state=VIC&granularity=hourly -> 200 scope= Victoria bad= [] len= 77923
+== PRV-01 addresses/managers/rents in 17 bodies (HTML + RSC)
+p1.html 79088 address/manager hits: [] rent hits: [] rent/street keys: False
+p2.html 78083 address/manager hits: [] rent hits: [] rent/street keys: False
+p3.html 77994 address/manager hits: [] rent hits: [] rent/street keys: False
+p4.html 78985 address/manager hits: [] rent hits: [] rent/street keys: False
+p5.html 78710 address/manager hits: [] rent hits: [] rent/street keys: False
+p6.html 78038 address/manager hits: [] rent hits: [] rent/street keys: False
+p7.html 16354 address/manager hits: [] rent hits: [] rent/street keys: False
+p8.html 49 address/manager hits: [] rent hits: [] rent/street keys: False
+r1.txt 0 address/manager hits: [] rent hits: [] rent/street keys: False
+r2.txt 0 address/manager hits: [] rent hits: [] rent/street keys: False
+r3.txt 0 address/manager hits: [] rent hits: [] rent/street keys: False
+r4.txt 0 address/manager hits: [] rent hits: [] rent/street keys: False
+r5.txt 0 address/manager hits: [] rent hits: [] rent/street keys: False
+r6.txt 0 address/manager hits: [] rent hits: [] rent/street keys: False
+r7.txt 5741 address/manager hits: [] rent hits: [] rent/street keys: False
+r8.txt 0 address/manager hits: [] rent hits: [] rent/street keys: False
+rents.txt 695 address/manager hits: [] rent hits: [] rent/street keys: False
+TOTAL HITS 0
+== PRV-01 RSC payloads (RSC: 1, following _rsc redirect)
+r1.txt 25248 address/manager hits: [] rent/street keys: True
+r2.txt 24404 address/manager hits: [] rent/street keys: True
+r3.txt 24324 address/manager hits: [] rent/street keys: True
+r4.txt 25129 address/manager hits: [] rent/street keys: True
+r5.txt 25046 address/manager hits: [] rent/street keys: True
+r6.txt 24328 address/manager hits: [] rent/street keys: True
+== HDR-03 determinism (visible text hash, 3 requests each)
+/rental-analytics?state=NSW&granularity=weekly identical {'51f3112f0c00'}
+/rental-analytics?agencyId=13 identical {'b593b9d50c1a'}
+/rental-analytics?granularity=monthly identical {'d540badd702f'}
+/rental-analytics?state=QLD&agencyId=28&granularity=daily identical {'f0f9a1d2ca7d'}
+/rental-analytics?state=TAS identical {'de2a34dfe149'}

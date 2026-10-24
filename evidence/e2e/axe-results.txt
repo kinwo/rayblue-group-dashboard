@@ -1,0 +1,75 @@
+== light 
+{
+  "passes": 28,
+  "violations": []
+}
+== light ?state=VIC
+{
+  "passes": 28,
+  "violations": [
+    "color-contrast (serious) x16: abbr[title=\"New South Wales\"] | .opacity-35.grid.grid-cols-\\[112px_1fr_64px\\]:nth-child(1) > .flex-col.flex > .text-caption.text-ink-muted"
+  ]
+}
+== light ?agencyId=13
+{
+  "passes": 28,
+  "violations": [
+    "color-contrast (serious) x16: abbr[title=\"New South Wales\"] | .opacity-35.grid.grid-cols-\\[112px_1fr_64px\\]:nth-child(1) > .flex-col.flex > .text-caption.text-ink-muted"
+  ]
+}
+== light ?granularity=weekly
+{
+  "passes": 28,
+  "violations": []
+}
+== light ?granularity=monthly
+{
+  "passes": 28,
+  "violations": []
+}
+== dark defaults
+{
+  "passes": 28,
+  "violations": []
+}
+== dark 404
+{
+  "passes": 20,
+  "violations": []
+}
+== light 404
+{
+  "passes": 20,
+  "violations": []
+}
+== mobile sheet open
+{
+  "passes": 21,
+  "violations": []
+}
+== RE-TEST after state-bars fix
+== light ?state=VIC
+{
+  "passes": 28,
+  "violations": []
+}
+== light ?agencyId=13
+{
+  "passes": 28,
+  "violations": []
+}
+== light ?state=WA
+{
+  "passes": 28,
+  "violations": []
+}
+== light ?agencyId=28&granularity=monthly
+{
+  "passes": 28,
+  "violations": []
+}
+== dark ?state=WA
+{
+  "passes": 28,
+  "violations": []
+}

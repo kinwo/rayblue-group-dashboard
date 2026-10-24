@@ -1,0 +1,5 @@
+== REL-05 structured logs: 13 lines, 4 JSON, 9 non-JSON
+non-JSON lines (Next.js start banner): ['> rayblue-group-dashboard@0.1.0 start', '> next start', '▲ Next.js 16.4.3', '- Local:         http://localhost:3000', '- Network:       http://192.168.20.16:3000', '✓ Ready in 84ms', '✓ Running next.config.ts took 20ms']
+routes logged: Counter({'/api/health': 2, None: 1, '/api/[...path]': 1})
+request lines missing time/level/route/status/duration: 0
+lines with cookies/addresses/rents: 0

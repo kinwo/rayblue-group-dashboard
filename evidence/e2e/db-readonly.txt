@@ -1,0 +1,4 @@
+== REL-03 read-only DB
+before: 6eb9a129697b4f0a6bdf7319d10f30abf778cf3a  data/rayblue.db mtime=1792800946
+after:  6eb9a129697b4f0a6bdf7319d10f30abf778cf3a  data/rayblue.db mtime=1792800946
+rayblue.db

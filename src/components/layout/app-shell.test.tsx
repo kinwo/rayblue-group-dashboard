@@ -84,20 +84,22 @@ describe("AppShell below 808px", () => {
     expect(within(sheet).getByRole("link", { name: "Rental analytics" })).toBeInTheDocument();
   });
 
-  it("AC-NAV-4: the sheet closes with Escape", async () => {
+  it("AC-NAV-4: the sheet closes with Escape and focus returns to the menu button", async () => {
     renderShell();
     await userEvent.click(screen.getByRole("button", { name: "Open navigation menu" }));
     await screen.findByRole("dialog");
     await userEvent.keyboard("{Escape}");
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(screen.getByRole("button", { name: "Open navigation menu" })).toHaveFocus();
   });
 
-  it("AC-NAV-4: the sheet closes after choosing an item", async () => {
+  it("AC-NAV-4: the sheet closes after choosing an item and focus returns to the menu button", async () => {
     renderShell();
     await userEvent.click(screen.getByRole("button", { name: "Open navigation menu" }));
     const sheet = await screen.findByRole("dialog");
     await userEvent.click(within(sheet).getByRole("link", { name: "Rental analytics" }));
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(screen.getByRole("button", { name: "Open navigation menu" })).toHaveFocus();
   });
 });
 

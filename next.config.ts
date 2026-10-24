@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
-import { SECURITY_HEADERS } from "./src/utils/security-headers";
+import { NON_PAGE_CONTENT_SECURITY_POLICY, SECURITY_HEADERS } from "./src/utils/security-headers";
+
+// Paths src/proxy.ts skips (see its matcher); they get the fixed non-page CSP here instead.
+const STATIC_PATHS = ["/_next/static/:path*", "/_next/image", "/favicon.ico"];
 
 const nextConfig: NextConfig = {
   // No Cache Components / partial prerendering: a prerendered static shell cannot carry the
@@ -13,6 +16,10 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: Object.entries(SECURITY_HEADERS).map(([key, value]) => ({ key, value })),
       },
+      ...STATIC_PATHS.map((source) => ({
+        source,
+        headers: [{ key: "Content-Security-Policy", value: NON_PAGE_CONTENT_SECURITY_POLICY }],
+      })),
     ];
   },
   turbopack: {

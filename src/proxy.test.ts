@@ -1,6 +1,10 @@
 import { NextRequest } from "next/server";
 import { handleRequest, proxy } from "@/proxy";
-import { buildContentSecurityPolicy, SECURITY_HEADERS } from "@/utils/security-headers";
+import {
+  buildContentSecurityPolicy,
+  NON_PAGE_CONTENT_SECURITY_POLICY,
+  SECURITY_HEADERS,
+} from "@/utils/security-headers";
 
 const NONCE = "bm9uY2U=";
 const request = (path: string, method = "GET") => new NextRequest(`http://localhost${path}`, { method });
@@ -42,6 +46,14 @@ describe("buildContentSecurityPolicy (AC-SEC-4)", () => {
     }
   });
 
+  it("non-page policy is same-origin only and blocks plugins, base rewriting and framing", () => {
+    const fixed = directives(NON_PAGE_CONTENT_SECURITY_POLICY);
+    for (const name of ["script-src", "style-src", "img-src", "font-src"]) expect(fixed.get(name)).toEqual(["'self'"]);
+    expect(fixed.get("object-src")).toEqual(["'none'"]);
+    expect(fixed.get("base-uri")).toEqual(["'self'"]);
+    expect(fixed.get("frame-ancestors")).toEqual(["'none'"]);
+  });
+
   it("adds 'unsafe-eval' in development only", () => {
     expect(prod.get("script-src")).not.toContain("'unsafe-eval'");
     expect(dev.get("script-src")).toContain("'unsafe-eval'");
@@ -70,8 +82,14 @@ describe("proxy", () => {
     }
   });
 
-  it("leaves CSP off API responses", () => {
-    expect(handleRequest(request("/api/health"), NONCE).headers.get("content-security-policy")).toBeNull();
+  it("gives API and 405 responses the fixed non-page CSP, without a nonce", () => {
+    for (const response of [
+      handleRequest(request("/api/health"), NONCE),
+      handleRequest(request("/api/health", "POST"), NONCE),
+      handleRequest(request("/", "POST"), NONCE),
+    ]) {
+      expect(response.headers.get("content-security-policy")).toBe(NON_PAGE_CONTENT_SECURITY_POLICY);
+    }
   });
 
   it.each(["POST", "PUT", "PATCH", "DELETE", "OPTIONS"])(
