@@ -95,6 +95,8 @@ Development server:
 npm run dev
 ```
 
+Open http://localhost:3000
+
 Production build (what the evidence was captured against):
 
 ```bash
@@ -139,6 +141,14 @@ With the default seed (as-of **9:00 am, Sat 24 Oct 2026**, Sydney time):
    ```
 
 The seed is deterministic, so these numbers are the same on every machine. Screenshots of this workflow are in [evidence/e2e/shots/](evidence/e2e/shots/).
+
+5. Test invalid HTTP query params: http://localhost:3000/rental-analytics?agencyId=22AAa
+   An alert is displayed:
+
+```
+Some filters were reset
+The Agency filter in this link wasn't recognised or isn't available here, so we're showing all agencies.
+```
 
 ## Known limitations
 
