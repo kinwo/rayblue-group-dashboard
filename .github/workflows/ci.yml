@@ -18,8 +18,8 @@ env:
 
 jobs:
   verify:
-    # Pinned so the ubuntu-latest move to Ubuntu 26 is an explicit, reviewed change.
-    runs-on: ubuntu-24.04
+    # Pinned so the next ubuntu-latest move is an explicit, reviewed change.
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -44,7 +44,7 @@ jobs:
       - run: npm run build
 
   supply-chain:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:
