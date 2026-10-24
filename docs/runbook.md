@@ -48,14 +48,16 @@ Point `current` back at the previous release directory and restart. Releases shi
 | Page shows "We can't load the figures right now", health 503 | DB file removed, unreadable, locked or corrupt | Restore the release's `data/rayblue.db` (or roll back); users press Retry |
 | Page shows "figures may be out of date" | Dataset as-of time is over 24 hours old | Build and deploy a release with a fresh seed |
 | 404 JSON under `/api/*` | Unknown endpoint; only `/api/health` exists | Expected |
+| 429 and `rate_limited` warnings in the log | A client is over its per-minute limit | Expected for scrapers. If real users hit it (for example many people behind one office IP), raise `RATE_LIMIT_PAGES_PER_MINUTE` and restart. If every client is limited at once, check the proxy sets `X-Forwarded-For`: without it, all requests share one bucket |
 
 Logs are one JSON object per line on stdout (time, level, route, status, duration). They contain no request bodies, cookies or personal data. Retention is decided once a host is chosen (intent §9).
 
 ## Host-level protection the app relies on
 
-The app has no rate limiting or firewall of its own. The host or a reverse proxy in front of it must:
+The app limits requests per client IP itself (ADR 0004): by default 120 per minute for pages and 30 for `/api/*`, answering `429` with `Retry-After` beyond that. Tune them with `RATE_LIMIT_PAGES_PER_MINUTE` and `RATE_LIMIT_API_PER_MINUTE` (`0` turns a limit off). Counts are kept per process, so with several instances each one limits on its own. The app has no firewall of its own. The host or a reverse proxy in front of it must:
 
 - terminate TLS and redirect HTTP to HTTPS (HSTS is sent by the app);
-- rate-limit per client IP (suggested 60 requests per minute for pages, 10 per minute for `/api/health` from outside the monitoring network);
+- be the only way in, and set or append the client address to `X-Forwarded-For`: the app counts against the last entry, so without the proxy a client could pick its own;
+- rate-limit per client IP as an outer layer, at or above the app's limits, so floods stop before they reach Node;
 - allow only `GET` and `HEAD` from the internet;
 - cap request header and URL size (for example 16 KB).

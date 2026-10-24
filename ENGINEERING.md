@@ -21,6 +21,7 @@ How the Rayblue Agency Group Dashboard is built and why. For the product brief s
 | Database | SQLite file (`better-sqlite3` driver) | Zero setup for a prototype, fast, and runs in-memory for tests. Path from `DATABASE_URL` (default `./data/rayblue.db`, git-ignored). |
 | Styling | Tailwind CSS | Utility classes and design tokens in one place; no separate CSS files to keep in sync. |
 | Components | shadcn/ui | Accessible Radix primitives copied into the repo, so we own and can adjust them. Sidebar, Select, Tabs, Card. |
+| Rate limiting | rate-limiter-flexible (in memory) | Per-client limits in `src/proxy.ts`, tested with the app; same interface for a shared store later ([ADR 0004](docs/adr/0004-in-app-rate-limiting.md)). |
 | Charts | shadcn charts (Recharts) | Matches shadcn theming via CSS variables; enough for bar and line charts. |
 | Unit / component tests | Jest + React Testing Library | Standard for React; `next/jest` handles the SWC transform and path aliases. |
 | Property-based tests | fast-check | Finds edge cases in date bucketing and aggregation that example tests miss (month ends, DST changes, leap years). |

@@ -8,7 +8,7 @@ Next.js prototype of the **Rayblue Agency Group** dashboard: a group manager vie
 
 ## Stack
 
-Node.js 24 · TypeScript (strict) · Next.js App Router (latest) · Drizzle ORM · SQLite file · Tailwind CSS · shadcn/ui · Jest · React Testing Library · fast-check
+Node.js 24 · TypeScript (strict) · Next.js App Router (latest) · Drizzle ORM · SQLite file · Tailwind CSS · shadcn/ui · rate-limiter-flexible · Jest · React Testing Library · fast-check
 
 ## Commands
 

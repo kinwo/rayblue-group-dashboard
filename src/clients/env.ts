@@ -6,6 +6,9 @@ const envSchema = z.object({
   DATABASE_URL: z.string().trim().min(1).default("./data/rayblue.db"),
   APP_VERSION: z.string().trim().min(1).max(64).default(packageVersion),
   LOG_LEVEL: z.enum(LOG_LEVELS).default("info"),
+  // Requests per client IP per minute (ADR 0004). 0 turns that limit off.
+  RATE_LIMIT_PAGES_PER_MINUTE: z.coerce.number().int().min(0).max(100_000).default(120),
+  RATE_LIMIT_API_PER_MINUTE: z.coerce.number().int().min(0).max(100_000).default(30),
 });
 
 export type Env = z.infer<typeof envSchema>;
