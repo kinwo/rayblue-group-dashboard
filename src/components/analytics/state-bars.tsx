@@ -13,7 +13,7 @@ export function barPercent(count: number, max: number): number {
   return max > 0 ? (count / max) * 100 : 0;
 }
 
-/** "New listings by state" (F5): every state, highest first, others faded when one is highlighted. */
+/** "New listings by state" (F5): every state, highest first, other bars faded when one is highlighted. */
 export function StateBars({ byState, scope, trend }: StateBarsProps) {
   const highlighted = highlightedState(scope);
   const rows = [...byState].sort((a, b) => b.count - a.count);
@@ -30,10 +30,7 @@ export function StateBars({ byState, scope, trend }: StateBarsProps) {
           <li
             key={row.state}
             aria-current={row.state === highlighted ? "true" : undefined}
-            className={cn(
-              "grid grid-cols-[112px_1fr_64px] items-center gap-3 transition-opacity",
-              highlighted && row.state !== highlighted && "opacity-35",
-            )}
+            className="grid grid-cols-[112px_1fr_64px] items-center gap-3"
           >
             <span className="flex flex-col">
               <abbr title={stateName(row.state)} className="text-caption-strong text-ink no-underline">
@@ -43,8 +40,12 @@ export function StateBars({ byState, scope, trend }: StateBarsProps) {
               <span className="text-caption text-ink-muted">{formatAgencyCount(row.agencyCount)}</span>
             </span>
             <span aria-hidden="true" className="h-4.5 border-l border-line-strong">
+              {/* Only the bar fades: faded labels and counts would fail text contrast (WCAG 1.4.3). */}
               <span
-                className="block h-full rounded-r-sm"
+                className={cn(
+                  "block h-full rounded-r-sm transition-opacity",
+                  highlighted && row.state !== highlighted && "opacity-35",
+                )}
                 style={{ width: `${barPercent(row.count, max)}%`, backgroundColor: SINGLE_SERIES_COLOR }}
               />
             </span>

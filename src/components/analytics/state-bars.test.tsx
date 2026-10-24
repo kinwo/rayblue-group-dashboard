@@ -6,6 +6,8 @@ import { makeView } from "@/components/testing/fixtures";
 
 const view = makeView();
 
+const bar = (li: HTMLElement) => li.querySelector("[aria-hidden] > span") as HTMLElement;
+
 function rows(v = view) {
   render(<StateBars byState={v.byState} scope={v.scope} trend={v.trend} />);
   return within(screen.getByRole("region", { name: "New listings by state" })).getAllByRole("listitem");
@@ -27,7 +29,7 @@ describe("StateBars", () => {
 
   it("AC-STA-2: bars are scaled to the highest value", () => {
     const items = rows();
-    const width = (li: HTMLElement) => (li.querySelector("[aria-hidden] > span") as HTMLElement).style.width;
+    const width = (li: HTMLElement) => bar(li).style.width;
     expect(width(items[0])).toBe("100%");
     expect(width(items[1])).toBe("50%");
     expect(width(items[7])).toBe("0%");
@@ -36,14 +38,14 @@ describe("StateBars", () => {
   it("AC-STA-3: no fading and an all-states description without a filter", () => {
     const items = rows();
     expect(screen.getByText("11 Oct to 24 Oct · All states and territories")).toBeInTheDocument();
-    items.forEach((li) => expect(li).not.toHaveClass("opacity-35"));
+    items.forEach((li) => expect(bar(li)).not.toHaveClass("opacity-35"));
   });
 
-  it("AC-STA-3: other states fade to 35% when a state is selected; the description names it", () => {
+  it("AC-STA-3: other states' bars fade to 35% when a state is selected; the description names it", () => {
     const items = rows(makeView({ scope: { label: "Victoria", seriesName: "Victoria", state: "VIC", agency: null } }));
     expect(screen.getByText("11 Oct to 24 Oct · Victoria highlighted")).toBeInTheDocument();
-    expect(items[1]).not.toHaveClass("opacity-35");
-    expect(items[0]).toHaveClass("opacity-35");
+    expect(bar(items[1])).not.toHaveClass("opacity-35");
+    expect(bar(items[0])).toHaveClass("opacity-35");
     expect(items).toHaveLength(8);
   });
 
@@ -51,7 +53,12 @@ describe("StateBars", () => {
     const agency = { id: 9, name: "Rayblue Brisbane City", state: "QLD" as const };
     const items = rows(makeView({ scope: { label: agency.name, seriesName: agency.name, state: null, agency } }));
     expect(screen.getByText(/Queensland highlighted/)).toBeInTheDocument();
-    expect(items[2]).not.toHaveClass("opacity-35");
+    expect(bar(items[2])).not.toHaveClass("opacity-35");
+  });
+
+  it("keeps labels and counts at full opacity so faded rows still meet text contrast", () => {
+    const items = rows(makeView({ scope: { label: "Victoria", seriesName: "Victoria", state: "VIC", agency: null } }));
+    items.forEach((li) => expect(li).not.toHaveClass("opacity-35"));
   });
 });
 
