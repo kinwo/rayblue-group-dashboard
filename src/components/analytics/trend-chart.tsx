@@ -20,6 +20,9 @@ export function tickStarts(points: readonly TrendPoint[]): number[] {
 
 const Y_INTERVALS = 4;
 
+/** Right margin so the latest x label ("24 Oct", "19 Oct"), centred on the last point, is not clipped. */
+const X_AXIS_END_ROOM = 28;
+
 /** Five whole-number y ticks from 0 with a rounded step (e.g. 75, 200, 2,500) whose top covers `max`. */
 export function niceYTicks(max: number): number[] {
   const raw = Math.max(max, 1) / Y_INTERVALS;
@@ -64,7 +67,7 @@ export function TrendChart({ trend, scope }: TrendChartProps) {
             config={config}
             className="aspect-auto h-60 w-full text-caption [&_.recharts-cartesian-axis-tick_text]:fill-ink-muted"
           >
-            <LineChart data={points} margin={{ top: 8, right: 16, bottom: 0, left: 0 }} accessibilityLayer>
+            <LineChart data={points} margin={{ top: 8, right: X_AXIS_END_ROOM, bottom: 0, left: 0 }} accessibilityLayer>
               <CartesianGrid vertical={false} stroke="var(--line)" />
               <XAxis
                 dataKey="start"
@@ -74,7 +77,10 @@ export function TrendChart({ trend, scope }: TrendChartProps) {
                 tickLine={false}
                 axisLine={{ stroke: "var(--line-strong)" }}
                 tickMargin={8}
-                interval={0}
+                // Every second label fits on desktop; on narrow cards Recharts drops the ones that would
+                // overlap, always keeping the latest (DESIGN.md §7).
+                interval="preserveEnd"
+                minTickGap={8}
               />
               <YAxis
                 ticks={yTicks}
