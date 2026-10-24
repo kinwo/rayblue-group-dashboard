@@ -1,0 +1,17 @@
+@reference "../../app/globals.css";
+
+.view {
+  @apply mx-auto flex w-full max-w-[1360px] flex-col items-start gap-3 px-6 py-12;
+}
+
+.title {
+  @apply text-title text-ink;
+}
+
+.message {
+  @apply max-w-prose text-body text-ink-muted;
+}
+
+.action {
+  @apply pt-2;
+}

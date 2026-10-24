@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { TopAgenciesTable } from "@/components/analytics/top-agencies-table";
+import styles from "@/components/analytics/top-agencies-table.module.css";
 import { makeView } from "@/components/testing/fixtures";
 import type { RentalAnalyticsView } from "@/services/rental-analytics.types";
 
@@ -33,7 +34,7 @@ describe("TopAgenciesTable", () => {
   it("AC-AGY-7: numeric columns are right-aligned and tabular", () => {
     const table = renderTable();
     const [, , count, share, change] = within(bodyRows(table)[0]).getAllByRole("cell");
-    [count, share, change].forEach((cell) => expect(cell).toHaveClass("text-right", "tabular-nums"));
+    [count, share, change].forEach((cell) => expect(cell).toHaveClass(styles.numeric));
   });
 
   it("Share header reads Share of group, or Share of NSW with a state", () => {

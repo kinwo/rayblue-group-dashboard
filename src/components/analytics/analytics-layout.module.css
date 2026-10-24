@@ -1,0 +1,23 @@
+@reference "../../app/globals.css";
+
+/* Flex sizing shared by the page and its loading skeleton (DESIGN.md §5), so both reserve the same space. */
+
+.kpiRow {
+  @apply flex flex-wrap gap-4;
+}
+
+.kpiCell {
+  @apply flex-[1_1_220px];
+}
+
+.cardRow {
+  @apply flex flex-wrap gap-6;
+}
+
+.stateColumn {
+  @apply flex-[1_1_380px];
+}
+
+.tableColumn {
+  @apply flex-[1.4_1_480px];
+}

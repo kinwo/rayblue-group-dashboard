@@ -1,0 +1,5 @@
+@reference "../../app/globals.css";
+
+.button {
+  @apply text-on-chrome hover:bg-chrome-raised hover:text-on-chrome;
+}

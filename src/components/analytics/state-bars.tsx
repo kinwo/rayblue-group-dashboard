@@ -1,10 +1,12 @@
 import { AnalyticsCard } from "@/components/analytics/analytics-card";
+import layout from "@/components/analytics/analytics-layout.module.css";
 import { highlightedState, trendRangeLabel } from "@/components/analytics/scope";
 import type { RentalAnalyticsView } from "@/services/rental-analytics.types";
 import { SINGLE_SERIES_COLOR } from "@/utils/chart-colors";
-import { cn } from "@/utils/cn";
 import { formatAgencyCount, formatCount } from "@/utils/format";
 import { ALL_STATES_LABEL, stateName } from "@/utils/states";
+
+import styles from "@/components/analytics/state-bars.module.css";
 
 type StateBarsProps = Pick<RentalAnalyticsView, "byState" | "scope" | "trend">;
 
@@ -24,32 +26,30 @@ export function StateBars({ byState, scope, trend }: StateBarsProps) {
     : `${range} · ${ALL_STATES_LABEL}`;
 
   return (
-    <AnalyticsCard title="New listings by state" description={description} className="flex-[1_1_380px]">
-      <ul className="flex flex-col gap-3">
+    <AnalyticsCard title="New listings by state" description={description} className={layout.stateColumn}>
+      <ul className={styles.rows}>
         {rows.map((row) => (
           <li
             key={row.state}
             aria-current={row.state === highlighted ? "true" : undefined}
-            className="grid grid-cols-[112px_1fr_64px] items-center gap-3"
+            className={styles.row}
           >
-            <span className="flex flex-col">
-              <abbr title={stateName(row.state)} className="text-caption-strong text-ink no-underline">
+            <span className={styles.label}>
+              <abbr title={stateName(row.state)} className={styles.code}>
                 {row.state}
               </abbr>
               <span className="sr-only">{stateName(row.state)}</span>
-              <span className="text-caption text-ink-muted">{formatAgencyCount(row.agencyCount)}</span>
+              <span className={styles.agencies}>{formatAgencyCount(row.agencyCount)}</span>
             </span>
-            <span aria-hidden="true" className="h-4.5 border-l border-line-strong">
+            <span aria-hidden="true" className={styles.track}>
               {/* Only the bar fades: faded labels and counts would fail text contrast (WCAG 1.4.3). */}
               <span
-                className={cn(
-                  "block h-full rounded-r-sm transition-opacity",
-                  highlighted && row.state !== highlighted && "opacity-35",
-                )}
+                className={styles.bar}
+                data-faded={highlighted && row.state !== highlighted ? "" : undefined}
                 style={{ width: `${barPercent(row.count, max)}%`, backgroundColor: SINGLE_SERIES_COLOR }}
               />
             </span>
-            <span className="text-right text-caption-strong text-ink tabular-nums">{formatCount(row.count)}</span>
+            <span className={styles.count}>{formatCount(row.count)}</span>
           </li>
         ))}
       </ul>

@@ -1,0 +1,14 @@
+@reference "../../app/globals.css";
+
+.inset {
+  @apply min-w-0 bg-surface;
+}
+
+/* Mobile top bar on --chrome; the side navigation replaces it from the md breakpoint (DESIGN.md §5). */
+.mobileBar {
+  @apply flex h-12 items-center gap-2 bg-chrome px-2 text-on-chrome md:hidden;
+}
+
+.productName {
+  @apply text-subheading;
+}

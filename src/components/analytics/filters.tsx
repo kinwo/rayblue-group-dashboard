@@ -16,6 +16,8 @@ import { GRANULARITIES, type Granularity } from "@/utils/granularity";
 import { toQueryString, type AnalyticsFilters } from "@/utils/search-params";
 import { ALL_STATES_LABEL, isStateCode, STATES, stateName, type StateCode } from "@/utils/states";
 
+import styles from "@/components/analytics/filters.module.css";
+
 const ALL = "all";
 export const ALL_AGENCIES_LABEL = "All agencies";
 
@@ -56,12 +58,9 @@ export function Filters({ filters, agencyOptions, children }: FiltersProps) {
     <Tabs
       value={filters.granularity}
       onValueChange={(value) => navigate({ ...filters, granularity: value as Granularity })}
-      className="gap-6"
+      className={styles.tabs}
     >
-      <section
-        aria-label="Filters"
-        className="flex flex-wrap items-end gap-4 rounded-lg bg-surface-sunken px-4 py-3"
-      >
+      <section aria-label="Filters" className={styles.bar}>
         <StateSelect
           value={filters.state}
           onChange={(state) => navigate(filtersForState(filters, state, agencyOptions))}
@@ -71,51 +70,44 @@ export function Filters({ filters, agencyOptions, children }: FiltersProps) {
           options={agencyOptions}
           onChange={(agencyId) => navigate({ ...filters, agencyId })}
         />
-        <div className="flex flex-col gap-1">
-          <span id="listing-period-label" className="text-label text-ink">
+        <div className={styles.field}>
+          <span id="listing-period-label" className={styles.label}>
             Listing period
           </span>
           <TabsList
             variant="line"
             aria-labelledby="listing-period-label"
-            className="h-9 gap-4 rounded-none border-b border-line p-0"
+            className={styles.periodTabs}
           >
             {GRANULARITIES.map((g) => (
-              <TabsTrigger
-                key={g}
-                value={g}
-                className="h-full flex-none rounded-none px-0 text-label text-ink-muted hover:text-ink data-[state=active]:text-ink group-data-[variant=line]/tabs-list:data-[state=active]:after:opacity-100 after:bottom-[-1px] after:bg-primary"
-              >
+              <TabsTrigger key={g} value={g} className={styles.periodTab}>
                 {GRANULARITY_LABELS[g]}
               </TabsTrigger>
             ))}
           </TabsList>
         </div>
       </section>
-      <TabsContent value={filters.granularity} className="flex flex-col gap-6">
+      <TabsContent value={filters.granularity} className={styles.panel}>
         {children}
       </TabsContent>
     </Tabs>
   );
 }
 
-const fieldTriggerClass =
-  "h-9 w-64 max-w-full justify-between rounded-md border border-line-strong bg-surface-raised px-3 text-body text-ink shadow-none hover:border-ink-muted hover:bg-surface-raised dark:bg-surface-raised dark:hover:bg-surface-raised";
-
 function StateSelect({ value, onChange }: { value: StateCode | null; onChange: (state: StateCode | null) => void }) {
   const id = useId();
   const nonce = useNonce();
   return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-label text-ink">
+    <div className={styles.field}>
+      <label htmlFor={id} className={styles.label}>
         State or territory
       </label>
       <Select value={value ?? ALL} onValueChange={(v) => onChange(isStateCode(v) ? v : null)}>
-        <SelectTrigger id={id} className={fieldTriggerClass}>
+        <SelectTrigger id={id} className={styles.trigger}>
           {/* Explicit text so the server-rendered trigger shows the selection before hydration. */}
           <SelectValue>{value ? stateName(value) : ALL_STATES_LABEL}</SelectValue>
         </SelectTrigger>
-        <SelectContent nonce={nonce} position="popper" className="rounded-md bg-surface-raised shadow-md">
+        <SelectContent nonce={nonce} position="popper" className={styles.menu}>
           <SelectItem value={ALL}>{ALL_STATES_LABEL}</SelectItem>
           {STATES.map((s) => (
             <SelectItem key={s.code} value={s.code}>
@@ -149,8 +141,8 @@ function AgencyCombobox({
   };
 
   return (
-    <div className="flex flex-col gap-1">
-      <span id={labelId} className="text-label text-ink">
+    <div className={styles.field}>
+      <span id={labelId} className={styles.label}>
         Agency
       </span>
       <Popover open={open} onOpenChange={setOpen}>
@@ -161,19 +153,19 @@ function AgencyCombobox({
             aria-labelledby={labelId}
             aria-expanded={open}
             aria-controls={listId}
-            className={cn(fieldTriggerClass, "font-normal")}
+            className={styles.trigger}
           >
-            <span className="truncate">{selected ? selected.name : ALL_AGENCIES_LABEL}</span>
-            <ChevronsUpDownIcon aria-hidden="true" className="text-ink-muted" />
+            <span className={styles.triggerText}>{selected ? selected.name : ALL_AGENCIES_LABEL}</span>
+            <ChevronsUpDownIcon aria-hidden="true" className={styles.triggerIcon} />
           </Button>
         </PopoverTrigger>
-        <PopoverContent align="start" className="w-72 rounded-md bg-surface-raised p-0 shadow-md">
+        <PopoverContent align="start" className={cn(styles.menu, styles.agencyMenu)}>
           <Command label="Search agencies">
             <CommandInput placeholder="Search agencies" />
             <CommandList id={listId} label="Agencies">
-              <CommandEmpty className="py-6 text-center text-body text-ink-muted">No agencies found.</CommandEmpty>
-              <CommandItem value={ALL_AGENCIES_LABEL} onSelect={() => choose(null)} className="min-h-8">
-                <CheckIcon aria-hidden="true" className={cn(value === null ? "opacity-100" : "opacity-0")} />
+              <CommandEmpty className={styles.empty}>No agencies found.</CommandEmpty>
+              <CommandItem value={ALL_AGENCIES_LABEL} onSelect={() => choose(null)} className={styles.option}>
+                <CheckMark checked={value === null} />
                 {ALL_AGENCIES_LABEL}
               </CommandItem>
               {sorted.map((agency) => (
@@ -182,11 +174,11 @@ function AgencyCombobox({
                   value={`${agency.name} ${agency.state} ${agency.id}`}
                   keywords={[agency.name]}
                   onSelect={() => choose(agency.id)}
-                  className="min-h-8"
+                  className={styles.option}
                 >
-                  <CheckIcon aria-hidden="true" className={cn(agency.id === value ? "opacity-100" : "opacity-0")} />
-                  <span className="flex-1 truncate">{agency.name}</span>
-                  <span className="text-caption text-ink-muted">{agency.state}</span>
+                  <CheckMark checked={agency.id === value} />
+                  <span className={styles.optionName}>{agency.name}</span>
+                  <span className={styles.optionState}>{agency.state}</span>
                 </CommandItem>
               ))}
             </CommandList>
@@ -195,4 +187,9 @@ function AgencyCombobox({
       </Popover>
     </div>
   );
+}
+
+/** Keeps its space when unchecked so option names line up. */
+function CheckMark({ checked }: { checked: boolean }) {
+  return <CheckIcon aria-hidden="true" className={styles.check} data-checked={checked ? "" : undefined} />;
 }

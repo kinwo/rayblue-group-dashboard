@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import fc from "fast-check";
 
 import { niceYTicks, tickStarts, TrendChart, TrendTooltip, trendSummary } from "@/components/analytics/trend-chart";
+import styles from "@/components/analytics/trend-chart.module.css";
 import { installDomPolyfills } from "@/components/testing/dom";
 import { dailyPoints, makeView } from "@/components/testing/fixtures";
 import type { TrendPoint } from "@/services/rental-analytics.types";
@@ -87,7 +88,7 @@ describe("TrendTooltip", () => {
     render(<TrendTooltip active payload={point(p)} granularity="daily" seriesName="All Rayblue agencies" />);
     expect(screen.getByText("Sun 11 Oct 2026")).toBeInTheDocument();
     expect(screen.getByText("All Rayblue agencies")).toBeInTheDocument();
-    expect(screen.getByText("400")).toHaveClass("tabular-nums");
+    expect(screen.getByText("400")).toHaveClass(styles.tooltipValue);
   });
 
   it("AC-TRD-2: the partial last bucket ends with (to date)", () => {

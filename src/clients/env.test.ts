@@ -3,7 +3,13 @@ import { version } from "../../package.json";
 
 describe("loadEnv", () => {
   it("applies defaults when nothing is set", () => {
-    expect(loadEnv({})).toEqual({ DATABASE_URL: "./data/rayblue.db", APP_VERSION: version, LOG_LEVEL: "info" });
+    expect(loadEnv({})).toEqual({
+      DATABASE_URL: "./data/rayblue.db",
+      APP_VERSION: version,
+      LOG_LEVEL: "info",
+      RATE_LIMIT_PAGES_PER_MINUTE: 120,
+      RATE_LIMIT_API_PER_MINUTE: 30,
+    });
   });
 
   it("treats empty strings as unset", () => {
@@ -15,7 +21,19 @@ describe("loadEnv", () => {
       DATABASE_URL: "/srv/app.db",
       APP_VERSION: "v1.0.1",
       LOG_LEVEL: "warn",
+      RATE_LIMIT_PAGES_PER_MINUTE: 120,
+      RATE_LIMIT_API_PER_MINUTE: 30,
     });
+  });
+
+  it("reads rate limits as whole numbers, 0 included", () => {
+    const env = loadEnv({ RATE_LIMIT_PAGES_PER_MINUTE: "0", RATE_LIMIT_API_PER_MINUTE: "5" });
+    expect(env.RATE_LIMIT_PAGES_PER_MINUTE).toBe(0);
+    expect(env.RATE_LIMIT_API_PER_MINUTE).toBe(5);
+  });
+
+  it.each(["-1", "1.5", "lots"])("rejects rate limit %s", (value) => {
+    expect(() => loadEnv({ RATE_LIMIT_API_PER_MINUTE: value })).toThrow(InvalidEnvError);
   });
 
   it("AC-SEC-5: names invalid variables without echoing their values", () => {

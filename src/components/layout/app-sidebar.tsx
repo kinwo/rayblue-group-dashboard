@@ -20,6 +20,8 @@ import {
 import { parseAnalyticsSearchParams } from "@/utils/search-params";
 import { ALL_STATES_LABEL, stateName } from "@/utils/states";
 
+import styles from "@/components/layout/app-sidebar.module.css";
+
 export const PRODUCT_NAME = "Rayblue Agency Group";
 const CONTEXT_PREFIX = "Group office";
 const RENTAL_ANALYTICS_PATH = "/rental-analytics";
@@ -41,10 +43,10 @@ export function AppSidebar() {
   const isCurrent = pathname === RENTAL_ANALYTICS_PATH || pathname.startsWith(`${RENTAL_ANALYTICS_PATH}/`);
 
   return (
-    <Sidebar className="border-r-0">
-      <SidebarHeader className="gap-1 px-4 pt-5 pb-4">
-        <p className="text-subheading text-on-chrome">{PRODUCT_NAME}</p>
-        <p className="text-caption text-on-chrome-muted">
+    <Sidebar>
+      <SidebarHeader className={styles.header}>
+        <p className={styles.productName}>{PRODUCT_NAME}</p>
+        <p className={styles.mutedText}>
           <Suspense fallback={contextLine(null)}>
             <ScopeContextLine />
           </Suspense>
@@ -52,14 +54,14 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <nav aria-label="Main">
-          <SidebarGroup className="px-3">
-            <SidebarGroupLabel className="text-overline text-on-chrome-muted">Analytics</SidebarGroupLabel>
+          <SidebarGroup className={styles.group}>
+            <SidebarGroupLabel className={styles.groupLabel}>Analytics</SidebarGroupLabel>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   isActive={isCurrent}
-                  className="h-9 rounded-md text-label text-on-chrome data-[active=true]:font-semibold [&>svg]:text-on-chrome-muted data-[active=true]:[&>svg]:text-sky"
+                  className={styles.navLink}
                 >
                   <Link
                     href={RENTAL_ANALYTICS_PATH}
@@ -75,8 +77,8 @@ export function AppSidebar() {
           </SidebarGroup>
         </nav>
       </SidebarContent>
-      <SidebarFooter className="border-t border-chrome-line px-4 py-3">
-        <p className="text-caption text-on-chrome-muted">Group manager view</p>
+      <SidebarFooter className={styles.footer}>
+        <p className={styles.mutedText}>Group manager view</p>
       </SidebarFooter>
     </Sidebar>
   );

@@ -24,10 +24,12 @@ const nextConfig: NextConfig = {
   },
   turbopack: {
     rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
-      },
+      // Turbopack names the loader's output after `as`, so CSS modules must come out as
+      // `*.module.css` or Next treats them as global CSS (ADR 0005).
+      "*.css": [
+        { condition: { path: "*.module.css" }, loaders: ["@tailwindcss/turbopack"], as: "*.module.css" },
+        { condition: { not: { path: "*.module.css" } }, loaders: ["@tailwindcss/turbopack"], as: "*.css" },
+      ],
     },
   },
 };

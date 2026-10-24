@@ -6,6 +6,8 @@ import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
 
+import styles from "@/components/layout/mobile-nav-button.module.css";
+
 /** Below ~808px the sidebar hides behind this button and opens as a sheet (AC-NAV-4). */
 export function MobileNavButton() {
   const { setOpenMobile, openMobile } = useSidebar();
@@ -26,7 +28,7 @@ export function MobileNavButton() {
       aria-label="Open navigation menu"
       aria-expanded={openMobile}
       onClick={() => setOpenMobile(true)}
-      className="text-on-chrome hover:bg-chrome-raised hover:text-on-chrome"
+      className={styles.button}
     >
       <MenuIcon aria-hidden="true" />
     </Button>

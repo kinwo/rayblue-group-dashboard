@@ -10,6 +10,8 @@ import { SINGLE_SERIES_COLOR } from "@/utils/chart-colors";
 import { formatBucketLabel, formatBucketTooltip, formatCount } from "@/utils/format";
 import type { Granularity } from "@/utils/granularity";
 
+import styles from "@/components/analytics/trend-chart.module.css";
+
 type TrendChartProps = Pick<RentalAnalyticsView, "trend" | "scope">;
 
 /** Bucket starts to label: every second one counting back from the latest, so the latest is always labelled. */
@@ -61,12 +63,9 @@ export function TrendChart({ trend, scope }: TrendChartProps) {
       description={`${trendRangeLabel(points, granularity)} · ${scope.label}`}
       aside={<Legend name={scope.seriesName} />}
     >
-      <figure className="m-0">
+      <figure className={styles.figure}>
         <div role="img" aria-label={trendSummary({ trend, scope })}>
-          <ChartContainer
-            config={config}
-            className="aspect-auto h-60 w-full text-caption [&_.recharts-cartesian-axis-tick_text]:fill-ink-muted"
-          >
+          <ChartContainer config={config} className={styles.chart}>
             <LineChart data={points} margin={{ top: 8, right: X_AXIS_END_ROOM, bottom: 0, left: 0 }} accessibilityLayer>
               <CartesianGrid vertical={false} stroke="var(--line)" />
               <XAxis
@@ -136,8 +135,8 @@ export function TrendChart({ trend, scope }: TrendChartProps) {
 
 function Legend({ name }: { name: string }) {
   return (
-    <div aria-hidden="true" className="flex items-center gap-2 text-caption text-ink-muted">
-      <span className="size-2.5 rounded-sm" style={{ backgroundColor: SINGLE_SERIES_COLOR }} />
+    <div aria-hidden="true" className={styles.legend}>
+      <span className={styles.swatch} style={{ backgroundColor: SINGLE_SERIES_COLOR }} />
       {name}
     </div>
   );
@@ -155,12 +154,12 @@ export function TrendTooltip({ active, payload, granularity, seriesName }: Trend
   const point = payload?.[0]?.payload as TrendPoint | undefined;
   if (!active || !point) return null;
   return (
-    <div className="min-w-[140px] rounded-md border border-line bg-surface-raised px-3 py-2 text-ink shadow-md">
-      <p className="text-caption-strong">{formatBucketTooltip(point.start, granularity, point.isPartial)}</p>
-      <p className="mt-1 flex items-center gap-2 text-caption">
-        <span aria-hidden="true" className="size-2.5 rounded-sm" style={{ backgroundColor: SINGLE_SERIES_COLOR }} />
-        <span className="text-ink-muted">{seriesName}</span>
-        <span className="ml-auto font-semibold tabular-nums">{formatCount(point.count)}</span>
+    <div className={styles.tooltip}>
+      <p className={styles.tooltipDate}>{formatBucketTooltip(point.start, granularity, point.isPartial)}</p>
+      <p className={styles.tooltipRow}>
+        <span aria-hidden="true" className={styles.swatch} style={{ backgroundColor: SINGLE_SERIES_COLOR }} />
+        <span className={styles.tooltipSeries}>{seriesName}</span>
+        <span className={styles.tooltipValue}>{formatCount(point.count)}</span>
       </p>
     </div>
   );
