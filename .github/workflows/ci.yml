@@ -8,12 +8,23 @@ on:
 permissions:
   contents: read
 
+# A newer push to the same PR or branch supersedes the running checks.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  NEXT_TELEMETRY_DISABLED: 1
+
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    # Pinned so the ubuntu-latest move to Ubuntu 26 is an explicit, reviewed change.
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -22,6 +33,36 @@ jobs:
       - run: npm run typecheck
       - run: npm test -- --coverage
       - run: npm run db:migrate && npm run db:seed
+      - name: Restore Next.js build cache
+        uses: actions/cache@v6
+        with:
+          path: .next/cache
+          # Exact hit when deps and sources are unchanged; otherwise reuse the latest cache for the same deps.
+          key: nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**', 'next.config.ts', 'tsconfig.json') }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
       - run: npm run build
-      - name: Dependency audit (fails on high or critical)
+
+  supply-chain:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      # Install scripts are not needed to audit or describe the dependency tree.
+      - run: npm ci --ignore-scripts
+      - name: Audit production dependencies (fails on high or critical)
         run: npm audit --omit=dev --audit-level=high
+      - name: Verify registry signatures and provenance attestations
+        run: npm audit signatures
+      - name: Generate software bill of materials (CycloneDX)
+        run: npm sbom --omit=dev --sbom-format=cyclonedx --sbom-type=application > sbom.cdx.json
+      - uses: actions/upload-artifact@v7
+        with:
+          name: sbom
+          path: sbom.cdx.json
+          if-no-files-found: error

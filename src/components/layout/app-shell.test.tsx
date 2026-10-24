@@ -97,7 +97,12 @@ describe("AppShell below 808px", () => {
     renderShell();
     await userEvent.click(screen.getByRole("button", { name: "Open navigation menu" }));
     const sheet = await screen.findByRole("dialog");
+    // Without an app router, next/link falls back to a native navigation jsdom can't perform.
+    // Cancel it in the capture phase; the link's onClick still runs and closes the sheet.
+    const stopNavigation = (e: MouseEvent) => e.preventDefault();
+    document.addEventListener("click", stopNavigation, true);
     await userEvent.click(within(sheet).getByRole("link", { name: "Rental analytics" }));
+    document.removeEventListener("click", stopNavigation, true);
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     expect(screen.getByRole("button", { name: "Open navigation menu" })).toHaveFocus();
   });

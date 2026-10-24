@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 
 import RentalAnalyticsPage from "@/app/rental-analytics/page";
-import { installDomPolyfills } from "@/components/testing/dom";
+import { installChartLayout, installDomPolyfills } from "@/components/testing/dom";
 import type { ListingRepository } from "@/data/repository.types";
 import { DEFAULT_AS_OF } from "@/data/seed-config";
 import { createTestRepository } from "@/test/db";
@@ -22,7 +22,10 @@ jest.mock("next/navigation", () => ({
 const HOUR = 60 * 60 * 1000;
 let close: () => void = () => {};
 
-beforeAll(installDomPolyfills);
+beforeAll(() => {
+  installDomPolyfills();
+  installChartLayout();
+});
 beforeEach(() => {
   const test = createTestRepository({
     agencies: [

@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import fc from "fast-check";
 
@@ -92,7 +92,8 @@ describe("Filters", () => {
     renderFilters();
     const tablist = screen.getByRole("tablist", { name: "Listing period" });
     expect(within(tablist).getAllByRole("tab").map((t) => t.textContent)).toEqual(["Daily", "Weekly", "Monthly"]);
-    screen.getByRole("tab", { name: "Daily" }).focus();
+    // Focusing a tab updates Radix's roving-focus state, so it must run inside act().
+    act(() => screen.getByRole("tab", { name: "Daily" }).focus());
     await userEvent.keyboard("{ArrowRight}");
     expect(screen.getByRole("tab", { name: "Weekly" })).toHaveFocus();
     expect(pushedUrl()).toBe("/rental-analytics?granularity=weekly");
