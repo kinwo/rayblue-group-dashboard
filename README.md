@@ -25,7 +25,7 @@ The group manager oversees many agencies across Australia but has no single plac
 - **Data**: synthetic, seeded into a local SQLite file. No real customer data.
 - **Public**: no sign-in; the app shows aggregate counts only.
 
-Full requirements and acceptance criteria: **[intent.md](intent.md)**. It is the source of truth for v1 scope.
+Full requirements and acceptance criteria: **[intent.md](evidence/intent.md)**. It is the source of truth for v1 scope.
 
 ### Out of scope (for now)
 
@@ -178,7 +178,7 @@ Everything is in **[evidence/](evidence/)**:
 | [evidence/e2e/oracle.py](evidence/e2e/oracle.py), [expected.json](evidence/e2e/expected.json) | Independent SQL oracle for the expected figures, and its output                                             |
 | [evidence/e2e/inspect.js](evidence/e2e/inspect.js), `inspect-*.json`                          | In-page script and the figures it read from the rendered page, to compare with the oracle                   |
 
-Related: requirements and acceptance criteria in [intent.md](intent.md), the E2E plan in [e2e-test-plan.md](e2e-test-plan.md), and decision records in [docs/adr/](docs/adr/).
+Related: requirements and acceptance criteria in [intent.md](evidence/intent.md), the E2E plan in [e2e-test-plan.md](e2e-test-plan.md), and decision records in [docs/adr/](docs/adr/).
 
 ## Scripts
 
@@ -200,7 +200,7 @@ Related: requirements and acceptance criteria in [intent.md](intent.md), the E2E
 Read in this order; each step goes one level deeper.
 
 1. **README.md** (this file): what the product is and how to run it.
-2. **[intent.md](intent.md)**: v1 requirements and acceptance criteria.
+2. **[intent.md](evidence/intent.md)**: v1 requirements and acceptance criteria.
 3. **[AGENTS.md](AGENTS.md)**: the short rule set for anyone (human or AI agent) changing the code.
 4. **[ENGINEERING.md](ENGINEERING.md)**: architecture, engineering decisions, practices and the testing strategy.
 5. **[DESIGN.md](DESIGN.md)**: the UI design system (tokens, typography, layout, components, charts).

@@ -30,4 +30,4 @@ Every Retry button goes through `useGuardedRetry` (`src/components/hooks/use-gua
 
 ## Adding a failure path
 
-Throw a typed error from `src/utils/errors.ts` with a message that is safe to log. Map it in `loadRentalAnalytics` if the page should render something tailored. Add a row to the table above, and an acceptance criterion in `intent.md`.
+Throw a typed error from `src/utils/errors.ts` with a message that is safe to log. Map it in `loadRentalAnalytics` if the page should render something tailored. Add a row to the table above, and an acceptance criterion in `evidence/intent.md`.

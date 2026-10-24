@@ -1,6 +1,6 @@
 # Verify
 
-What was checked on `feat/rental-analytics-v1` ([PR #1](https://github.com/kinwo/rayblue-group-dashboard/pull/1)), the results, what is still unverified, and where each check runs. Acceptance criteria IDs refer to [intent.md](../intent.md).
+What was checked on `feat/rental-analytics-v1` ([PR #1](https://github.com/kinwo/rayblue-group-dashboard/pull/1)), the results, what is still unverified, and where each check runs. Acceptance criteria IDs refer to [intent.md](intent.md).
 
 Status as of 24 Oct 2026, head `eeffab7`.
 

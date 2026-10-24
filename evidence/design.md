@@ -1,6 +1,6 @@
 # Design
 
-How the Rayblue Agency Group **Rental analytics** dashboard (v1 prototype) is built and why. The requirements are in [intent.md](../intent.md), the rules in [ENGINEERING.md](../ENGINEERING.md), the visual system in [DESIGN.md](../DESIGN.md), and the decision records in [docs/adr/](../docs/adr/).
+How the Rayblue Agency Group **Rental analytics** dashboard (v1 prototype) is built and why. The requirements are in [intent.md](intent.md), the rules in [ENGINEERING.md](../ENGINEERING.md), the visual system in [DESIGN.md](../DESIGN.md), and the decision records in [docs/adr/](../docs/adr/).
 
 ## 1. Architecture overview
 

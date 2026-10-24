@@ -55,7 +55,7 @@ Never import upward. Use the `@/` alias.
 | If you are… | Read |
 | --- | --- |
 | Unsure about product scope or terms | [README.md › Product brief](README.md#product-brief) |
-| Building or checking a feature against requirements | [intent.md](intent.md) (acceptance criteria) |
+| Building or checking a feature against requirements | [intent.md](evidence/intent.md) (acceptance criteria) |
 | Adding a feature or a new layer file | [ENGINEERING.md › Architecture](ENGINEERING.md#3-architecture) |
 | Choosing a library or pattern | [ENGINEERING.md › Tech stack decisions](ENGINEERING.md#2-tech-stack-decisions) |
 | Building or styling UI (tokens, components, charts) | [DESIGN.md](DESIGN.md) |

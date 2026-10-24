@@ -1,6 +1,6 @@
 # E2E Test Plan: Rental Analytics v1
 
-End-to-end test plan for the acceptance criteria in [intent.md](intent.md). Unit, property and component tests are covered by [ENGINEERING.md › Testing strategy](ENGINEERING.md#5-testing-strategy); this plan covers what only a real browser against a real server can prove: routing, URL state, HTTP behaviour, response headers, cross-browser layout, keyboard flows and that the figures on screen match the seeded database.
+End-to-end test plan for the acceptance criteria in [intent.md](evidence/intent.md). Unit, property and component tests are covered by [ENGINEERING.md › Testing strategy](ENGINEERING.md#5-testing-strategy); this plan covers what only a real browser against a real server can prove: routing, URL state, HTTP behaviour, response headers, cross-browser layout, keyboard flows and that the figures on screen match the seeded database.
 
 Status: draft · Last updated 24 Oct 2026
 

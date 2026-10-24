@@ -8,7 +8,7 @@ Each step ran in its own session, so every session started from documents rather
 
 1. **Design.** In Claude Design, create an interactive Rayblue Group Dashboard web UI. Export it as a single-page interactive HTML file ([ui/webapp-html-prototype.html](../ui/webapp-html-prototype.html)).
 2. **Agent docs.** In Claude Code, create the agent-facing markdown files (AGENTS.md, ENGINEERING.md, DESIGN.md for UI/UX, README.md) using the Progressive Disclosure Principle. They cover engineering principles, the tech stack, unit tests, component tests and property-based tests. AGENTS.md stays short and points to the deeper docs.
-3. **Requirements.** In a separate Claude Code session, create [intent.md](../intent.md) from the product brief: acceptance criteria with stable IDs (AC-NAV-1 …) and a verification method for each.
+3. **Requirements.** In a separate Claude Code session, create [intent.md](intent.md) from the product brief: acceptance criteria with stable IDs (AC-NAV-1 …) and a verification method for each.
 4. **Plan.** In a separate Claude Code session, create the implementation plan from intent.md, the HTML prototype, the data model schema and the synthetic-data brief, using a Claude Agent Team with three teammates (Sam, Tim, Albert).
 5. **Build.** Execute the implementation plan with the agent team (§3).
 6. **E2E plan.** In a separate Claude Code session, create the E2E test plan [e2e-test-plan.md](../e2e-test-plan.md) from intent.md.
