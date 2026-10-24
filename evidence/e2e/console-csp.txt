@@ -1,0 +1,5 @@
+== SEC-02 CSP violations / console errors
+/rental-analytics console=[] errors=[] cspEventsAfterLoad=0
+/rental-analytics?state=NSW&granularity=weekly console=[] errors=[] cspEventsAfterLoad=0
+/rental-analytics?agencyId=7&granularity=monthly console=[] errors=[] cspEventsAfterLoad=0
+/nope console=[] errors=[] cspEventsAfterLoad=0

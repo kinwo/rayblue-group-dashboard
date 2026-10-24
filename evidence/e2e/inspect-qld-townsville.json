@@ -1,0 +1,102 @@
+{
+  "bars": [
+    "NSW 12 agencies589 w=100%/253px op=1 n=589",
+    "VIC 10 agencies479 w=81.3243%/206px op=1 n=479",
+    "QLD 8 agencies419 w=71.1375%/180px op=1 n=419",
+    "WA 0 agencies0 w=0%/0px op=1 n=0",
+    "SA 0 agencies0 w=0%/0px op=1 n=0",
+    "TAS 0 agencies0 w=0%/0px op=1 n=0",
+    "ACT 0 agencies0 w=0%/0px op=1 n=0",
+    "NT 0 agencies0 w=0%/0px op=1 n=0"
+  ],
+  "caption": "Top agencies by new listings",
+  "cells": [
+    "Rayblue Ipswich:start:normal",
+    "QLD:start:normal",
+    "59:right:tabular-nums",
+    "14.1%:right:tabular-nums",
+    "−2%:right:tabular-nums"
+  ],
+  "chartLabel": "New listings per day for Rayblue Townsville City, 11 Oct to 24 Oct. Latest 0, peak 6.",
+  "context": null,
+  "cookie": "",
+  "h1": [
+    "Rental analytics"
+  ],
+  "headers": [
+    "Agency:none:button",
+    "State:none:button",
+    "New listings:descending:button",
+    "Share of QLD:none:button",
+    "vs previous:none:button"
+  ],
+  "inkColor": "rgb(14, 34, 50)",
+  "innerW": 1440,
+  "kpi": [
+    {
+      "color": "rgb(14, 34, 50)",
+      "fvn": "tabular-nums",
+      "v": "0"
+    },
+    {
+      "color": "rgb(14, 34, 50)",
+      "fvn": "tabular-nums",
+      "v": "26"
+    },
+    {
+      "color": "rgb(14, 34, 50)",
+      "fvn": "tabular-nums",
+      "v": "95"
+    },
+    {
+      "color": "rgb(14, 34, 50)",
+      "fvn": "tabular-nums",
+      "v": "1"
+    }
+  ],
+  "kpiNotes": [
+    "New listings today0To 9:00 am · last Saturday 2",
+    "New listings this week26Week to date · last week 27",
+    "New listings this month95Month to date · September 23",
+    "Agencies1In Queensland"
+  ],
+  "lang": "en-AU",
+  "legend": "Rayblue Townsville CityRayblue Townsville City",
+  "links": [
+    "Rental analytics:page"
+  ],
+  "mains": 1,
+  "meta": "Rayblue Townsville City · Sample data · Updated 9:00 am, 24 Oct 2026",
+  "navs": 1,
+  "postForms": 0,
+  "rows": [
+    "Rayblue Ipswich | QLD | 59 | 14.1% | −2%",
+    "Rayblue Southport | QLD | 58 | 13.8% | +2%",
+    "Rayblue Cairns City | QLD | 57 | 13.6% | +6%",
+    "Rayblue Maroochydore | QLD | 54 | 12.9% | −4%",
+    "Rayblue Townsville City | QLD | 54 | 12.9% | −5% [selected]",
+    "Rayblue South Brisbane | QLD | 52 | 12.4% | −9%",
+    "Rayblue Fortitude Valley | QLD | 43 | 10.3% | −4%",
+    "Rayblue Toowong | QLD | 42 | 10.0% | −7%"
+  ],
+  "scrollW": 1440,
+  "storage": 0,
+  "trendRows": [
+    "Sun 11 Oct 20261",
+    "Mon 12 Oct 20264",
+    "Tue 13 Oct 20266",
+    "Wed 14 Oct 20265",
+    "Thu 15 Oct 20265",
+    "Fri 16 Oct 20264",
+    "Sat 17 Oct 20262",
+    "Sun 18 Oct 20261",
+    "Mon 19 Oct 20265",
+    "Tue 20 Oct 20265",
+    "Wed 21 Oct 20265",
+    "Thu 22 Oct 20266",
+    "Fri 23 Oct 20265",
+    "Sat 24 Oct 2026 (to date)0"
+  ],
+  "trendTitle": "New listings per day",
+  "url": "?state=QLD&agencyId=29"
+}

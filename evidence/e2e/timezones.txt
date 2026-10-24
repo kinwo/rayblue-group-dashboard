@@ -1,0 +1,4 @@
+== HDR-01 browser time zones
+Europe/London: browserTZ="Europe/London" meta="Tasmania · Sample data · Updated 9:00 am, 24 Oct 2026"
+America/New_York: browserTZ="America/New_York" meta="Tasmania · Sample data · Updated 9:00 am, 24 Oct 2026"
+NY tooltip: "Sat 24 Oct 2026 (to date) |  | All Rayblue agencies | 10" table: "Sun 11 Oct 2026 … Sat 24 Oct 2026 (to date)" errors=[0]

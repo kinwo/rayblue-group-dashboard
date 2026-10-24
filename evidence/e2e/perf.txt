@@ -1,0 +1,2 @@
+== PRF-01 200 sequential GETs (production build, localhost): p50=8.8ms p95=11.7ms max=19.2ms -> PASS (target p95 <= 500ms)
+== PRF-03 (wall clock incl. CLI round trips, ms): 358 347 344 349 351 349 350 352 346 347
