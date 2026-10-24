@@ -19,7 +19,7 @@ How the Rayblue Agency Group Dashboard is built and why. For the product brief s
 | Language / runtime | TypeScript strict, Node.js 24 | Current LTS; native support for modern ES features. Pinned in `.nvmrc` and `package.json#engines`. |
 | ORM | Drizzle ORM | Schema-as-TypeScript gives inferred row types; SQL-like query builder keeps aggregation queries readable. |
 | Database | SQLite file (`better-sqlite3` driver) | Zero setup for a prototype, fast, and runs in-memory for tests. Path from `DATABASE_URL` (default `./data/rayblue.db`, git-ignored). |
-| Styling | Tailwind CSS | Utility classes and design tokens in one place; no separate CSS files to keep in sync. |
+| Styling | Tailwind CSS + CSS Modules | Tokens and utilities in one place (`globals.css`); each component composes them with `@apply` in its own `*.module.css` under semantic class names ([ADR 0005](docs/adr/0005-css-modules-for-component-styles.md)). |
 | Components | shadcn/ui | Accessible Radix primitives copied into the repo, so we own and can adjust them. Sidebar, Select, Tabs, Card. |
 | Rate limiting | rate-limiter-flexible (in memory) | Per-client limits in `src/proxy.ts`, tested with the app; same interface for a shared store later ([ADR 0004](docs/adr/0004-in-app-rate-limiting.md)). |
 | Charts | shadcn charts (Recharts) | Matches shadcn theming via CSS variables; enough for bar and line charts. |
@@ -88,7 +88,7 @@ Indexes `listings(agencyId, listedDate)` and `listings(listedDate)` for the time
 - **Validate at boundaries:** parse search params, env vars and seed input once at the edge; trust types inside.
 - **Errors:** throw typed errors from services; handle them in route `error.tsx` boundaries. Never swallow errors silently.
 - **Dates:** store UTC; bucket and display in `Australia/Sydney` using the single helper in `src/utils`. Never call `new Date()` inside business logic; pass "now" in so it can be tested.
-- **Styling:** Tailwind utilities and shadcn tokens only; no inline hex colours, no ad-hoc CSS files.
+- **Styling:** each component's styles live in a sibling `*.module.css` built from Tailwind token utilities with `@apply`; TSX uses `styles.name` and `data-*` attributes for state. No utility strings in `className` (lint enforces it; `sr-only` is the exception), no inline hex colours, no global CSS outside `globals.css`.
 - **Accessibility:** every chart has a visible title and a text summary or table alternative; all controls are keyboard reachable and labelled.
 
 ### Workflow

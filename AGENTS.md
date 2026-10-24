@@ -8,7 +8,7 @@ Next.js prototype of the **Rayblue Agency Group** dashboard: a group manager vie
 
 ## Stack
 
-Node.js 24 · TypeScript (strict) · Next.js App Router (latest) · Drizzle ORM · SQLite file · Tailwind CSS · shadcn/ui · rate-limiter-flexible · Jest · React Testing Library · fast-check
+Node.js 24 · TypeScript (strict) · Next.js App Router (latest) · Drizzle ORM · SQLite file · Tailwind CSS + CSS Modules · shadcn/ui · rate-limiter-flexible · Jest · React Testing Library · fast-check
 
 ## Commands
 
@@ -47,6 +47,7 @@ Never import upward. Use the `@/` alias.
 6. Schema change → `npm run db:generate` → commit the migration with it.
 7. Don't edit `src/components/ui/*` unless the change must apply everywhere.
 8. No new dependencies without a clear reason; record big decisions as an ADR in `docs/adr/`.
+9. Component styles go in a sibling `*.module.css` with semantic class names, built from token utilities with `@apply`; no utility strings in `className` except `sr-only` (ADR 0005, lint-enforced).
 
 ## Read more only when you need it
 

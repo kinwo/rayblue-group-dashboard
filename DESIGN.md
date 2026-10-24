@@ -133,7 +133,7 @@ Rules: base size is 14px (dense admin UI). Every figure that can line up with an
 
 ## 6. Components
 
-Build on shadcn/ui primitives in `src/components/ui`, themed through the tokens above. Feature components in `src/components` compose them. Names in brackets are the prototype's Cirrus classes.
+Build on shadcn/ui primitives in `src/components/ui`, themed through the tokens above. Feature components in `src/components` compose them and keep their styles in a sibling `*.module.css` with semantic class names, composed from the token utilities with `@apply` ([ADR 0005](docs/adr/0005-css-modules-for-component-styles.md)). Names in brackets are the prototype's Cirrus classes.
 
 ### Buttons (`ci-btn`)
 
@@ -229,7 +229,7 @@ Keep the Cirrus names above as the source of truth in `src/app/globals.css`, the
 | `--sidebar` / `--sidebar-foreground` | `--chrome` / `--on-chrome` |
 | `--sidebar-accent` / `--sidebar-border` / `--sidebar-ring` | `--chrome-raised` / `--chrome-line` / `--sky` |
 
-shadcn's `--primary` collides by name with Cirrus `--primary`; they hold the same value, so define it once. Expose the remaining Cirrus tokens to Tailwind through `@theme inline` (e.g. `bg-surface-sunken`, `text-ink-muted`, `border-line`, `rounded-lg` = 10px) and register the type scale as utilities (`text-display`, `text-caption-strong`, …) so components never use arbitrary values like `text-[28px]` or `bg-[#e9eff5]`.
+shadcn's `--primary` collides by name with Cirrus `--primary`; they hold the same value, so define it once. Expose the remaining Cirrus tokens to Tailwind through `@theme inline` (e.g. `bg-surface-sunken`, `text-ink-muted`, `border-line`, `rounded-lg` = 10px) and register the type scale as utilities (`text-display`, `text-caption-strong`, …) so components never use arbitrary values like `text-[28px]` or `bg-[#e9eff5]`. Feature components use these utilities only inside their CSS modules, after `@reference "…/app/globals.css"`; their TSX passes `styles.name`, never utility strings (ESLint enforces this; `sr-only` is the one exception).
 
 ## 11. Changing the system
 
