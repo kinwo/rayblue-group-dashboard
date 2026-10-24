@@ -1,6 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 
 import { KpiTiles } from "@/components/analytics/kpi-tiles";
+import styles from "@/components/analytics/kpi-tiles.module.css";
 import { makeView } from "@/components/testing/fixtures";
 
 function tiles(view = makeView()) {
@@ -36,11 +37,9 @@ describe("KpiTiles", () => {
     expect(tiles(view)[3]).toBe("Agencies1In New South Wales");
   });
 
-  it("AC-KPI-4: values are tabular and never coloured", () => {
+  it("AC-KPI-4: values use the tabular, uncoloured value style", () => {
     render(<KpiTiles {...makeView()} />);
-    const value = screen.getByText("1,932");
-    expect(value).toHaveClass("tabular-nums", "text-ink");
-    expect(value.className).not.toMatch(/text-(success|danger|warning|primary)/);
+    expect(screen.getByText("1,932")).toHaveClass(styles.value);
   });
 
   it("AC-STE-2: an empty scope shows zeros", () => {

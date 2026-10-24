@@ -1,0 +1,38 @@
+@reference "../../app/globals.css";
+
+.rows {
+  @apply flex flex-col gap-3;
+}
+
+.row {
+  @apply grid grid-cols-[112px_1fr_64px] items-center gap-3;
+}
+
+.label {
+  @apply flex flex-col;
+}
+
+.code {
+  @apply text-caption-strong text-ink no-underline;
+}
+
+.agencies {
+  @apply text-caption text-ink-muted;
+}
+
+.track {
+  @apply h-4.5 border-l border-line-strong;
+}
+
+.bar {
+  @apply block h-full rounded-r-sm transition-opacity;
+}
+
+/* Only the bar fades: faded labels and counts would fail text contrast (WCAG 1.4.3). */
+.bar[data-faded] {
+  @apply opacity-35;
+}
+
+.count {
+  @apply text-right text-caption-strong text-ink tabular-nums;
+}

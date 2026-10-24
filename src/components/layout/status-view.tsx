@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import styles from "@/components/layout/status-view.module.css";
+
 type StatusViewProps = {
   title: string;
   message: string;
@@ -13,10 +15,10 @@ type StatusViewProps = {
 export function StatusView({ title, message, action, headingLevel = 1 }: StatusViewProps) {
   const Heading = headingLevel === 1 ? "h1" : "h2";
   return (
-    <div className="mx-auto flex w-full max-w-[1360px] flex-col items-start gap-3 px-6 py-12">
-      <Heading className="text-title text-ink">{title}</Heading>
-      <p className="max-w-prose text-body text-ink-muted">{message}</p>
-      <div className="pt-2">{action}</div>
+    <div className={styles.view}>
+      <Heading className={styles.title}>{title}</Heading>
+      <p className={styles.message}>{message}</p>
+      <div className={styles.action}>{action}</div>
     </div>
   );
 }

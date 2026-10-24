@@ -1,0 +1,78 @@
+@reference "../../app/globals.css";
+
+.tabs {
+  @apply gap-6;
+}
+
+/* Filter bar on --surface-sunken (DESIGN.md §6 › Form controls). */
+.bar {
+  @apply flex flex-wrap items-end gap-4 rounded-lg bg-surface-sunken px-4 py-3;
+}
+
+.field {
+  @apply flex flex-col gap-1;
+}
+
+.label {
+  @apply text-label text-ink;
+}
+
+/* Listing period: line tabs with a primary underline on the active one (DESIGN.md §6 › Tabs). */
+.periodTabs {
+  @apply h-9 gap-4 rounded-none border-b border-line p-0;
+}
+
+.periodTab {
+  @apply h-full flex-none rounded-none px-0 text-label text-ink-muted hover:text-ink data-[state=active]:text-ink;
+  @apply after:bg-primary data-[state=active]:after:opacity-100;
+}
+
+.panel {
+  @apply flex flex-col gap-6;
+}
+
+/* State select and agency combobox triggers share one look (DESIGN.md §6 › Form controls). */
+.trigger {
+  @apply h-9 w-64 max-w-full justify-between rounded-md border border-line-strong bg-surface-raised px-3 text-body font-normal text-ink shadow-none;
+  @apply hover:border-ink-muted hover:bg-surface-raised;
+}
+
+.triggerText {
+  @apply truncate;
+}
+
+.triggerIcon {
+  @apply text-ink-muted;
+}
+
+.menu {
+  @apply rounded-md bg-surface-raised shadow-md;
+}
+
+.agencyMenu {
+  @apply w-72 p-0;
+}
+
+.empty {
+  @apply py-6 text-center text-body text-ink-muted;
+}
+
+.option {
+  @apply min-h-8;
+}
+
+.check {
+  @apply opacity-0;
+}
+
+.check[data-checked] {
+  @apply opacity-100;
+}
+
+.optionName {
+  @apply flex-1 truncate;
+}
+
+.optionState {
+  @apply text-caption text-ink-muted;
+}

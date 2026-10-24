@@ -1,0 +1,31 @@
+@reference "../../app/globals.css";
+
+/* Side navigation on --chrome (DESIGN.md §6 › Side navigation). */
+.header {
+  @apply gap-1 px-4 pt-5 pb-4;
+}
+
+.productName {
+  @apply text-subheading text-on-chrome;
+}
+
+.mutedText {
+  @apply text-caption text-on-chrome-muted;
+}
+
+.group {
+  @apply px-3;
+}
+
+.groupLabel {
+  @apply text-overline text-on-chrome-muted;
+}
+
+.navLink {
+  @apply h-9 rounded-md text-label text-on-chrome [&>svg]:text-on-chrome-muted;
+  @apply data-[active=true]:font-semibold data-[active=true]:[&>svg]:text-sky;
+}
+
+.footer {
+  @apply border-t border-chrome-line px-4 py-3;
+}

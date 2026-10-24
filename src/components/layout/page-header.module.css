@@ -1,0 +1,30 @@
+@reference "../../app/globals.css";
+
+/* Page header band (DESIGN.md §6 › Page header). */
+.header {
+  @apply flex flex-col gap-3 border-b border-line bg-surface-raised px-6 pt-5 pb-4;
+}
+
+.titleBlock {
+  @apply flex flex-col gap-1;
+}
+
+.title {
+  @apply text-title text-ink;
+}
+
+.meta {
+  @apply text-caption text-ink-muted;
+}
+
+.staleAlert {
+  @apply border-warning/40 bg-warning-soft text-warning;
+}
+
+.staleTitle {
+  @apply text-subheading;
+}
+
+.staleText {
+  @apply text-body text-ink;
+}

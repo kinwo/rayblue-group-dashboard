@@ -2,7 +2,10 @@ import type { RentalAnalyticsView } from "@/services/rental-analytics.types";
 import { formatCount, formatMonth, formatTime, formatWeekday } from "@/utils/format";
 import { stateName } from "@/utils/states";
 
+import layout from "@/components/analytics/analytics-layout.module.css";
+import styles from "@/components/analytics/kpi-tiles.module.css";
 import { highlightedState } from "@/components/analytics/scope";
+import { cn } from "@/utils/cn";
 
 type KpiTilesProps = Pick<RentalAnalyticsView, "kpis" | "scope" | "asOf">;
 
@@ -42,15 +45,12 @@ export function KpiTiles(props: KpiTilesProps) {
       <h2 id="listing-totals-heading" className="sr-only">
         Listing totals
       </h2>
-      <ul className="flex flex-wrap gap-4">
+      <ul className={layout.kpiRow}>
         {kpiTiles(props).map((tile) => (
-          <li
-            key={tile.label}
-            className="flex min-w-0 flex-[1_1_220px] flex-col gap-1 rounded-lg border border-line bg-surface-raised p-4"
-          >
-            <span className="text-caption-strong text-ink-muted">{tile.label}</span>
-            <span className="text-display text-ink tabular-nums">{formatCount(tile.value)}</span>
-            <span className="text-caption text-ink-muted">{tile.note}</span>
+          <li key={tile.label} className={cn(layout.kpiCell, styles.tile)}>
+            <span className={styles.label}>{tile.label}</span>
+            <span className={styles.value}>{formatCount(tile.value)}</span>
+            <span className={styles.note}>{tile.note}</span>
           </li>
         ))}
       </ul>

@@ -4,12 +4,15 @@ import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from "lucide-react";
 import { useState } from "react";
 
 import { AnalyticsCard } from "@/components/analytics/analytics-card";
+import layout from "@/components/analytics/analytics-layout.module.css";
 import { trendRangeLabel } from "@/components/analytics/scope";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { AgencyRow, RentalAnalyticsView } from "@/services/rental-analytics.types";
 import { cn } from "@/utils/cn";
 import { formatChange, formatCount, formatShare } from "@/utils/format";
 import { ALL_STATES_LABEL, stateName } from "@/utils/states";
+
+import styles from "@/components/analytics/top-agencies-table.module.css";
 
 type TopAgenciesTableProps = Pick<RentalAnalyticsView, "topAgencies" | "scope" | "trend">;
 
@@ -61,13 +64,13 @@ export function TopAgenciesTable({ topAgencies, scope, trend }: TopAgenciesTable
     <AnalyticsCard
       title="Top agencies"
       description={`${trendRangeLabel(trend.points, trend.granularity)} · ${scope.state ? stateName(scope.state) : ALL_STATES_LABEL}`}
-      className="flex-[1.4_1_480px]"
+      className={layout.tableColumn}
     >
-      <div className="overflow-hidden rounded-lg border border-line">
-        <Table className="text-body">
+      <div className={styles.frame}>
+        <Table className={styles.table}>
           <TableCaption className="sr-only">{TABLE_CAPTION}</TableCaption>
-          <TableHeader className="bg-surface-sunken">
-            <TableRow className="border-line hover:bg-transparent">
+          <TableHeader className={styles.head}>
+            <TableRow className={styles.headRow}>
               {header("name", "Agency")}
               {header("state", "State")}
               {header("count", "New listings", true)}
@@ -77,8 +80,8 @@ export function TopAgenciesTable({ topAgencies, scope, trend }: TopAgenciesTable
           </TableHeader>
           <TableBody>
             {rows.length === 0 ? (
-              <TableRow className="hover:bg-transparent">
-                <TableCell colSpan={5} className="py-12 text-center text-ink-muted">
+              <TableRow className={styles.emptyRow}>
+                <TableCell colSpan={5} className={styles.empty}>
                   {EMPTY_MESSAGE}
                 </TableCell>
               </TableRow>
@@ -88,13 +91,13 @@ export function TopAgenciesTable({ topAgencies, scope, trend }: TopAgenciesTable
                   key={row.agencyId}
                   aria-selected={row.isSelected}
                   data-state={row.isSelected ? "selected" : undefined}
-                  className="h-10 border-line hover:bg-surface-hover data-[state=selected]:bg-selected"
+                  className={styles.row}
                 >
-                  <TableCell className="px-3 font-medium text-ink">{row.name}</TableCell>
-                  <TableCell className="px-3 text-ink-muted">{row.state}</TableCell>
-                  <TableCell className="px-3 text-right tabular-nums">{formatCount(row.count)}</TableCell>
-                  <TableCell className="px-3 text-right tabular-nums">{formatShare(row.share)}</TableCell>
-                  <TableCell className="px-3 text-right tabular-nums">{formatChange(row.change)}</TableCell>
+                  <TableCell className={cn(styles.cell, styles.name)}>{row.name}</TableCell>
+                  <TableCell className={cn(styles.cell, styles.state)}>{row.state}</TableCell>
+                  <TableCell className={cn(styles.cell, styles.numeric)}>{formatCount(row.count)}</TableCell>
+                  <TableCell className={cn(styles.cell, styles.numeric)}>{formatShare(row.share)}</TableCell>
+                  <TableCell className={cn(styles.cell, styles.numeric)}>{formatChange(row.change)}</TableCell>
                 </TableRow>
               ))
             )}
@@ -118,13 +121,9 @@ function SortableHead({
 }) {
   const Icon = sort === "ascending" ? ArrowUpIcon : sort === "descending" ? ArrowDownIcon : ArrowUpDownIcon;
   return (
-    <TableHead aria-sort={sort ?? "none"} className={cn("h-10 px-3 text-caption-strong text-ink-muted", numeric && "text-right")}>
-      <button
-        type="button"
-        onClick={onSort}
-        className="inline-flex items-center gap-1 rounded-sm hover:text-ink"
-      >
-        <Icon aria-hidden="true" className={cn("size-3.5", sort ? "text-primary" : "text-ink-muted")} />
+    <TableHead aria-sort={sort ?? "none"} className={cn(styles.columnHead, numeric && styles.columnHeadNumeric)}>
+      <button type="button" onClick={onSort} className={styles.sortButton}>
+        <Icon aria-hidden="true" className={styles.sortIcon} data-active={sort ? "" : undefined} />
         {label}
       </button>
     </TableHead>
