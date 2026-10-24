@@ -119,6 +119,8 @@ npm run lint && npm run typecheck && npm test
 - `npm run typecheck`: `tsc --noEmit` in strict mode.
 - `npm test`: unit, property-based (fast-check), component (RTL) and data tests on in-memory SQLite. Tests do not need the seeded database or a running server. Add `-- --coverage` for a coverage report.
 
+CI also runs a production build (reusing a cached `.next/cache`) and a parallel supply-chain job: `npm audit --omit=dev --audit-level=high`, `npm audit signatures`, and a CycloneDX SBOM of the production dependencies (`npm sbom --omit=dev --sbom-format=cyclonedx`), uploaded as the `sbom` workflow artifact.
+
 ## Example workflow
 
 With the default seed (as-of **9:00 am, Sat 24 Oct 2026**, Sydney time):
