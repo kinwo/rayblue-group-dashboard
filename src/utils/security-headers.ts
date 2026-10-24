@@ -1,5 +1,6 @@
 // Security headers (AC-SEC-4, ADR 0003). One home for the policy: proxy.ts adds the
-// per-request CSP to pages; next.config.ts adds the rest to every response.
+// per-request CSP to pages and the fixed non-page CSP to API responses; next.config.ts
+// adds the rest to every response and the non-page CSP to static files.
 
 /** Headers every response carries, pages, API and static files alike. */
 export const SECURITY_HEADERS: Readonly<Record<string, string>> = {
@@ -32,6 +33,22 @@ export function buildContentSecurityPolicy(nonce: string, { isDev }: { isDev: bo
   ];
   return directives.map((d) => d.join(" ")).join("; ");
 }
+
+/**
+ * Content Security Policy for responses that are not pages (API JSON, 405s, static files).
+ * They render nothing, so nothing needs a nonce: same-origin only, no framing, no plugins.
+ */
+export const NON_PAGE_CONTENT_SECURITY_POLICY = [
+  "default-src 'none'",
+  "script-src 'self'",
+  "style-src 'self'",
+  "img-src 'self'",
+  "font-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+].join("; ");
 
 /** HTTP methods the app answers; everything else is 405 (AC-SEC-1). */
 export const ALLOWED_METHODS = ["GET", "HEAD"] as const;
