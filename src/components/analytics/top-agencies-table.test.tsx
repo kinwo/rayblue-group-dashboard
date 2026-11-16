@@ -53,16 +53,19 @@ describe("TopAgenciesTable", () => {
     const countHeader = screen.getByRole("columnheader", { name: /New listings/ });
     expect(countHeader).toHaveAttribute("aria-sort", "descending");
     const agencyHeader = screen.getByRole("columnheader", { name: /Agency/ });
-    expect(agencyHeader).toHaveAttribute("aria-sort", "none");
+    expect(agencyHeader).not.toHaveAttribute("aria-sort");
+    expect(screen.getByRole("status")).toBeEmptyDOMElement();
 
     await userEvent.click(within(agencyHeader).getByRole("button", { name: "Agency" }));
     expect(agencyHeader).toHaveAttribute("aria-sort", "ascending");
-    expect(countHeader).toHaveAttribute("aria-sort", "none");
+    expect(countHeader).not.toHaveAttribute("aria-sort");
+    expect(screen.getByRole("status")).toHaveTextContent("Sorted by Agency, ascending");
     expect(names(table)).toEqual(["Rayblue Bondi", "Rayblue Brisbane City", "Rayblue Fitzroy", "Rayblue Parramatta"]);
 
     await userEvent.click(within(agencyHeader).getByRole("button", { name: "Agency" }));
     expect(agencyHeader).toHaveAttribute("aria-sort", "descending");
     expect(names(table)[0]).toBe("Rayblue Parramatta");
+    expect(screen.getByRole("status")).toHaveTextContent("Sorted by Agency, descending");
   });
 
   it("AC-AGY-5: sorting by vs previous puts — last", async () => {

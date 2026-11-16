@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Public_Sans } from "next/font/google";
 import { headers } from "next/headers";
 import { connection } from "next/server";
@@ -28,7 +28,13 @@ export const metadata: Metadata = {
   title: { default: "Rental analytics · Rayblue Agency Group", template: "%s · Rayblue Agency Group" },
   description: "New rental listings per day, week and month across Rayblue agencies. Sample data.",
   robots: { index: false, follow: false },
+  // Opts into the OS text size (Dynamic Type, Android font scale) where supported: 1rem follows it.
+  // Safe because every size is in rem (DESIGN.md §3); never also set a root font-size.
+  other: { "text-scale": "scale" },
 };
+
+/** `<meta name="color-scheme" content="light dark">`: the browser themes the canvas before CSS loads (AC-THM-1). */
+export const viewport: Viewport = { colorScheme: "light dark" };
 
 /**
  * Every route renders at request time so Next.js can put the proxy's CSP nonce

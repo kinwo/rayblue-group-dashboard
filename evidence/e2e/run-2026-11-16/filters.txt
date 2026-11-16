@@ -1,0 +1,60 @@
+## E2E-FLT-02 state options
+"All states and territories | New South Wales | Victoria | Queensland | Western Australia | South Australia | Tasmania | Australian Capital Territory | Northern Territory"
+✗ Failed to save screenshot to shots/02-state-options.png: No such file or directory (os error 2)
+## E2E-FLT-03 agency options (all states)
+{
+  "count": 31,
+  "everyHasState": true,
+  "first": "All agencies",
+  "sample": [
+    "All agencies",
+    "Rayblue BallaratVIC",
+    "Rayblue BondiNSW",
+    "Rayblue Box HillVIC"
+  ],
+  "sortedByName": true
+}
+✗ Failed to save screenshot to shots/03-agency-options.png: No such file or directory (os error 2)
+## E2E-FLT-05 type-ahead 'Tow'
+{
+  "highlighted": "Rayblue Townsville CityQLD",
+  "visible": [
+    "Rayblue Townsville CityQLD",
+    "Rayblue NewtownNSW",
+    "Rayblue ToowongQLD",
+    "Rayblue ChatswoodNSW"
+  ]
+}
+✗ Failed to save screenshot to shots/04-agency-typeahead.png: No such file or directory (os error 2)
+## E2E-FLT-07 build a view: QLD -> Townsville City -> Monthly
+✗ Failed to read: Resource temporarily unavailable (os error 35) (after 5 retries - daemon may be busy or unresponsive)
+✗ Evaluation error: TypeError: Cannot read properties of null (reading 'textContent')
+    at <anonymous>:1:178
+
+## E2E-FLT-04 QLD agencies only, sorted:
+"All agencies | Rayblue Cairns CityQLD | Rayblue Fortitude ValleyQLD | Rayblue IpswichQLD | Rayblue MaroochydoreQLD | Rayblue South BrisbaneQLD | Rayblue SouthportQLD | Rayblue ToowongQLD | Rayblue Townsville CityQLD"
+## E2E-FLT-07 (cont.) after QLD -> Townsville City:
+{"kpi":"0/26/95/1","state":"Queensland","tab":"Daily","trend":"NewlistingsperdayforRayblueTownsvilleCity,11Octto24Oct.La","url":"?state=QLD&agencyId=29"}
+after Monthly:
+{"kpi":"0/26/95/1","state":"Queensland","tab":"Monthly","trend":"NewlistingspermonthforRayblueTownsvilleCity,NovtoOct.Latest","url":"?state=QLD&agencyId=29&granularity=monthly"}
+## E2E-FLT-08 reload keeps view; no client storage
+{ "agency": "Rayblue Townsville City", "kpi": "0/26/95/1", "state": "Queensland", "tab": "Monthly", "trend": "New listings per month for Rayblue Townsville City, Nov to Oct. Latest", "url": "?state=QLD&agencyId=29&granularity=monthly"}
+-> same after reload
+{  "cookie": "",  "local": 0,  "session": 0}
+## E2E-FLT-13 change state to Tasmania resets agency
+✗ Unknown ref: e5
+✗ Element not found. Verify the selector is correct and the element exists in the DOM.
+{ "agency": "Rayblue Townsville City", "kpi": "0/26/95/1", "state": "Queensland", "tab": "Monthly", "trend": "New listings per month for Rayblue Townsville City, Nov to Oct. Latest", "url": "?state=QLD&agencyId=29&granularity=monthly"}
+## E2E-FLT-09 Back x3, then Forward x3
+{ "agency": "Rayblue Townsville City", "kpi": "0/26/95/1", "state": "Queensland", "tab": "Daily", "trend": "New listings per day for Rayblue Townsville City, 11 Oct to 24 Oct. La", "url": "?state=QLD&agencyId=29"}
+{ "agency": "All agencies", "kpi": "2/197/725/8", "state": "Queensland", "tab": "Daily", "trend": "New listings per day for Queensland, 11 Oct to 24 Oct. Latest 2, peak ", "url": "?state=QLD"}
+{ "agency": "All agencies", "kpi": "10/692/2,586/30", "state": "All states and territories", "tab": "Daily", "trend": "New listings per day for All states and territories, 11 Oct to 24 Oct.", "url": ""}
+{ "agency": "All agencies", "kpi": "2/197/725/8", "state": "Queensland", "tab": "Daily", "trend": "New listings per day for Queensland, 11 Oct to 24 Oct. Latest 2, peak ", "url": "?state=QLD"}
+{ "agency": "Rayblue Townsville City", "kpi": "0/26/95/1", "state": "Queensland", "tab": "Daily", "trend": "New listings per day for Rayblue Townsville City, 11 Oct to 24 Oct. La", "url": "?state=QLD&agencyId=29"}
+{ "agency": "Rayblue Townsville City", "kpi": "0/26/95/1", "state": "Queensland", "tab": "Monthly", "trend": "New listings per month for Rayblue Townsville City, Nov to Oct. Latest", "url": "?state=QLD&agencyId=29&granularity=monthly"}
+## E2E-FLT-13 (re-run) change state to Tasmania resets agency
+{ "agency": "All agencies", "kpi": "0/0/0/0", "state": "Tasmania", "tab": "Monthly", "trend": "New listings per month for Tasmania, Nov to Oct. Latest 0, peak 0.", "url": "?state=TAS&granularity=monthly"}
+## E2E-FLT-12 agency not in state: ?state=VIC&agencyId=2 (NSW agency)
+{ "agency": "All agencies", "kpi": "6/224/838/10", "state": "Victoria", "tab": "Daily", "trend": "New listings per day for Victoria, 11 Oct to 24 Oct. Latest 6, peak 49", "url": "?state=VIC&agencyId=2"}
+## E2E-NAV-04 context line
+"Group office · Victoria"

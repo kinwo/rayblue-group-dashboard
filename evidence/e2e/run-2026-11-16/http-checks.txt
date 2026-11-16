@@ -1,0 +1,71 @@
+## E2E-NAV-01 root redirect
+GET / -> 307 http://localhost:3000/rental-analytics
+
+## E2E-SEC-01 security headers
+--- /rental-analytics
+HTTP/1.1 200 OK
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+referrer-policy: strict-origin-when-cross-origin
+permissions-policy: camera=(), microphone=(), geolocation=()
+content-security-policy: default-src 'self'; script-src 'self' 'nonce-…' 'strict-dynamic'; style-src 'self' 'nonce-NzY5YjBkYmMtNThiMi00Njg1LWI4MGEtMTI2ZTQ5MGQzMzUw'; style-src-attr 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+--- /nope
+HTTP/1.1 404 Not Found
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+referrer-policy: strict-origin-when-cross-origin
+permissions-policy: camera=(), microphone=(), geolocation=()
+content-security-policy: default-src 'self'; script-src 'self' 'nonce-…' 'strict-dynamic'; style-src 'self' 'nonce-YTIxYjBlNzctZTkxZi00YzgwLTlmMTQtNTY1MWRkNThjYjRl'; style-src-attr 'unsafe-inline'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+--- /api/health
+HTTP/1.1 200 OK
+strict-transport-security: max-age=63072000; includeSubDomains
+x-content-type-options: nosniff
+referrer-policy: strict-origin-when-cross-origin
+permissions-policy: camera=(), microphone=(), geolocation=()
+content-security-policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+--- /favicon.ico
+HTTP/1.1 200 OK
+Strict-Transport-Security: max-age=63072000; includeSubDomains
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: camera=(), microphone=(), geolocation=()
+Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+
+## E2E-SEC-03 write methods
+POST /rental-analytics -> 405
+POST /api/health -> 405
+PUT /rental-analytics -> 405
+PUT /api/health -> 405
+PATCH /rental-analytics -> 405
+PATCH /api/health -> 405
+DELETE /rental-analytics -> 405
+DELETE /api/health -> 405
+POST /rental-analytics with Next-Action -> 405
+
+## E2E-REL-01 health
+HTTP/1.1 200 OK
+cache-control: no-store
+{"status":"ok","version":"0.1.0","database":"ok"}
+
+
+## E2E-STE-03 not found
+/nope -> 404
+href="/rental-analytics">
+/rental-analytics/x -> 404
+href="/rental-analytics">
+
+## Head meta (color-scheme, text-scale, viewport)
+in <head> <meta name="viewport" content="width=device-width, initial-scale=1"/>
+in <head> <meta name="color-scheme" content="light dark"/>
+in <head> <meta name="text-scale" content="scale"/>
+html lang: en-AU
+
+## E2E-FLT-11 invalid params (status, echo check)
+state=XYZ                                  -> 200  raw input in markup outside scripts: False  'stack' text: False
+granularity=hourly                         -> 200  raw input in markup outside scripts: False  'stack' text: False
+agencyId=abc                               -> 200  raw input in markup outside scripts: False  'stack' text: False
+agencyId=-1                                -> 200  raw input in markup outside scripts: False  'stack' text: False
+state=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA   -> 200  raw input in markup outside scripts: False  'stack' text: False
+state=%3Cscript%3Ealert%281%29%3C/script   -> 200  raw input in markup outside scripts: False  'stack' text: False
+state=NSW&state=VIC                        -> 200  raw input in markup outside scripts: False  'stack' text: False
+state=VIC&granularity=hourly               -> 200  raw input in markup outside scripts: False  'stack' text: False

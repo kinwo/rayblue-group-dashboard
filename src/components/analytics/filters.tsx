@@ -2,7 +2,7 @@
 
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useId, useState, useTransition, type ReactNode } from "react";
+import { useCallback, useId, useState, useTransition, type ReactNode } from "react";
 
 import { useOnlineStatus } from "@/components/hooks/use-online-status";
 import { useNonce } from "@/components/security/nonce";
@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { AgencyOption } from "@/services/rental-analytics.types";
 import { cn } from "@/utils/cn";
+import { compareText } from "@/utils/format";
 import { GRANULARITIES, type Granularity } from "@/utils/granularity";
 import { toQueryString, type AnalyticsFilters, type FilterKey } from "@/utils/search-params";
 import { ALL_STATES_LABEL, isStateCode, STATES, stateName, type StateCode } from "@/utils/states";
@@ -150,10 +151,12 @@ function AgencyCombobox({
 }) {
   const [open, setOpen] = useState(false);
   const labelId = useId();
-  const listId = useId();
   const hintId = useId();
+  // cmdk gives its list its own id (overriding any we pass), so read it once the list mounts.
+  const [listId, setListId] = useState<string>();
+  const listRef = useCallback((el: HTMLDivElement | null) => setListId(el?.id || undefined), []);
   const isEmpty = options.length === 0;
-  const sorted = [...options].sort((a, b) => a.name.localeCompare(b.name, "en-AU"));
+  const sorted = [...options].sort((a, b) => compareText(a.name, b.name));
   const selected = sorted.find((a) => a.id === value);
 
   const choose = (agencyId: number | null) => {
@@ -173,7 +176,8 @@ function AgencyCombobox({
             role="combobox"
             aria-labelledby={labelId}
             aria-expanded={open}
-            aria-controls={listId}
+            // The list only exists while the popover is open; never point at a missing element.
+            aria-controls={open ? listId : undefined}
             aria-describedby={isEmpty ? hintId : undefined}
             disabled={isEmpty}
             className={styles.trigger}
@@ -185,7 +189,7 @@ function AgencyCombobox({
         <PopoverContent align="start" className={cn(styles.menu, styles.agencyMenu)}>
           <Command label="Search agencies">
             <CommandInput placeholder="Search agencies" />
-            <CommandList id={listId} label="Agencies">
+            <CommandList ref={listRef} label="Agencies">
               <CommandEmpty className={styles.empty}>No agencies found.</CommandEmpty>
               <CommandItem value={ALL_AGENCIES_LABEL} onSelect={() => choose(null)} className={styles.option}>
                 <CheckMark checked={value === null} />

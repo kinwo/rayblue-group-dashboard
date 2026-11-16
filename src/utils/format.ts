@@ -1,5 +1,6 @@
-// Display formatting for counts, shares, changes and Sydney dates. Every date
-// input is UTC epoch ms; output is in Australia/Sydney (AGENTS.md rule 3).
+// Display formatting for counts, shares, changes and Sydney dates, and the order
+// display text sorts in. Every date input is UTC epoch ms; output is in
+// Australia/Sydney (AGENTS.md rule 3).
 import { TIME_ZONE } from "@/utils/date-buckets";
 import type { Granularity } from "@/utils/granularity";
 
@@ -8,6 +9,8 @@ const MINUS = "−";
 const EM_DASH = "—";
 
 const countFormat = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 0 });
+// One collator for every sorted list: digit runs compare as numbers and case or accents never split ties.
+const textCollator = new Intl.Collator(LOCALE, { numeric: true, sensitivity: "base" });
 const shareFormat = new Intl.NumberFormat(LOCALE, {
   style: "percent",
   minimumFractionDigits: 1,
@@ -36,6 +39,9 @@ function sydneyParts(ms: number): SydneyParts {
 }
 
 const short = (name: string) => name.slice(0, 3);
+
+/** Sort comparator for display text: `Agency 2` before `Agency 10`; `bondi` ties with `Bondi`. */
+export const compareText: (a: string, b: string) => number = textCollator.compare;
 
 /** `3,369` (AC-KPI-4). */
 export function formatCount(n: number): string {

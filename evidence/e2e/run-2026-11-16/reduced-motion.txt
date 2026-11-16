@@ -1,0 +1,15 @@
+## E2E-A11Y-04 reduced motion (new criterion: no slide/zoom/pulse; fades may stay)
+### media: reduce
+prefers-reduced-motion: "reduce"
+skeleton pulse animation: "none"
+panel transition (colour/opacity kept): "opacity 0.15s"
+state select: "select-content anim=enter 0.15s enterX=0 enterY=0 enterScale=1 enterOpacity=0"
+agency combobox: "popover-content anim=enter 0.15s enterX=0 enterY=0 enterScale=1 enterOpacity=0"
+nav sheet: "sidebar(nav sheet) anim=enter 0.5s enterX=0 enterY=0 enterScale=1 enterOpacity=1"
+### media: no-preference (control)
+prefers-reduced-motion: "no-preference"
+skeleton pulse animation: "pulse"
+panel transition (colour/opacity kept): "opacity 0.15s"
+state select: "select-content anim=enter 0.15s enterX=0 enterY=calc(2*.25rem*-1) enterScale=.95 enterOpacity=0"
+agency combobox: "popover-content anim=enter 0.15s enterX=0 enterY=calc(2*.25rem*-1) enterScale=.95 enterOpacity=0"
+nav sheet: "sidebar(nav sheet) anim=enter 0.5s enterX=-100% enterY=0 enterScale=1 enterOpacity=1"

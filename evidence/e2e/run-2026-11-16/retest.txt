@@ -1,0 +1,14 @@
+## Re-test after fixes (fresh production build)
+I3 closed:  "expanded=false aria-controls=null target=- listboxId=-"
+I3 open:    "expanded=true aria-controls=radix-_r_a_ target=listbox listboxId=radix-_r_a_"
+I1 ring:    "focused=true focusVisible=true input.outline=none wrapper.outline=solid 2px rgb(10, 106, 161) offset=-2px"
+I3 closed again: "expanded=false aria-controls=null target=- listboxId=-"
+I2 375 @ 125%: "root=20px body=17.5px scrollW=375/375 clippedText=[] beyondViewport=[]"
+    alert title: "\"Figures may be out of date\" lines=1 clamp=none overflow=visible cut=false"
+I2 375 @ 150%: "root=24px body=21px scrollW=375/375 clippedText=["All states and territorie"] beyondViewport=[]"
+    alert title: "\"Figures may be out of date\" lines=2 clamp=none overflow=visible cut=false"
+I2 375 @ 200%: "root=32px body=28px scrollW=482/375 clippedText=["All states and territorie"] beyondViewport=["DIV","BUTTON","SPAN","SPAN"]"
+    alert title: "\"Figures may be out of date\" lines=3 clamp=none overflow=visible cut=false"
+## axe re-run (1440, light): defaults and open agency combobox
+defaults: violations=0 incomplete=['color-contrast']
+combobox open: violations=0 incomplete=['aria-valid-attr-value', 'color-contrast']

@@ -4,8 +4,9 @@
   @apply rounded-none border-x-0 border-t-0 border-warning/40 bg-warning-soft px-6 text-warning;
 }
 
+/* AlertTitle clamps to one line; let the title wrap so large text or a narrow screen never cuts it off. */
 .title {
-  @apply text-subheading;
+  @apply line-clamp-none text-subheading;
 }
 
 .text {

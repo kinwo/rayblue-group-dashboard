@@ -1,7 +1,7 @@
 @reference "../../app/globals.css";
 
 .view {
-  @apply mx-auto flex w-full max-w-[1360px] flex-col items-start gap-3 px-6 py-12;
+  @apply mx-auto flex w-full max-w-[85rem] flex-col items-start gap-3 px-6 py-12;
 }
 
 .title {

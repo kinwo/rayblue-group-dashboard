@@ -21,8 +21,9 @@
   @apply border-warning/40 bg-warning-soft text-warning;
 }
 
+/* AlertTitle clamps to one line; let the title wrap so large text or a narrow screen never cuts it off. */
 .staleTitle {
-  @apply text-subheading;
+  @apply line-clamp-none text-subheading;
 }
 
 .staleText {

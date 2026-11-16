@@ -1,0 +1,14 @@
+## E2E-NAV-02 / E2E-NAV-03 sidebar
+"links=Rental analytics aria-current=page sidebarText=\"Rayblue Agency Group |  | Group office · Queensland |  | ANALYTICS | Rental analytics |  | Group manager view\" signOut=false"
+## E2E-FLT-10 shared URL in a fresh browser context (main text hash)
+context A=24dbee2f624c context B=24dbee2f624c -> identical
+## E2E-PRV-02 requests stay on the origin; no cookies
+request origins:   20 http://localhost:3000 
+"document.cookie=\"\" localStorage=0 sessionStorage=0"
+Set-Cookie headers on page, health, 404: 0
+## E2E-HDR-03 determinism: 5 URLs x 3 requests (full HTML with scripts and nonces removed)
+(defaults)                                 -> identical ['c6fc5d89baf9']
+?state=NSW&granularity=weekly              -> identical ['2423b52d17b6']
+?agencyId=13                               -> identical ['55b76795b1e1']
+?state=VIC&agencyId=22&granularity=monthly -> identical ['b1dc27e75747']
+?state=TAS                                 -> identical ['92657d3cfb45']

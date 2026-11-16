@@ -10,6 +10,9 @@ export default function GlobalError({ retry }: { error: unknown; retry: () => vo
     <html lang="en-AU">
       <body>
         <title>Rental analytics · Rayblue Agency Group</title>
+        {/* No metadata or viewport exports in global-error; React hoists these into <head>. */}
+        <meta name="color-scheme" content="light dark" />
+        <meta name="text-scale" content="scale" />
         <main>
           <RetryErrorView onRetry={() => retry()} />
         </main>

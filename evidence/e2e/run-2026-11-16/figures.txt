@@ -1,0 +1,32 @@
+PASS http://localhost:3000/rental-analytics  kpi=['10', '692', '2,586', '30'] rows=8
+PASS http://localhost:3000/rental-analytics?granularity=weekly  kpi=['10', '692', '2,586', '30'] rows=8
+PASS http://localhost:3000/rental-analytics?granularity=monthly  kpi=['10', '692', '2,586', '30'] rows=8
+PASS http://localhost:3000/rental-analytics?state=NSW  kpi=['2', '271', '1,023', '12'] rows=8
+PASS http://localhost:3000/rental-analytics?state=NSW&granularity=weekly  kpi=['2', '271', '1,023', '12'] rows=8
+PASS http://localhost:3000/rental-analytics?state=NSW&granularity=monthly  kpi=['2', '271', '1,023', '12'] rows=8
+PASS http://localhost:3000/rental-analytics?state=VIC  kpi=['6', '224', '838', '10'] rows=8
+PASS http://localhost:3000/rental-analytics?state=VIC&granularity=weekly  kpi=['6', '224', '838', '10'] rows=8
+PASS http://localhost:3000/rental-analytics?state=VIC&granularity=monthly  kpi=['6', '224', '838', '10'] rows=8
+PASS http://localhost:3000/rental-analytics?state=QLD  kpi=['2', '197', '725', '8'] rows=8
+PASS http://localhost:3000/rental-analytics?state=QLD&granularity=weekly  kpi=['2', '197', '725', '8'] rows=8
+PASS http://localhost:3000/rental-analytics?state=QLD&granularity=monthly  kpi=['2', '197', '725', '8'] rows=8
+PASS http://localhost:3000/rental-analytics?state=TAS  kpi=['0', '0', '0', '0'] rows=0
+PASS http://localhost:3000/rental-analytics?state=TAS&granularity=weekly  kpi=['0', '0', '0', '0'] rows=0
+PASS http://localhost:3000/rental-analytics?state=TAS&granularity=monthly  kpi=['0', '0', '0', '0'] rows=0
+PASS http://localhost:3000/rental-analytics?state=WA  kpi=['0', '0', '0', '0'] rows=0
+PASS http://localhost:3000/rental-analytics?state=WA&granularity=weekly  kpi=['0', '0', '0', '0'] rows=0
+PASS http://localhost:3000/rental-analytics?state=WA&granularity=monthly  kpi=['0', '0', '0', '0'] rows=0
+PASS http://localhost:3000/rental-analytics?agencyId=13  kpi=['0', '35', '130', '1'] rows=8
+PASS http://localhost:3000/rental-analytics?agencyId=13&granularity=weekly  kpi=['0', '35', '130', '1'] rows=8
+PASS http://localhost:3000/rental-analytics?agencyId=13&granularity=monthly  kpi=['0', '35', '130', '1'] rows=8
+PASS http://localhost:3000/rental-analytics?agencyId=16  kpi=['0', '11', '39', '1'] rows=9
+PASS http://localhost:3000/rental-analytics?agencyId=16&granularity=weekly  kpi=['0', '11', '39', '1'] rows=9
+PASS http://localhost:3000/rental-analytics?agencyId=16&granularity=monthly  kpi=['0', '11', '39', '1'] rows=9
+PASS http://localhost:3000/rental-analytics?state=QLD&agencyId=29  kpi=['0', '26', '95', '1'] rows=8
+PASS http://localhost:3000/rental-analytics?state=QLD&agencyId=29&granularity=weekly  kpi=['0', '26', '95', '1'] rows=8
+PASS http://localhost:3000/rental-analytics?state=QLD&agencyId=29&granularity=monthly  kpi=['0', '26', '95', '1'] rows=8
+PASS http://localhost:3000/rental-analytics?agencyId=7  kpi=['0', '31', '120', '1'] rows=8
+PASS http://localhost:3000/rental-analytics?agencyId=7&granularity=weekly  kpi=['0', '31', '120', '1'] rows=8
+PASS http://localhost:3000/rental-analytics?agencyId=7&granularity=monthly  kpi=['0', '31', '120', '1'] rows=8
+
+30/30 views match the oracle

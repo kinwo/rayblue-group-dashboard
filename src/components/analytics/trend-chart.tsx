@@ -110,25 +110,28 @@ export function TrendChart({ trend, scope, isEmpty = false }: TrendChartProps) {
             </LineChart>
           </ChartContainer>
         </div>
-        <table className="sr-only">
-          <caption>
-            {title}, {scope.label}
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col">Period</th>
-              <th scope="col">New listings</th>
-            </tr>
-          </thead>
-          <tbody>
-            {points.map((p) => (
-              <tr key={p.start}>
-                <th scope="row">{formatBucketTooltip(p.start, granularity, p.isPartial)}</th>
-                <td>{formatCount(p.count)}</td>
+        {/* sr-only on a wrapper: a <table> ignores the 1px width and would widen the page at large text sizes. */}
+        <div className="sr-only">
+          <table>
+            <caption>
+              {title}, {scope.label}
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Period</th>
+                <th scope="col">New listings</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {points.map((p) => (
+                <tr key={p.start}>
+                  <th scope="row">{formatBucketTooltip(p.start, granularity, p.isPartial)}</th>
+                  <td>{formatCount(p.count)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </figure>
     </AnalyticsCard>
   );

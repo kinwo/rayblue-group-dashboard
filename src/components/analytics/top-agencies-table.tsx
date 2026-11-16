@@ -9,7 +9,7 @@ import { trendRangeLabel } from "@/components/analytics/scope";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { AgencyRow, RentalAnalyticsView } from "@/services/rental-analytics.types";
 import { cn } from "@/utils/cn";
-import { formatChange, formatCount, formatShare } from "@/utils/format";
+import { compareText, formatChange, formatCount, formatShare } from "@/utils/format";
 import { ALL_STATES_LABEL, stateName } from "@/utils/states";
 
 import styles from "@/components/analytics/top-agencies-table.module.css";
@@ -23,8 +23,8 @@ type Sort = { key: SortKey; direction: SortDirection };
 const DEFAULT_SORT: Sort = { key: "count", direction: "descending" };
 
 const compare: Record<SortKey, (a: AgencyRow, b: AgencyRow) => number> = {
-  name: (a, b) => a.name.localeCompare(b.name, "en-AU"),
-  state: (a, b) => a.state.localeCompare(b.state) || a.name.localeCompare(b.name, "en-AU"),
+  name: (a, b) => compareText(a.name, b.name),
+  state: (a, b) => compareText(a.state, b.state) || compareText(a.name, b.name),
   count: (a, b) => a.count - b.count,
   share: (a, b) => a.share - b.share,
   // "—" (no previous count) sorts below every number.
@@ -40,24 +40,31 @@ export function sortRows(rows: readonly AgencyRow[], sort: Sort): AgencyRow[] {
     .map(({ row }) => row);
 }
 
+/** Clicking the sorted column flips it; another column starts A–Z for text, highest first for numbers. */
+export function nextSort(current: Sort, key: SortKey): Sort {
+  if (current.key === key) return { key, direction: current.direction === "ascending" ? "descending" : "ascending" };
+  return { key, direction: key === "name" || key === "state" ? "ascending" : "descending" };
+}
+
 export const TABLE_CAPTION = "Top agencies by new listings";
 export const EMPTY_MESSAGE = "No agencies match these filters.";
 
 /** Top agencies table (F6, DESIGN.md §6 › Data table). Sorting is local view state; filters stay in the URL. */
 export function TopAgenciesTable({ topAgencies, scope, trend }: TopAgenciesTableProps) {
   const [sort, setSort] = useState<Sort>(DEFAULT_SORT);
+  // Said once per user sort; empty on first render so loading the page announces nothing.
+  const [announcement, setAnnouncement] = useState("");
   const rows = sortRows(topAgencies.rows, sort);
   const shareLabel = scope.state ? `Share of ${scope.state}` : "Share of group";
 
-  const toggle = (key: SortKey) =>
-    setSort((current) =>
-      current.key === key
-        ? { key, direction: current.direction === "ascending" ? "descending" : "ascending" }
-        : { key, direction: key === "name" || key === "state" ? "ascending" : "descending" },
-    );
+  const sortBy = (key: SortKey, label: string) => {
+    const next = nextSort(sort, key);
+    setSort(next);
+    setAnnouncement(`Sorted by ${label}, ${next.direction}`);
+  };
 
   const header = (key: SortKey, label: string, numeric = false) => (
-    <SortableHead key={key} label={label} numeric={numeric} sort={sort.key === key ? sort.direction : null} onSort={() => toggle(key)} />
+    <SortableHead key={key} label={label} numeric={numeric} sort={sort.key === key ? sort.direction : null} onSort={() => sortBy(key, label)} />
   );
 
   return (
@@ -104,6 +111,9 @@ export function TopAgenciesTable({ topAgencies, scope, trend }: TopAgenciesTable
           </TableBody>
         </Table>
       </div>
+      <p role="status" className="sr-only">
+        {announcement}
+      </p>
     </AnalyticsCard>
   );
 }
@@ -121,9 +131,10 @@ function SortableHead({
 }) {
   const Icon = sort === "ascending" ? ArrowUpIcon : sort === "descending" ? ArrowDownIcon : ArrowUpDownIcon;
   return (
-    <TableHead aria-sort={sort ?? "none"} className={cn(styles.columnHead, numeric && styles.columnHeadNumeric)}>
+    // aria-sort only on the sorted column; the others omit it rather than say "none".
+    <TableHead scope="col" aria-sort={sort ?? undefined} className={cn(styles.columnHead, numeric && styles.columnHeadNumeric)}>
       <button type="button" onClick={onSort} className={styles.sortButton}>
-        <Icon aria-hidden="true" className={styles.sortIcon} data-active={sort ? "" : undefined} />
+        <Icon aria-hidden="true" className={styles.sortIcon} />
         {label}
       </button>
     </TableHead>

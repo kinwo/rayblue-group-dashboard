@@ -1,0 +1,5 @@
+## E2E-NAV-05 @mobile 412x915
+loaded:        "dialog=false focus=BODY:\"Rayblue Agency Group\" fixedSidebarVisible=false menuButton=true scrollW=412/412"
+menu opened:   "dialog=true focus=DIV:\"SidebarDisplays the \" fixedSidebarVisible=false menuButton=true scrollW=412/412"
+after Escape:  "dialog=false focus=BUTTON:\"Open navigation menu\" fixedSidebarVisible=false menuButton=true scrollW=412/412"
+after choosing item: "dialog=false focus=BUTTON:\"Open navigation menu\" fixedSidebarVisible=false menuButton=true scrollW=412/412"

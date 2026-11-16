@@ -1,0 +1,10 @@
+## E2E-FLT-06 period tabs by keyboard (focused|selected|url)
+"Weekly|Weekly|?granularity=weekly"
+"Monthly|Monthly|?granularity=monthly"
+"Weekly|Weekly|?granularity=weekly"
+## E2E-AGY-05 sorting
+initial:     "{\"sorts\":[\"New listings=descending\"],\"status\":\"\",\"first3\":[\"Rayblue Carlton\",\"Rayblue Ryde\",\"Rayblue Liverpool\"],\"sortedIconColor\":\"rgb(10, 106, 161)\",\"otherIconColor\":\"rgb(71, 93, 110)\",\"focused\":\"BODY:Rayblue Agency Group\"}"
+click Agency: "{\"sorts\":[\"Agency=ascending\"],\"status\":\"Sorted by Agency, ascending\",\"first3\":[\"Rayblue Bondi\",\"Rayblue Carlton\",\"Rayblue Dandenong\"],\"sortedIconColor\":\"rgb(10, 106, 161)\",\"otherIconColor\":\"rgb(71, 93, 110)\",\"focused\":\"BUTTON:Agency\"}"
+Enter:        "{\"sorts\":[\"Agency=descending\"],\"status\":\"Sorted by Agency, descending\",\"first3\":[\"Rayblue Ryde\",\"Rayblue Richmond\",\"Rayblue Liverpool\"],\"sortedIconColor\":\"rgb(10, 106, 161)\",\"otherIconColor\":\"rgb(71, 93, 110)\",\"focused\":\"BUTTON:Agency\"}"
+click vs previous: "{\"sorts\":[\"vs previous=descending\"],\"status\":\"Sorted by vs previous, descending\",\"first3\":[\"Rayblue Carlton\",\"Rayblue Ryde\",\"Rayblue Liverpool\"],\"sortedIconColor\":\"rgb(10, 106, 161)\",\"otherIconColor\":\"rgb(71, 93, 110)\",\"focused\":\"BUTTON:vs previous\"}"
+vs previous column: "— — — — — — — —"

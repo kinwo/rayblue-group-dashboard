@@ -1,0 +1,5 @@
+## E2E-HDR-01 header and tooltip text in other browser time zones (Sydney time expected everywhere)
+Europe/London: "browserTZ=Europe/London meta=\"All states and territories · Sample data · Updated 9:00 am, 24 Oct 2026\" lastRow=\"Sat 24 Oct 2026 (to date)10\""
+   errors: 0
+America/New_York: "browserTZ=America/New_York meta=\"All states and territories · Sample data · Updated 9:00 am, 24 Oct 2026\" lastRow=\"Sat 24 Oct 2026 (to date)10\""
+   errors: 0

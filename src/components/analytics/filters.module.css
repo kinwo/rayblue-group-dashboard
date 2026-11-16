@@ -9,8 +9,9 @@
   @apply flex flex-wrap items-end gap-4 rounded-lg bg-surface-sunken px-4 py-3;
 }
 
+/* max-w-full lets a field (and its w-64 trigger) shrink to the bar on narrow screens with large text. */
 .field {
-  @apply flex flex-col gap-1;
+  @apply flex max-w-full min-w-0 flex-col gap-1;
 }
 
 .label {
@@ -60,6 +61,19 @@
 
 .agencyMenu {
   @apply w-72 p-0;
+}
+
+/*
+ * Search field focus ring. The cmdk input is taller than its wrapper and the popover clips
+ * its overflow, so the global offset ring lost its top and bottom edges. Draw the ring
+ * inside the wrapper instead, around the icon and the text.
+ */
+.agencyMenu :global([data-slot="command-input-wrapper"]:has(:focus-visible)) {
+  @apply outline-2 -outline-offset-2 outline-(--focus-ring-color);
+}
+
+.agencyMenu :global([data-slot="command-input"]:focus-visible) {
+  @apply outline-none;
 }
 
 .empty {
