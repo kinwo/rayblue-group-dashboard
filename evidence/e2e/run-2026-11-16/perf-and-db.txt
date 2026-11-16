@@ -1,0 +1,6 @@
+## E2E-PRF-01 100 sequential GETs, mixed params (kept under the 120/min page rate limit)
+n=100 status={200: 100} p50=9.2ms p95=13.0ms max=29.6ms (target p95 <= 500ms)
+
+## E2E-REL-03 database unchanged by the run
+before: 6eb9a129697b4f0a6bdf7319d10f30abf778cf3a mtime=1792800946
+after:  6eb9a129697b4f0a6bdf7319d10f30abf778cf3a mtime=1792800946

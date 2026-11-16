@@ -209,7 +209,7 @@ Measured on the production build with the seed dataset; results recorded with th
 - **AC-A11Y-1** — The page meets WCAG 2.1 AA, following [DESIGN.md › Accessibility](../DESIGN.md#8-accessibility). Lighthouse accessibility scores 100 with no axe violations. `manual`
 - **AC-A11Y-2** — Every control is operable by keyboard alone with a visible focus ring; components are tested by role and label. `component`
 - **AC-A11Y-3** — The document uses `<html lang="en-AU">`, landmarks (`nav`, `main`, labelled sections) and one `h1`. `component`
-- **AC-A11Y-4** — With `prefers-reduced-motion`, transitions are removed. `manual`
+- **AC-A11Y-4** — With `prefers-reduced-motion: reduce`, nothing slides, zooms, spins or pulses; colour and opacity changes may still fade. `manual`
 
 ### 7.6 Compatibility and layout
 

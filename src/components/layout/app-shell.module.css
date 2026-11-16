@@ -6,7 +6,7 @@
 
 /* Mobile top bar on --chrome; the side navigation replaces it from the md breakpoint (DESIGN.md §5). */
 .mobileBar {
-  @apply flex h-12 items-center gap-2 bg-chrome px-2 text-on-chrome md:hidden;
+  @apply flex min-h-12 items-center gap-2 bg-chrome px-2 text-on-chrome md:hidden;
 }
 
 .productName {

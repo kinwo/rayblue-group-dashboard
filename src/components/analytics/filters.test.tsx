@@ -88,6 +88,15 @@ describe("Filters", () => {
     expect(pushedUrl()).toBe("/rental-analytics");
   });
 
+  it("AC-A11Y-1: the agency combobox points aria-controls at its list only while the list exists", async () => {
+    renderFilters();
+    const combobox = screen.getByRole("combobox", { name: "Agency" });
+    expect(combobox).not.toHaveAttribute("aria-controls");
+    await userEvent.click(combobox);
+    const list = screen.getByRole("listbox", { name: "Agencies" });
+    expect(combobox).toHaveAttribute("aria-controls", list.id);
+  });
+
   it("AC-FLT-4: Daily, Weekly and Monthly tabs with arrow-key navigation", async () => {
     renderFilters();
     const tablist = screen.getByRole("tablist", { name: "Listing period" });

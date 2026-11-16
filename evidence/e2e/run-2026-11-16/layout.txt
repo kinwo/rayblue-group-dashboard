@@ -1,0 +1,9 @@
+## E2E-CMP-01 / E2E-NAV-06 / E2E-AGY-07 widths (defaults, plus the longest agency name at 360)
+360: w=360 scrollW=360 noHScroll=true mode=sheet jsMobile(50.5rem)=true cssMobileBar=true tableFrame=276/569 overflowX=auto axisLabelOverlaps=0
+412: w=412 scrollW=412 noHScroll=true mode=sheet jsMobile(50.5rem)=true cssMobileBar=true tableFrame=328/569 overflowX=auto axisLabelOverlaps=0
+768: w=768 scrollW=768 noHScroll=true mode=sheet jsMobile(50.5rem)=true cssMobileBar=true tableFrame=684/684 overflowX=auto axisLabelOverlaps=0
+807: w=807 scrollW=807 noHScroll=true mode=sheet jsMobile(50.5rem)=true cssMobileBar=true tableFrame=723/723 overflowX=auto axisLabelOverlaps=0
+809: w=809 scrollW=809 noHScroll=true mode=fixed-sidebar jsMobile(50.5rem)=false cssMobileBar=false tableFrame=477/569 overflowX=auto axisLabelOverlaps=0
+1024: w=1024 scrollW=1024 noHScroll=true mode=fixed-sidebar jsMobile(50.5rem)=false cssMobileBar=false tableFrame=692/692 overflowX=auto axisLabelOverlaps=0
+1440: w=1440 scrollW=1440 noHScroll=true mode=fixed-sidebar jsMobile(50.5rem)=false cssMobileBar=false tableFrame=596/596 overflowX=auto axisLabelOverlaps=0
+360 longest name (23 Rayblue Fortitude Valley QLD): w=360 scrollW=360 noHScroll=true mode=sheet jsMobile(50.5rem)=true cssMobileBar=true tableFrame=276/569 overflowX=auto axisLabelOverlaps=0

@@ -34,11 +34,11 @@
 }
 
 .filters {
-  @apply h-[78px] rounded-lg;
+  @apply h-19.5 rounded-lg;
 }
 
 .kpi {
-  @apply h-[108px] rounded-lg border border-line bg-surface-raised;
+  @apply h-27 rounded-lg border border-line bg-surface-raised;
 }
 
 .trend {

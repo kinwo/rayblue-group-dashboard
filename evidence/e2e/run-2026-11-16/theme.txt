@@ -1,0 +1,3 @@
+## E2E-THM-01 themes (1440x900)
+dark: "scheme=dark used=light dark body=rgb(10, 20, 28) sidebar=rgb(6, 15, 22) ink=rgb(230, 238, 245)"
+light: "scheme=light used=light dark body=rgb(244, 247, 250) sidebar=rgb(12, 38, 56) ink=rgb(14, 34, 50)"

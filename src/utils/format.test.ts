@@ -2,6 +2,7 @@ import fc from "fast-check";
 import { arbGranularity, arbInstant } from "@/test/arbitraries";
 import { bucketStart } from "@/utils/date-buckets";
 import {
+  compareText,
   formatAgencyCount,
   formatBucketLabel,
   formatBucketRange,
@@ -121,4 +122,26 @@ describe("formatAgencyCount (AC-STA-2)", () => {
     [58, "58 agencies"],
     [1200, "1,200 agencies"],
   ])("%d -> %s", (n, s) => expect(formatAgencyCount(n)).toBe(s));
+});
+
+describe("compareText", () => {
+  const sign = (n: number) => Math.sign(n) || 0;
+
+  it("orders digit runs as numbers: Agency 2 before Agency 10", () => {
+    expect(["Agency 10", "Agency 2", "Agency 1"].sort(compareText)).toEqual(["Agency 1", "Agency 2", "Agency 10"]);
+  });
+
+  it("treats case and accents as ties, so the caller's tie-break decides", () => {
+    expect(compareText("bondi", "Bondi")).toBe(0);
+    expect(compareText("Rayblue Cafe", "Rayblue Café")).toBe(0);
+  });
+
+  it("is antisymmetric and reflexive, so sorting is consistent", () => {
+    fc.assert(
+      fc.property(fc.string(), fc.string(), (a, b) => {
+        expect(sign(compareText(a, b)) + sign(compareText(b, a))).toBe(0);
+        expect(sign(compareText(a, a))).toBe(0);
+      }),
+    );
+  });
 });

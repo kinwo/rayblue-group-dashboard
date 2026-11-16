@@ -22,7 +22,7 @@
 }
 
 .tooltip {
-  @apply min-w-[140px] rounded-md border border-line bg-surface-raised px-3 py-2 text-ink shadow-md;
+  @apply min-w-35 rounded-md border border-line bg-surface-raised px-3 py-2 text-ink shadow-md;
 }
 
 .tooltipDate {

@@ -1,0 +1,13 @@
+loaded 
+loaded ?state=VIC
+loaded ?agencyId=16&granularity=monthly
+loaded ?state=TAS&granularity=weekly
+✗ Element not found. Verify the selector is correct and the element exists in the DOM.
+✗ Element not found. Verify the selector is correct and the element exists in the DOM.
+loaded /nope
+--- console (errors/warnings)
+(none)
+--- page errors
+## E2E-SEC-02 console and CSP after fixes (rebuilt app)
+console errors/warnings/violations: 0
+page errors: 0

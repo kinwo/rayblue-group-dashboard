@@ -1,0 +1,16 @@
+## E2E-TRD-04 hover last and previous point per period
+last   daily: "Sat 24 Oct 2026 (to date) |  | All Rayblue agencies | 10"
+before daily: "Fri 23 Oct 2026 |  | All Rayblue agencies | 127"
+last   ?granularity=weekly: "Week of 19 Oct 2026 (to date) |  | All Rayblue agencies | 692"
+before ?granularity=weekly: "Week of 12 Oct 2026 |  | All Rayblue agencies | 768"
+last   ?granularity=monthly: "October 2026 (to date) |  | All Rayblue agencies | 2,586"
+before ?granularity=monthly: "September 2026 |  | All Rayblue agencies | 628"
+## E2E-TRD-07 keyboard tooltip
+focusable chart layer: "DIV role=null focused=false"
+ArrowRight: "(no tooltip)"
+ArrowRight: "(no tooltip)"
+ArrowLeft: "(no tooltip)"
+focused: "BODY role=null outline=none"
+ArrowRight: "(no tooltip)"
+ArrowRight: "(no tooltip)"
+ArrowLeft: "(no tooltip)"

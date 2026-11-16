@@ -2,7 +2,7 @@
 
 End-to-end test plan for the acceptance criteria in [intent.md](evidence/intent.md). Unit, property and component tests are covered by [ENGINEERING.md › Testing strategy](ENGINEERING.md#5-testing-strategy); this plan covers what only a real browser against a real server can prove: routing, URL state, HTTP behaviour, response headers, cross-browser layout, keyboard flows and that the figures on screen match the seeded database.
 
-Status: draft · Last updated 24 Oct 2026
+Status: draft · Last updated 16 Nov 2026
 
 ## 1. Scope
 
@@ -107,7 +107,7 @@ DST and month-end correctness (AC-KPI-3) is proven by property and integration t
 | E2E-AGY-02 | Share and change | Defaults. | Share cells match `/^\d+\.\d%$/` and equal expected; "vs previous" matches `/^(\+\d+%\|−\d+%\|0%\|—)$/` with U+2212 for negatives, equal to expected. | AC-AGY-2, AC-AGY-3 |
 | E2E-AGY-03 | Selected row in top 8 | `?agencyId=<top agency>`. | Its row has `aria-selected="true"`; still 8 rows. | AC-AGY-4 |
 | E2E-AGY-04 | Selected row outside top 8 | `?agencyId=<low-volume agency>`. | 9 rows; the ninth is that agency with `aria-selected="true"`. | AC-AGY-4 |
-| E2E-AGY-05 | Sorting | Activate each sortable header button with click and with Enter. | Rows reorder; the header's `aria-sort` cycles `ascending` / `descending`; others are `none`. URL is not required to change. | AC-AGY-5 |
+| E2E-AGY-05 | Sorting | Activate each sortable header button with click and with Enter. | Rows reorder; the header's `aria-sort` cycles `ascending` / `descending`; other headers have no `aria-sort`. A visually hidden status line says "Sorted by <column>, <direction>", and focus stays on the header button. URL is not required to change. | AC-AGY-5 |
 | E2E-AGY-06 | Alignment | Defaults. | Numeric cells computed `text-align: right` and `tabular-nums`. | AC-AGY-7 |
 | E2E-AGY-07 `@layout` | Table scroll | At 360px. | Table frame scrolls horizontally; `document.scrollingElement.scrollWidth <= innerWidth`. | AC-CMP-2 |
 
@@ -141,7 +141,7 @@ AC-AGY-6 (no agencies in scope) cannot be reached with the seed, since every sta
 | E2E-A11Y-01 | axe scan | Run axe (WCAG 2.1 A/AA tags) on defaults, a state view, an agency view, each period, the open mobile sheet, the 404 page, light and dark. | Zero violations. | AC-A11Y-1 |
 | E2E-A11Y-02 | Document structure | Defaults. | `<html lang="en-AU">`; one `nav`, one `main`, sections labelled; exactly one `h1`. | AC-A11Y-3 |
 | E2E-A11Y-03 | Full keyboard journey | Using only the keyboard: change state, agency and period, sort the table, read a chart tooltip. | All reachable and operable; focus always visible; no focus trap outside the open sheet. | AC-A11Y-2, AC-NAV-5 |
-| E2E-A11Y-04 | Reduced motion | `reducedMotion: 'reduce'`; open the sheet and change filters. | Computed `transition-duration` and `animation-duration` are 0s (or ≤ 0.01ms) on animated elements. | AC-A11Y-4 |
+| E2E-A11Y-04 | Reduced motion | `reducedMotion: 'reduce'`; load the page (skeleton), open the sheet, a select and the agency combobox, and change filters. | No skeleton `pulse` animation; the sheet, select and combobox contents have zero `--tw-enter-translate-*`/`--tw-exit-translate-*` and a scale of 1, so they only fade; colour and opacity transitions may remain. | AC-A11Y-4 |
 | E2E-THM-01 `@theme` | Dark and light | `colorScheme` dark, then light. | `body` background equals the dark / light token from DESIGN.md; sidebar background is dark in both. Visual snapshot per theme. | AC-THM-1 |
 | E2E-CMP-01 `@layout` | No horizontal scroll | Widths 360, 412, 768, 1024, 1440 on defaults and the widest agency name. | `scrollWidth <= innerWidth` at each width. | AC-CMP-2 |
 

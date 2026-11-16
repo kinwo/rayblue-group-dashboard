@@ -1,13 +1,16 @@
 @reference "../../app/globals.css";
 
-/* Flex sizing shared by the page and its loading skeleton (DESIGN.md §5), so both reserve the same space. */
+/*
+ * Flex sizing shared by the page and its loading skeleton (DESIGN.md §5), so both reserve the same space.
+ * Bases in rem: with larger text, cards wrap onto new rows sooner instead of squeezing their content.
+ */
 
 .kpiRow {
   @apply flex flex-wrap gap-4;
 }
 
 .kpiCell {
-  @apply flex-[1_1_220px];
+  @apply flex-[1_1_13.75rem];
 }
 
 .cardRow {
@@ -15,9 +18,9 @@
 }
 
 .stateColumn {
-  @apply flex-[1_1_380px];
+  @apply flex-[1_1_23.75rem];
 }
 
 .tableColumn {
-  @apply flex-[1.4_1_480px];
+  @apply flex-[1.4_1_30rem];
 }

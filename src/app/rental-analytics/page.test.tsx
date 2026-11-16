@@ -43,6 +43,11 @@ beforeEach(() => {
 });
 afterEach(() => close());
 
+// The page reads the server clock once per request. Freeze it an hour after the fixture's as-of
+// time, so the stale-data alert (AC-HDR-2) doesn't appear once the real date moves past it.
+beforeEach(() => jest.spyOn(Date, "now").mockReturnValue(DEFAULT_AS_OF + HOUR));
+afterEach(() => jest.restoreAllMocks());
+
 async function renderPage(raw: Record<string, string | string[] | undefined>) {
   render(await RentalAnalyticsPage({ searchParams: Promise.resolve(raw) }));
 }

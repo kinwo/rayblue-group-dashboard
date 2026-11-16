@@ -79,25 +79,27 @@ A single-series chart uses `--chart-1`. Assign series colours from a fixed key (
 
 Fonts: **Public Sans** (400, 500, 600, 700) for UI, **JetBrains Mono** (400) for code and IDs. Load with `next/font` (self-hosted, `display: swap`); fall back to the system UI stack.
 
-| Class | Size / line | Weight | Extra | Use |
-| --- | --- | --- | --- | --- |
-| `text-display` | 28 / 36 | 600 | −0.01em | KPI values |
-| `text-title` | 22 / 28 | 600 | −0.005em | Page title |
-| `text-heading` | 17 / 24 | 600 | | Card and section titles |
-| `text-subheading` | 14 / 20 | 600 | | Sub-section titles |
-| `text-body-lg` | 16 / 24 | 400 | | Rare long-form text |
-| `text-body` | 14 / 20 | 400 | | Default body, table cells |
-| `text-label` | 14 / 20 | 500 | | Form labels, buttons, tabs, nav items |
-| `text-caption` | 12 / 16 | 400 | | Meta lines, notes, axis labels |
-| `text-caption-strong` | 12 / 16 | 600 | | KPI labels, bar values, tooltip titles |
-| `text-overline` | 11 / 16 | 600 | 0.06em, uppercase | Nav section labels |
-| `text-code` | 13 / 20 | 400 mono | | IDs, code |
+| Class | Size / line (px) | Size (rem) | Weight | Extra | Use |
+| --- | --- | --- | --- | --- | --- |
+| `text-display` | 28 / 36 | 1.75rem | 600 | −0.01em | KPI values |
+| `text-title` | 22 / 28 | 1.375rem | 600 | −0.005em | Page title |
+| `text-heading` | 17 / 24 | 1.0625rem | 600 | | Card and section titles |
+| `text-subheading` | 14 / 20 | 0.875rem | 600 | | Sub-section titles |
+| `text-body-lg` | 16 / 24 | 1rem | 400 | | Rare long-form text |
+| `text-body` | 14 / 20 | 0.875rem | 400 | | Default body, table cells |
+| `text-label` | 14 / 20 | 0.875rem | 500 | | Form labels, buttons, tabs, nav items |
+| `text-caption` | 12 / 16 | 0.75rem | 400 | | Meta lines, notes, axis labels |
+| `text-caption-strong` | 12 / 16 | 0.75rem | 600 | | KPI labels, bar values, tooltip titles |
+| `text-overline` | 11 / 16 | 0.6875rem | 600 | 0.06em, uppercase | Nav section labels |
+| `text-code` | 13 / 20 | 0.8125rem | 400 mono | | IDs, code |
 
-Rules: base size is 14px (dense admin UI). Every figure that can line up with another uses `font-variant-numeric: tabular-nums` (`tabular-nums` in Tailwind). Sentence case everywhere except overlines. Use `−` (U+2212) for negative changes, as the prototype does.
+Rules: sizes live in rem and line heights are unitless (line ÷ size, e.g. `calc(1.25 / 0.875)`), so text follows the user's browser or OS text size; the px figures are at the default 16px root. Never set a font size on `:root` or `html`: the root layout opts into the OS text size with `<meta name="text-scale" content="scale">` (Chrome 146+; ignored elsewhere), and a root size would block or double it. Base size is 14px (0.875rem; dense admin UI). Every figure that can line up with another uses `font-variant-numeric: tabular-nums` (`tabular-nums` in Tailwind). Sentence case everywhere except overlines. Use `−` (U+2212) for negative changes, as the prototype does.
 
 ## 4. Spacing, size, shape, depth
 
-**Spacing** (4px base): `--space-1` 4 · `-2` 8 · `-3` 12 · `-4` 16 · `-5` 20 · `-6` 24 · `-8` 32 · `-12` 48. Use only these steps.
+Values here are px at the default 16px root. Spacing, control, row and layout sizes are implemented in rem (px ÷ 16) so they grow with text; borders, radii, shadows and the focus ring stay in px.
+
+**Spacing** (4px = 0.25rem base): `--space-1` 4 · `-2` 8 · `-3` 12 · `-4` 16 · `-5` 20 · `-6` 24 · `-8` 32 · `-12` 48. Use only these steps.
 
 **Control heights:** `--control-sm` 28 · `--control-md` 36 (default) · `--control-lg` 44 (touch-first).
 **Table rows:** `--row-compact` 32 · `--row-default` 40 · `--row-comfortable` 48.
@@ -108,7 +110,7 @@ Rules: base size is 14px (dense admin UI). Every figure that can line up with an
 
 **Z-index:** `--z-sticky` 100 · `--z-dropdown` 1000 · `--z-dialog` 1300 · `--z-toast` 1400.
 
-**Motion:** 120ms ease-out for colour and border changes, 150ms for switches, 160ms for toast entry. Respect `prefers-reduced-motion` (drop transitions, slow spinners to 2s).
+**Motion:** 120ms ease-out for colour and border changes, 150ms for switches, 160ms for toast entry. Respect `prefers-reduced-motion`: nothing slides, zooms, spins or pulses (overlays keep only their fade, the skeleton pulse is off, spinners slow to 2s); colour and opacity transitions stay, as they carry no movement.
 
 ## 5. Layout
 
@@ -126,9 +128,9 @@ Rules: base size is 14px (dense admin UI). Every figure that can line up with an
 └──────────────┴──────────────────────────────────────────────┘
 ```
 
-- **Shell:** side nav `--sidenav-width` (248px) on `--chrome`, main column on `--surface`. Below ~808px the nav wraps above the content; in the app use the shadcn Sidebar's sheet on mobile.
-- **Content:** padding `20px 24px 32px`, max width 1360px, vertical gap `--space-6` (24px) between blocks.
-- **Responsive by flex-wrap**, not breakpoints: each row uses `flex-wrap` with flex-basis minimums (KPI 220px, by-state 380px, table 480px). Tables scroll horizontally inside their frame rather than squash.
+- **Shell:** side nav `--sidenav-width` (15.5rem, 248px) on `--chrome`, main column on `--surface`. Below ~808px the nav wraps above the content; in the app use the shadcn Sidebar's sheet on mobile.
+- **Content:** padding `20px 24px 32px`, max width 85rem (1360px), vertical gap `--space-6` (24px) between blocks.
+- **Responsive by flex-wrap**, not breakpoints: each row uses `flex-wrap` with flex-basis minimums in rem (KPI 13.75rem, by-state 23.75rem, table 30rem; 220 / 380 / 480px), so larger text makes cards wrap sooner rather than squeeze. Tables scroll horizontally inside their frame rather than squash.
 - **Filter bar:** `--surface-sunken` panel, `--radius-lg`, padding `12px 16px`, gap 16px, items aligned to the bottom edge. Filters reflect URL search params (AGENTS.md rule 4).
 
 ## 6. Components
@@ -190,8 +192,8 @@ On `--chrome`. Head: product name (`--on-chrome`) and context line ("Group offic
 Built with shadcn charts (Recharts), coloured from the chart tokens.
 
 - **Trend line** (listings per day / week / month): 240px plot, single 2px `--chart-1` line, 7px points (10px when hovered) ringed with 2px `--surface-raised`. Five horizontal gridlines in `--line`, baseline in `--line-strong`; y-axis labels on the left in `text-caption` muted, tabular, "nice" rounded maxima. Label every second x tick, counting back from the latest so the latest is always labelled.
-- **Hover:** dashed `--line-strong` crosshair plus a tooltip card (`--surface-raised`, `--line` border, `--radius-md`, `--shadow-md`, min width 140px): long date in `text-caption-strong`, then swatch · series name · bold tabular value. Flip the tooltip to the left of the crosshair past 70% of the width.
-- **Horizontal bars** (listings by state): grid of `112px · 1fr · 64px` (state id with agency count / bar / value), 18px bars in `--chart-1` with `0 4px 4px 0` radius from a `--line-strong` baseline. Sort descending. When a state filter is active, keep all bars and fade the others to 35% opacity.
+- **Hover:** dashed `--line-strong` crosshair plus a tooltip card (`--surface-raised`, `--line` border, `--radius-md`, `--shadow-md`, min width 8.75rem, 140px): long date in `text-caption-strong`, then swatch · series name · bold tabular value. Flip the tooltip to the left of the crosshair past 70% of the width.
+- **Horizontal bars** (listings by state): grid of `7rem · 1fr · 4rem` (112 · 1fr · 64px; state id with agency count / bar / value), 18px bars in `--chart-1` with `0 4px 4px 0` radius from a `--line-strong` baseline. Sort descending. When a state filter is active, keep all bars and fade the others to 35% opacity.
 - **Legend:** 10px rounded-square swatch + `text-caption` muted name above the plot.
 - **Partial periods** are labelled "(to date)" in tooltips and KPI notes, never silently compared with full periods.
 - **Accessibility:** wrap the chart in `role="img"` with an `aria-label` summarising scope, range, latest and peak values ("New listings per day for All states and territories, 11 Oct to 24 Oct. Latest 258, peak 621."). Decorative SVG gets `aria-hidden`.

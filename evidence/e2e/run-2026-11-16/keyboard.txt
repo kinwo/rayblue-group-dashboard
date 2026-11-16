@@ -1,0 +1,20 @@
+## E2E-NAV-07 / E2E-A11Y-03 Tab order with focus outline (agent-browser, 1440x900, production build)
+Tab 1: a "Rental analytics" outline=solid 2px rgb(43, 176, 237)      (sky ring inside the dark sidebar)
+Tab 2: button[combobox] "All states and territories" outline=solid 2px rgb(10, 106, 161)
+Tab 3: button[combobox] "All agencies" outline=solid 2px rgb(10, 106, 161)
+Tab 4: button[tab] "Daily" outline=solid 2px rgb(10, 106, 161)
+Tab 5: div[tabpanel] outline=solid 2px rgb(10, 106, 161)
+Tab 6: svg[application] (trend chart) outline=solid 2px rgb(10, 106, 161)
+
+## E2E-TRD-07 keyboard tooltip (built-in browser pane, same server; see note)
+focus=svg[application] tooltip=Sun 11 Oct 2026  All Rayblue agencies 27
+Right: Mon 12 Oct 2026  All Rayblue agencies 124
+Right: Tue 13 Oct 2026  All Rayblue agencies 145
+Left:  Mon 12 Oct 2026  All Rayblue agencies 124
+Left:  Sun 11 Oct 2026  All Rayblue agencies 27
+Tab:   focus=BUTTON "Agency" (first sort button) outline=solid, 0 navigations, url=/rental-analytics
+
+Note (tooling): with agent-browser 0.26.0, a second arrow-key press on the chart made the CLI dispatch
+2,375 synthetic "Unidentified" keydown events, after which Chrome reloaded and navigated back
+(once to chrome://settings/help). History methods were instrumented: no app code called back()/go().
+The same sequence in the built-in browser pane, and an earlier clean agent-browser run, behave correctly.

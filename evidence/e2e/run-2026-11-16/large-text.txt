@@ -1,0 +1,5 @@
+## Large text (root font size emulated with an injected stylesheet; rem-based layout follows it)
+375 @ 125%: "root=20px body=17.5px scrollW=375/375 clippedText=[] beyondViewport=[]"
+375 @ 150%: "root=24px body=21px scrollW=375/375 clippedText=["Figures may be out of dat","All states and territorie"] beyondViewport=[]"
+1440 @ 125%: "root=20px body=17.5px scrollW=1440/1440 clippedText=[] beyondViewport=[]"
+1440 @ 150%: "root=24px body=21px scrollW=1440/1440 clippedText=[] beyondViewport=[]"

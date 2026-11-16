@@ -1,10 +1,91 @@
 # E2E Test Results: Rental Analytics v1
 
-Results of running [e2e-test-plan.md](e2e-test-plan.md) by hand in a real browser against the production build.
+Results of running [e2e-test-plan.md](e2e-test-plan.md) in a real browser against the production build. Newest run first.
+
+## Run 2: 16 Nov 2026 (regression after the Modern Web Guidance and rem changes)
+
+Run: 16 Nov 2026 · `main` plus uncommitted changes (Modern Web Guidance fixes, rem type scale, `text-scale` opt-in) · Status: **3 defects and 1 failing unit test fixed, 0 new open findings**
+
+Scope: everything the change set could affect, plus a cheap regression sweep. Scenarios whose code paths didn't change and that need special server set-ups were not re-run (listed below). Evidence: [evidence/e2e/run-2026-11-16/](evidence/e2e/run-2026-11-16/), screenshots in [evidence/e2e/run-2026-11-16/shots/](evidence/e2e/run-2026-11-16/shots/).
+
+| Item | Value |
+| --- | --- |
+| Server | `npm run build` then `npm start` (Next.js 16.4.3, production), `http://localhost:3000`, rate limiting on (120 pages/min) |
+| Data | `data/rayblue.db`, unchanged since run 1 (SHA-1 `6eb9a129…`); oracle output identical to run 1 |
+| Browser | `agent-browser` 0.26.0 (headless Chromium over CDP); the Claude desktop browser pane for one keyboard cross-check |
+| Figures | [check_figures.py](evidence/e2e/run-2026-11-16/check_figures.py) drives 10 scopes × 3 periods and compares every KPI, trend bucket, state bar, top-agency count, share and "vs previous" with [the oracle](evidence/e2e/oracle.py) |
+| Accessibility | axe-core 4.14.0 from `node_modules`, tags `wcag2a, wcag2aa, wcag21a, wcag21aa` |
+
+### Summary
+
+| Result | Scenarios |
+| --- | --- |
+| ✅ Pass | 60 of 71 plan scenarios (3 of them only after a fix: E2E-NAV-07, E2E-A11Y-03, E2E-A11Y-01), plus 2 new checks (large text, `<head>` meta) |
+| 🔧 Defects fixed and re-verified | 3 (D5–D7), plus the clock-dependent unit test (U1) |
+| ◐ Partial | 1 (E2E-KPI-05) |
+| ⚠️ Open (unchanged from run 1) | 1 (E2E-NAV-04, F1) |
+| ⏭ Not re-run | 9 (see below), plus Firefox and WebKit |
+
+Repo gate after the fixes: `npm run verify` passes (lint, typecheck, 42 suites, 345 tests).
+
+### Defects fixed in this run
+
+| # | Found by | Defect | Fix | Re-test |
+| --- | --- | --- | --- | --- |
+| D5 | E2E-FLT-05, E2E-A11Y-03 | Agency search field: the **focus ring lost its top and bottom edges**, leaving two bars, one touching the text. The cmdk input is taller than its wrapper, and the popover clips its overflow. | [filters.module.css](src/components/analytics/filters.module.css) draws the ring inset on the input's wrapper (`:has(:focus-visible)`), around the icon and text. `ui/` unchanged. | Full ring: `wrapper outline 2px solid, offset −2px` ([retest.txt](evidence/e2e/run-2026-11-16/retest.txt)); shots 04 → 20, side by side in 21 |
+| D6 | Large text (AC-CMP-2) | Alert titles were **clamped to one line**: "Figures may be out o…" at 150% text on a 375px phone. Same component in the offline banner. | `line-clamp-none` on the stale-data and offline titles ([page-header.module.css](src/components/layout/page-header.module.css), [connection-banner.module.css](src/components/layout/connection-banner.module.css)). | Title wraps to 2 lines at 150%, 3 at 200%, never cut; shots 16 → 22 |
+| D7 | E2E-A11Y-01 (axe "needs review") | Agency combobox `aria-controls` **never matched its list**: cmdk replaces the `id` passed to `CommandList`, and the attribute also pointed at a missing element while closed. | [filters.tsx](src/components/analytics/filters.tsx) reads cmdk's list id from a ref and sets `aria-controls` only while open. New RTL test (it fails without the fix). | Closed: no `aria-controls`; open: points at the `listbox` |
+| U1 | `npm run verify` | `page.test.tsx` AC-STE-2 compared the 24 Oct fixture with the real clock, so the stale alert appeared from 25 Oct on. | The test freezes `Date.now` an hour after the fixture's as-of time ([page.test.tsx](src/app/rental-analytics/page.test.tsx)). | 345 / 345 |
+
+### Results by scenario
+
+| Scenarios | Result | Evidence and notes |
+| --- | --- | --- |
+| Figures: E2E-FLT-01, E2E-KPI-01–04 and 06, E2E-TRD-01–03, 05, 06 (titles), 08, E2E-STA-01–04, E2E-AGY-01–04 | ✅ | 30 of 30 views equal the oracle: group, NSW, VIC, QLD, TAS, WA, agencies 13, 16, 7 and QLD+29, each Daily / Weekly / Monthly ([figures.txt](evidence/e2e/run-2026-11-16/figures.txt)). Bars: only the bar fades (0.35), rows stay at 1 |
+| E2E-NAV-01 | ✅ | `GET /` → 307 to `/rental-analytics` ([http-checks.txt](evidence/e2e/run-2026-11-16/http-checks.txt)) |
+| E2E-NAV-02, 03 | ✅ | One link with `aria-current="page"`, "Group manager view", no sign-out ([misc.txt](evidence/e2e/run-2026-11-16/misc.txt)). Shot 01 |
+| E2E-NAV-04 | ⚠️ F1 | With an agency selected the context line still names the state ("Group office · Queensland"); unchanged, still needs a product call |
+| E2E-NAV-05 `@mobile` | ✅ | 412px: menu button, sheet `dialog`, closes on Escape and on choosing the item, focus back on the button ([mobile.txt](evidence/e2e/run-2026-11-16/mobile.txt)). Shots 13, 14 |
+| E2E-NAV-06, E2E-CMP-01, E2E-AGY-07 | ✅ | 360, 412, 768, 807, 809, 1024, 1440: no horizontal scroll; sheet at 807, fixed sidebar at 809; `matchMedia("(width < 50.5rem)")` agrees with the CSS at every width; table frame scrolls (276 / 569px at 360); no axis-label overlap; longest agency name fine ([layout.txt](evidence/e2e/run-2026-11-16/layout.txt)). Shots 15 |
+| E2E-NAV-07, E2E-A11Y-03 | 🔧 D5 → ✅ | Tab order sidebar → state → agency → Daily → panel → chart → sort buttons, each with a 2px outline ([keyboard.txt](evidence/e2e/run-2026-11-16/keyboard.txt)). Shot 12 |
+| E2E-FLT-02–05 | ✅ / 🔧 D5 | 9 state options in order; 30 agencies sorted by name with states; QLD narrows to 8; "Tow" highlights Townsville City ([filters.txt](evidence/e2e/run-2026-11-16/filters.txt)). Shots 02–05 |
+| E2E-FLT-06–09, 12–14 | ✅ | Arrow keys move tab and URL; QLD → Townsville City → Monthly writes `?state=QLD&agencyId=29&granularity=monthly`; reload identical, no storage; Back and Forward restore each view; agency outside the state dropped; changing state resets the agency. Shots 06–08 |
+| E2E-FLT-10 | ✅ | Same URL in a fresh browser session: identical `main` text hash |
+| E2E-FLT-11 | ✅ | All 8 bad inputs → 200, defaults applied, nothing echoed |
+| E2E-KPI-05 | ◐ | en-AU grouping checked for every tile; `tabular-nums` and colour not re-measured (styles unchanged apart from rem sizes) |
+| E2E-TRD-04 | ✅ | Last-point tooltips end "(to date)" for day, week and month; the point before has no suffix ([tooltips.txt](evidence/e2e/run-2026-11-16/tooltips.txt)). Shot 10 |
+| E2E-TRD-07 | ✅ | Right, Right, Left, Left: 11 → 12 → 13 → 12 → 11 Oct; Tab then moves to the first sort button. Shot 11. See tooling note |
+| E2E-AGY-05 | ✅ (new criterion) | Only the sorted header has `aria-sort`; the status line says "Sorted by Agency, ascending" / "descending"; focus stays on the button; sorted icon `--primary`; "—" sorts last ([interactions.txt](evidence/e2e/run-2026-11-16/interactions.txt)). Shot 09 |
+| E2E-HDR-01 | ✅ | Meta line and last bucket identical in Europe/London and America/New_York; no errors ([timezones.txt](evidence/e2e/run-2026-11-16/timezones.txt)) |
+| E2E-HDR-02 | ✅ | The real server clock (16 Nov) is more than 24h past the as-of time, so the alert shows ("…9:00 am, 24 Oct 2026, more than a day ago"). The no-alert case is covered by the page test (U1) |
+| E2E-HDR-03 | ✅ | 5 URLs × 3 requests: identical HTML (scripts and nonces removed); each URL differs from the others |
+| E2E-STE-03 | ✅ | `/nope`, `/rental-analytics/x` → 404 with a link to Rental analytics |
+| E2E-SEC-01, 03 | ✅ | Headers on page, 404, API and static responses; no `X-Powered-By`; all write methods and a `Next-Action` POST → 405 |
+| E2E-SEC-02 | ✅ | Production build: 0 console errors, warnings or CSP violations across 5 pages and open menus, before and after the fixes ([console-csp.txt](evidence/e2e/run-2026-11-16/console-csp.txt)) |
+| E2E-PRV-02 | ✅ | 20 requests, all to `localhost:3000`; no `Set-Cookie`; cookies and storage empty |
+| E2E-REL-01, 03 | ✅ | Health `ok` with `no-store`; DB SHA-1 and mtime unchanged by the run ([perf-and-db.txt](evidence/e2e/run-2026-11-16/perf-and-db.txt)) |
+| E2E-A11Y-01 | 🔧 D7 → ✅ | 0 violations in 14 views: defaults, VIC, agency 16 monthly, TAS weekly, open combobox, 404, open mobile sheet, each in light and dark ([axe-results.txt](evidence/e2e/run-2026-11-16/axe-results.txt)). Remaining "needs review": chart tick contrast (SVG), `aria-hidden-focus` behind the open sheet, and axe's generic `aria-haspopup` caveat |
+| E2E-A11Y-02 | ✅ | `lang="en-AU"`, one `h1`, labelled regions |
+| E2E-A11Y-04 | ✅ (new criterion) | With `reduce`: skeleton pulse `none`; select and combobox only fade (translate 0, scale 1); nav sheet doesn't slide (translate 0); opacity transitions kept. Control run without `reduce`: pulse, 8px slide, 95% zoom, −100% sheet slide ([reduced-motion.txt](evidence/e2e/run-2026-11-16/reduced-motion.txt)). Shot 18 |
+| E2E-THM-01 | ✅ | Dark body `#0a141c`, sidebar `#060f16`; light body `#f4f7fa`, sidebar `#0c2638`; used `color-scheme: light dark` ([theme.txt](evidence/e2e/run-2026-11-16/theme.txt)). Shots 19 |
+| E2E-PRF-01 | ✅ | 100 sequential mixed GETs (kept under the rate limit): p50 9.2ms, p95 13.0ms, max 29.6ms |
+| New: `<head>` meta | ✅ | `color-scheme: light dark`, `text-scale: scale` and `viewport` are all in `<head>` |
+| New: large text | 🔧 D6 → ✅ | Root text at 125% and 150% (emulated by an injected root font size): no horizontal scroll and no clipped text at 375 and 1440, except the State select value, which truncates like the Agency field ([large-text.txt](evidence/e2e/run-2026-11-16/large-text.txt)). Shots 16, 17, 22 |
+
+**Not re-run** (code unchanged or special server set-ups; all passed in run 1 except as noted): E2E-AGY-06 (alignment), E2E-STE-01, E2E-STE-02, E2E-PRV-01, E2E-REL-02, E2E-REL-04, E2E-REL-05 (F2 and F3 still open), E2E-PRF-02 (not run in run 1 either), E2E-PRF-03; also Firefox and WebKit, and the seeded stale-warning variant of E2E-HDR-02. Partial coverage: E2E-FLT-09 used three changes (state, agency, period) rather than four; E2E-TRD-06 checked titles, not every series name.
+
+### Notes
+
+- **200% text on a phone:** at 200% root text on a 375px screen, the period tabs and the state-bar rows overflow (the page scrolls sideways). Everything fits up to 150%. A fix needs a stacked layout for narrow cards; recorded here, not a defect against the 150% target.
+- **Dev server only:** `next dev` logs inline-style CSP violations. The production build logs none (E2E-SEC-02).
+- **Tooling:** `agent-browser` 0.26.0 sometimes dispatched thousands of synthetic "Unidentified" key events after an arrow-key press on the chart, then Chrome reloaded and navigated back (once to `chrome://settings/help`). With `history` instrumented, no app code called `back()` or `go()`. The same keys in the desktop browser pane behave correctly. A screenshot taken mid-sequence also moved focus. The harness avoids both.
+- **Rate limiting works:** two full passes back to back hit the app's own "Too many requests" page (ADR 0004). [open.sh](evidence/e2e/run-2026-11-16/open.sh) waits out the limit instead of testing the 429 page.
+
+## Run 1: 24 Oct 2026 (full plan)
 
 Run: 24 Oct 2026, 10:15–10:40 AEDT · Branch `feat/rental-analytics-v1` (base `eeffab7`) · Status: **4 defects fixed, 3 open findings**
 
-## 1. Summary
+### 1. Summary
 
 | Result | Scenarios |
 | --- | --- |
@@ -18,7 +99,7 @@ Browser coverage was Chromium only. The Firefox and WebKit projects weren't run 
 
 Every figure on screen matched an independent oracle: the KPIs, trend buckets, state totals, top-agency counts, shares and "vs previous". This held in every scope checked (group, NSW, VIC, QLD, TAS, WA, and agencies 7, 13, 16, 23, 28, 29) and in all three periods.
 
-### Defects fixed in this run
+#### Defects fixed in this run
 
 | # | Scenario | Defect | Fix | Re-test |
 | --- | --- | --- | --- | --- |
@@ -29,7 +110,7 @@ Every figure on screen matched an independent oracle: the KPIs, trend buckets, s
 
 Repo gate after the fixes: `npm run lint && npm run typecheck && npm test` passes (33 suites, 277 tests).
 
-### Open findings (not auto-fixed; they need a product or design call)
+#### Open findings (not auto-fixed; they need a product or design call)
 
 | # | Scenario | Finding | Why it isn't auto-fixed | Suggested direction |
 | --- | --- | --- | --- | --- |
@@ -37,7 +118,7 @@ Repo gate after the fixes: `npm run lint && npm run typecheck && npm test` passe
 | F2 | E2E-REL-05 | Page requests produce **no access log line**. Only `/api/*` logs `route/status/durationMs`; page renders log only on failure (`request_failed`). | Next.js's proxy never sees the final status, and a page-level log would have to assume 200. | Decide whether AC-REL-7 needs a line for every page request. If so, a custom server or a platform access log is the clean place for it. |
 | F3 | E2E-REL-05, E2E-STE-02 | When a render fails, Next.js also prints its own unstructured `⨯ Error [DataUnavailableError] … at …` **stack trace** to stdout, next to the app's JSON line. `next start` banner lines are also not JSON. Nothing reaches the client (AC-SEC-5 holds). | This is framework output, not app code. | Treat stdout as framework plus app output and filter the JSON lines, or wrap `next start` so non-JSON lines are discarded. |
 
-## 2. Environment and method
+### 2. Environment and method
 
 | Item | Value |
 | --- | --- |
@@ -51,11 +132,11 @@ Repo gate after the fixes: `npm run lint && npm run typecheck && npm test` passe
 
 The plan targets Playwright specs (`e2e/*.spec.ts`), which need an ADR before adding the dependency. This run executes the same scenarios by hand without adding any dependency. The evidence is in [evidence/e2e/](evidence/e2e/), with screenshots in [evidence/e2e/shots/](evidence/e2e/shots/).
 
-## 3. Results by scenario
+### 3. Results by scenario
 
 Legend: ✅ pass · 🔧 failed, fixed, re-verified · ⚠️ open finding · ◐ partial · ⏭ not run
 
-### 3.1 Navigation and app shell
+#### 3.1 Navigation and app shell
 
 | ID | Result | Evidence and notes |
 | --- | --- | --- |
@@ -67,7 +148,7 @@ Legend: ✅ pass · 🔧 failed, fixed, re-verified · ⚠️ open finding · �
 | E2E-NAV-06 | ✅ | 807px: menu button, no fixed sidebar. 809px: fixed sidebar. Shots 21 |
 | E2E-NAV-07 | ✅ | Tab order: sidebar link → state → agency → Daily tab → panel → chart → 5 sort buttons. Each has a 2px solid outline, and the controls also have a ring. Shots 11, 12 |
 
-### 3.2 Filters and URL state
+#### 3.2 Filters and URL state
 
 | ID | Result | Evidence and notes |
 | --- | --- | --- |
@@ -86,7 +167,7 @@ Legend: ✅ pass · 🔧 failed, fixed, re-verified · ⚠️ open finding · �
 | E2E-FLT-13 | ✅ | QLD agency, then Tasmania: agency resets, URL drops `agencyId`. Shot 08 |
 | E2E-FLT-14 | ✅ | State, then agency (2 changes) reaches a single-agency view; KPI, trend, highlight and table all reflect it |
 
-### 3.3 KPI tiles
+#### 3.3 KPI tiles
 
 | ID | Result | Evidence and notes |
 | --- | --- | --- |
@@ -97,7 +178,7 @@ Legend: ✅ pass · 🔧 failed, fixed, re-verified · ⚠️ open finding · �
 | E2E-KPI-05 | ✅ | en-AU grouping, `tabular-nums`, colour = ink token `rgb(14, 34, 50)` |
 | E2E-KPI-06 | ✅ | Tile text identical across Daily, Weekly and Monthly |
 
-### 3.4 Trend chart
+#### 3.4 Trend chart
 
 | ID | Result | Evidence and notes |
 | --- | --- | --- |
@@ -110,7 +191,7 @@ Legend: ✅ pass · 🔧 failed, fixed, re-verified · ⚠️ open finding · �
 | E2E-TRD-07 | ✅ | Tab into the chart, then arrows move the tooltip (Mon 12 Oct 124 → Tue 13 Oct 145 → Sun 11 Oct 27). Shot 13 |
 | E2E-TRD-08 | ✅ | `role="img"`, label "…11 Oct to 24 Oct. Latest 10, peak 149." matches the table |
 
-### 3.5 By-state bars and top agencies
+#### 3.5 By-state bars and top agencies
 
 | ID | Result | Evidence and notes |
 | --- | --- | --- |
@@ -127,7 +208,7 @@ Legend: ✅ pass · 🔧 failed, fixed, re-verified · ⚠️ open finding · �
 | E2E-AGY-07 `@layout` | ✅ | 360px: table frame `overflow-x: auto` (276 / 598px), page `scrollWidth` 360. Shot 22 |
 | (AC-AGY-6) | ✅ | The plan calls this unreachable with the seed, but `?state=TAS` and `?state=WA` show "No agencies match these filters." Shots 08, 29 |
 
-### 3.6 Header, states, security, privacy, operations
+#### 3.6 Header, states, security, privacy, operations
 
 | ID | Result | Evidence and notes |
 | --- | --- | --- |
@@ -148,7 +229,7 @@ Legend: ✅ pass · 🔧 failed, fixed, re-verified · ⚠️ open finding · �
 | E2E-REL-04 | ✅ | Invalid `LOG_LEVEL`, invalid `APP_VERSION`, missing DB, empty DB, no migrations, wrong migration: each exits 1 within 0.3s with one JSON line. Every variable has a default, so "missing env var" can't fail ([startup-failures.txt](evidence/e2e/startup-failures.txt)) |
 | E2E-REL-05 | ⚠️ F2, F3 | App lines are valid JSON with the required fields, with no cookies, addresses or rents. Pages aren't access-logged, and Next prints non-JSON banner and stack lines ([logs-check.txt](evidence/e2e/logs-check.txt)) |
 
-### 3.7 Accessibility, theme and layout
+#### 3.7 Accessibility, theme and layout
 
 | ID | Result | Evidence and notes |
 | --- | --- | --- |
@@ -159,7 +240,7 @@ Legend: ✅ pass · 🔧 failed, fixed, re-verified · ⚠️ open finding · �
 | E2E-THM-01 | ✅ | Dark body `#0a141c`, sidebar `#060f16`; light body `#f4f7fa`, sidebar `#0c2638` (DESIGN.md tokens). Shot 23 |
 | E2E-CMP-01 | 🔧 D2 | `scrollWidth == innerWidth` at 360, 412, 768, 1024 and 1440, on defaults and with the longest agency name. Chart labels at 360 fixed. Shots 22, 25 |
 
-### 3.8 Performance
+#### 3.8 Performance
 
 | ID | Result | Evidence and notes |
 | --- | --- | --- |
@@ -167,7 +248,7 @@ Legend: ✅ pass · 🔧 failed, fixed, re-verified · ⚠️ open finding · �
 | E2E-PRF-02 | ⏭ | Lighthouse isn't installed. Not run, so no new dependency was added |
 | E2E-PRF-03 | ✅ | Period tab change → chart updated: 10 runs at 344–358ms, CLI round trip included (target ≤ 1s) |
 
-## 4. Not covered, and notes for the Playwright suite
+### 4. Not covered, and notes for the Playwright suite
 
 - **Not run:** Firefox and WebKit projects (only Chromium was available to the tool), CLS under throttling (E2E-STE-01), Lighthouse (E2E-PRF-02), and visual snapshot baselines (E2E-THM-01).
 - **Plan corrections:**

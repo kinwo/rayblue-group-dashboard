@@ -61,6 +61,7 @@
   @apply size-3.5 text-ink-muted;
 }
 
-.sortIcon[data-active] {
+/* The sorted column's icon; driven by aria-sort so state and look can't disagree. */
+.columnHead[aria-sort] .sortIcon {
   @apply text-primary;
 }
